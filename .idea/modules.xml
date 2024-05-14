@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/sales_automation.iml" filepath="$PROJECT_DIR$/.idea/sales_automation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/android/sales_automation_android.iml" filepath="$PROJECT_DIR$/android/sales_automation_android.iml" />
     </modules>
   </component>
 </project>

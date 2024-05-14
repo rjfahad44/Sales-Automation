@@ -18,7 +18,7 @@ class ImageCapture extends StatefulWidget {
 }
 
 class _ImageCaptureState extends State<ImageCapture> {
-  late File _image;
+  File? _image;
   bool _isImageChoose = false;
   ImagePicker imagePicker = ImagePicker();
   final TextEditingController _doctorNameController = TextEditingController();
@@ -72,7 +72,7 @@ class _ImageCaptureState extends State<ImageCapture> {
     }
   }
 
-  sendPrescribedProducts(String doctorName, int employeeId, List<Map<String, dynamic>> prescribedProducts) async {
+  sendPrescribedProducts(File image, String doctorName, int employeeId, List<Map<String, dynamic>> prescribedProducts, Function(bool isSuccess) callback) async {
     var uri = Uri.parse('${serverPath}/api/ImageCapture/SubmitImageCapture');
     var request = http.Request('POST', uri);
     var authorizationToken = currentLoginUser.token;
@@ -81,7 +81,7 @@ class _ImageCaptureState extends State<ImageCapture> {
     request.headers['Authorization'] = 'Bearer $authorizationToken';
     request.headers['Content-Type'] = 'application/json';
 
-    final bytes = await _image.readAsBytes();
+    final bytes = await image.readAsBytes();
     var base64Image = base64Encode(bytes);
 
     print('\n\nBase64Image Data => $base64Image');
@@ -102,6 +102,7 @@ class _ImageCaptureState extends State<ImageCapture> {
     var response = await request.send();
 
     if (response.statusCode == 200) {
+      callback.call(true);
       Fluttertoast.showToast(
           msg: "Successfully upload!",
           toastLength: Toast.LENGTH_LONG,
@@ -112,6 +113,7 @@ class _ImageCaptureState extends State<ImageCapture> {
           fontSize: 16.0);
       print('sent successfully!');
     } else {
+      callback.call(false);
       Fluttertoast.showToast(
           msg: "Error: ${response.reasonPhrase}",
           toastLength: Toast.LENGTH_LONG,
@@ -140,22 +142,22 @@ class _ImageCaptureState extends State<ImageCapture> {
               child: Column(
                 children: [
                   Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         SizedBox(
-                          width: 80.0,
-                          height: 80.0,
+                          width: 60.0,
+                          height: 60.0,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.all(8.0),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12.0)),
+                              padding: const  EdgeInsets.all(2.0),
+                          shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8.0)),
                             ),
                             child: const Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Padding(
-                                    padding: EdgeInsets.only(bottom: 8.0),
+                                    padding: EdgeInsets.only(bottom: 2.0),
                                     child: Icon(
                                       Icons.camera_alt_outlined,
                                       size: 24.0,
@@ -166,7 +168,7 @@ class _ImageCaptureState extends State<ImageCapture> {
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 11,
-                                      fontWeight: FontWeight.w300,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   )
                                 ]),
@@ -175,20 +177,23 @@ class _ImageCaptureState extends State<ImageCapture> {
                             },
                           ),
                         ),
+
+                        const SizedBox(width: 50.0,),
+
                         SizedBox(
-                          width: 80.0,
-                          height: 80.0,
+                          width: 60.0,
+                          height: 60.0,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: const EdgeInsets.all(2.0),
                               shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12.0)),
+                                  borderRadius: BorderRadius.circular(8.0)),
                             ),
                             child: const Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Padding(
-                                    padding: EdgeInsets.only(bottom: 8.0),
+                                    padding: EdgeInsets.only(bottom: 2.0),
                                     child: Icon(
                                       Icons.photo_library_outlined,
                                       size: 24.0,
@@ -199,7 +204,7 @@ class _ImageCaptureState extends State<ImageCapture> {
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 11,
-                                      fontWeight: FontWeight.w300,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   )
                                 ]),
@@ -212,23 +217,47 @@ class _ImageCaptureState extends State<ImageCapture> {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+
                       Visibility(
                           visible: _isImageChoose,
-                          child: SizedBox(
-                            width: MediaQuery.of(context).size.width / 2.5,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(8.0),
-                                child: Image(
-                                    image: FileImage(
-                                        _isImageChoose ? _image : File(''),
-                                    ),
-                                  fit: BoxFit.fill,
+                          child: Column(
+                            children: [
+
+
+                              Align(
+                                alignment: Alignment.topRight,
+                                child:  Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                                  child: IconButton(
+                                    icon: const Icon(Icons.delete, color: Colors.red,),
+                                    onPressed: (){
+                                      setState(() {
+                                        _image = null;
+                                        _isImageChoose = false;
+                                      });
+                                    },
+                                  ),
                                 ),
                               ),
-                            ),
-                          )),
+
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width / 2.5,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    child: Image(
+                                      image: FileImage(
+                                        _isImageChoose ? _image??File('') : File(''),
+                                      ),
+                                      fit: BoxFit.fill,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                      ),
                     ],
                   ),
                   const SizedBox(
@@ -272,30 +301,39 @@ class _ImageCaptureState extends State<ImageCapture> {
                                       borderRadius: BorderRadius.circular(10.0),
                                     ))),
                             onPressed: () async {
-                              var doctorName =
-                              _doctorNameController.text.toString();
+                              var doctorName = _doctorNameController.text.toString();
                               var employeeId = currentLoginUser.userID;
                               if (doctorName.isEmpty) {
                                 Fluttertoast.showToast(
                                     msg: "Please Enter Doctor Name",
                                     toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.CENTER,
+                                    gravity: ToastGravity.BOTTOM,
                                     timeInSecForIosWeb: 1,
                                     backgroundColor: Colors.red,
                                     textColor: Colors.white,
                                     fontSize: 16.0);
-                              } else if (!_isImageChoose) {
+                              } else if (_image == null) {
                                 Fluttertoast.showToast(
                                     msg: "Image is empty!!",
                                     toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.CENTER,
+                                    gravity: ToastGravity.BOTTOM,
                                     timeInSecForIosWeb: 1,
                                     backgroundColor: Colors.red,
                                     textColor: Colors.white,
                                     fontSize: 16.0);
                               } else {
                                 enableUploadButtons.value = !enableUploadButtons.value;
-                                await sendPrescribedProducts(doctorName, employeeId, prescribedProducts);
+                                await sendPrescribedProducts(_image!, doctorName, employeeId, prescribedProducts, (isSuccess){
+                                  setState(() {
+                                    if(isSuccess){
+                                      _doctorNameController.text = "";
+                                      _image = null;
+                                      _isImageChoose = false;
+                                    }else{
+
+                                    }
+                                  });
+                                });
                                 enableUploadButtons.value = !enableUploadButtons.value;
                               }
                             },
@@ -319,6 +357,7 @@ class _ImageCaptureState extends State<ImageCapture> {
                           );
                         }),
                   ),
+
                 ],
               ),
             )),
