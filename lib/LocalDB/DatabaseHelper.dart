@@ -1,4 +1,7 @@
+import 'dart:ffi';
+
 import 'package:hive_flutter/adapters.dart';
+import 'package:sales_automation/Screens/ImageCaptureScreen/Model/ImageDataModel.dart';
 
 abstract class HiveBox<T> {
   Future<void> add(T item);
@@ -8,18 +11,16 @@ abstract class HiveBox<T> {
   Future<List<T>> getAll();
 }
 
-class HiveBoxImpl<T> extends HiveBox<T> {
+class HiveBoxHelper<T> {
   final String boxName;
 
-  HiveBoxImpl(this.boxName);
+  HiveBoxHelper(this.boxName);
 
-  @override
-  Future<void> add(T item) async {
+  Future<int> add(T item) async {
     final box = await Hive.openBox<T>(boxName);
-    await box.add(item);
+    return await box.add(item);
   }
 
-  @override
   Future<void> update(int index, T item) async {
     final box = await Hive.openBox<T>(boxName);
     if (index >= 0 && index < box.length) {
@@ -29,7 +30,6 @@ class HiveBoxImpl<T> extends HiveBox<T> {
     }
   }
 
-  @override
   Future<void> delete(int index) async {
     final box = await Hive.openBox<T>(boxName);
     if (index >= 0 && index < box.length) {
@@ -39,17 +39,33 @@ class HiveBoxImpl<T> extends HiveBox<T> {
     }
   }
 
-  @override
+  Future<void> deleteItem(T item) async {
+    final box = await Hive.openBox<T>(boxName);
+    if (box.isNotEmpty) {
+      await box.delete(item);
+    } else {
+      throw Exception('Data Not Found!!');
+    }
+  }
+
+  Future<void> deleteAllDataCompletely() async {
+    await Hive.deleteFromDisk();
+  }
+
+  Future<int> deleteAllData() async {
+    final tasksBox = Hive.box<ImageDataModel>(boxName);
+    return await tasksBox.clear();
+  }
+
   Future<T?> get(int index) async {
     final box = await Hive.openBox<T>(boxName);
-    if (index >= 0 && index < box.length) {  // Basic check for index validity
+    if (index >= 0 && index < box.length) {
       return box.getAt(index);
     } else {
       return null;
     }
   }
 
-  @override
   Future<List<T>> getAll() async {
     final box = await Hive.openBox<T>(boxName);
     return box.values.toList();

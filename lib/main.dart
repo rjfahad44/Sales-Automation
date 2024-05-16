@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:sales_automation/Screens/LoginScreen.dart';
 import 'package:sales_automation/global.dart';
 
-void main() {
+import 'Screens/ImageCaptureScreen/Adapter/ImageDataModelAdapter.dart';
+import 'Screens/ImageCaptureScreen/Model/ImageDataModel.dart';
+
+Future<void> main() async {
+  await Hive.initFlutter();
+  Hive.registerAdapter<ImageDataModel>(ImageDataModelAdapter());
   runApp(const AppRoot());
 }
 
