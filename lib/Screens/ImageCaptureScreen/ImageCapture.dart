@@ -375,22 +375,25 @@ class _ImageCaptureState extends State<ImageCapture> {
                   const SizedBox(
                     height: 10.0,
                   ),
-                  TextFormField(
-                    keyboardType: TextInputType.name,
-                    controller: _doctorNameController,
-                    validator: (String? value) {
-                      if (value!.isEmpty) {
-                        return "Doctor name is empty!!";
-                      }
-                      return null;
-                    },
-                    style: const TextStyle(color: Colors.black),
-                    decoration: InputDecoration(
-                      label: const Text("Doctor name"),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: const BorderSide(
-                            width: 0.60, color: Color(0xFF6C6A6A)),
+                  SizedBox(
+                    height: 50,
+                    child: TextFormField(
+                      keyboardType: TextInputType.name,
+                      controller: _doctorNameController,
+                      validator: (String? value) {
+                        if (value!.isEmpty) {
+                          return "Doctor name is empty!!";
+                        }
+                        return null;
+                      },
+                      style: const TextStyle(color: Colors.black),
+                      decoration: InputDecoration(
+                        label: const Text("Doctor name"),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: const BorderSide(
+                              width: 0.60, color: Color(0xFF6C6A6A)),
+                        ),
                       ),
                     ),
                   ),
@@ -589,42 +592,52 @@ class _ImageCaptureState extends State<ImageCapture> {
                                 itemCount: dataList.length,
                                 itemBuilder: (context, index) {
                                   final data = dataList[index];
-                                  return ListTile(
-                                    title: Text(
-                                      "Doctor Name : ${data.doctorName}",
-                                      style: const TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 18.0,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                    subtitle: Text(
-                                      'id : ${data.employeeId}',
-                                      style: const TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 14.0,
-                                          fontWeight: FontWeight.w400),
-                                    ),
-                                    leading: Image.file(
-                                      File(data.imagePath),
-                                      height: 80.0,
-                                      width: 80.0,
-                                    ),
-                                    trailing: IconButton(
-                                      icon: const Icon(
-                                        Icons.delete,
-                                        color: Colors.red,
+                                  return Card(
+                                    elevation: 1,
+                                    child: ListTile(
+                                      title: Text(
+                                        "Dr. Name : ${data.doctorName}",
+                                        style: const TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 12.0,
+                                            fontWeight: FontWeight.w500),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
-                                      onPressed: () {
-                                        imageHiveBox.delete(index);
-                                        setState(() {
-                                          imageDataList = imageHiveBox.getAll();
-                                          imageDataList?.then((value) {
-                                            setState(() {
-                                              isImageDataListIsNotEmpty = value.isNotEmpty;
+                                      // subtitle: Text(
+                                      //   'id : ${data.employeeId}',
+                                      //   style: const TextStyle(
+                                      //       color: Colors.black,
+                                      //       fontSize: 14.0,
+                                      //       fontWeight: FontWeight.w400),
+                                      // ),
+                                      leading: Padding(
+                                        padding: const EdgeInsets.all(6.0),
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(8),
+                                          child: Image.file(
+                                            File(data.imagePath),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                      trailing: IconButton(
+                                        icon: const Icon(
+                                          Icons.delete,
+                                          color: Colors.red,
+                                        ),
+                                        onPressed: () {
+                                          imageHiveBox.delete(index);
+                                          setState(() {
+                                            imageDataList = imageHiveBox.getAll();
+                                            imageDataList?.then((value) {
+                                              setState(() {
+                                                isImageDataListIsNotEmpty = value.isNotEmpty;
+                                              });
                                             });
                                           });
-                                        });
-                                      },
+                                        },
+                                      ),
                                     ),
                                   );
                                 },
