@@ -41,7 +41,7 @@ class HiveBoxHelper<T> {
 
   Future<void> deleteItem(T item) async {
     final box = await Hive.openBox<T>(boxName);
-    if (box.isNotEmpty) {
+    if (box.containsKey(item)) {
       await box.delete(item);
     } else {
       throw Exception('Data Not Found!!');
@@ -53,7 +53,7 @@ class HiveBoxHelper<T> {
   }
 
   Future<int> deleteAllData() async {
-    final tasksBox = Hive.box<ImageDataModel>(boxName);
+    final tasksBox = Hive.box<T>(boxName);
     return await tasksBox.clear();
   }
 

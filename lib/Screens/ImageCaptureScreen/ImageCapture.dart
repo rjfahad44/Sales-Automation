@@ -169,23 +169,21 @@ class _ImageCaptureState extends State<ImageCapture> {
     }
   }
 
-  sendAllPrescribedProducts(Function(bool isSuccess) callback) async {
-    var uri = Uri.parse('${serverPath}/api/ImageCapture/SubmitImageCapture');
-    var request = http.Request('POST', uri);
-    var authorizationToken = currentLoginUser.token;
-    print('\n\nToken : $authorizationToken');
-    request.headers['accept'] = '*/*';
-    request.headers['Authorization'] = 'Bearer $authorizationToken';
-    request.headers['Content-Type'] = 'application/json';
-
-    int pSize = 0;
+  sendAllPrescribedProducts() async {
     imageDataList?.then((value) async {
-      pSize = value.length;
-      print("1 uploaded Product Size: $pSize");
+      int count = 0;
+      int pos = 0;
       for (var p in value) {
-        final bytes = await File(p.imagePath).readAsBytes();
+        var uri = Uri.parse('${serverPath}/api/ImageCapture/SubmitImageCapture');
+        var request = http.Request('POST', uri);
+        var authorizationToken = currentLoginUser.token;
+        request.headers['accept'] = '*/*';
+        request.headers['Authorization'] = 'Bearer $authorizationToken';
+        request.headers['Content-Type'] = 'application/json';
+
+        var bytes = await File(p.imagePath).readAsBytes();
         var base64Image = base64Encode(bytes);
-        final data = {
+        var data = {
           'doctorName': p.doctorName,
           'employeeId': p.employeeId,
           'base64Image': base64Image,
@@ -197,32 +195,46 @@ class _ImageCaptureState extends State<ImageCapture> {
 
         var response = await request.send();
         if (response.statusCode == 200) {
-          pSize--;
+          imageHiveBox.delete(pos);
+          setState(() {
+            imageDataList = imageHiveBox.getAll();
+            imageDataList?.then((value) {
+              setState(() {
+                pos--;
+                isImageDataListIsNotEmpty = value.isNotEmpty;
+              });
+            });
+          });
+          count++;
+          print('upload pending: $count');
+        }else{
+          print('error $count');
         }
+        pos++;
       }
 
-      callback.call(true);
-      print("2 uploaded Product Size: $pSize");
+      print('count : $count');
+      print('list size : ${value.length}');
 
-      // Fluttertoast.showToast(
-      //     msg: "Successfully upload!",
-      //     toastLength: Toast.LENGTH_LONG,
-      //     gravity: ToastGravity.BOTTOM,
-      //     timeInSecForIosWeb: 1,
-      //     backgroundColor: Colors.red,
-      //     textColor: Colors.white,
-      //     fontSize: 16.0);
-      // print('sent successfully!');
-      //
-      // callback.call(false);
-      // Fluttertoast.showToast(
-      //     msg: "Error: ",
-      //     toastLength: Toast.LENGTH_LONG,
-      //     gravity: ToastGravity.BOTTOM,
-      //     timeInSecForIosWeb: 1,
-      //     backgroundColor: Colors.red,
-      //     textColor: Colors.white,
-      //     fontSize: 16.0);
+      if(count == value.length){
+        Fluttertoast.showToast(
+            msg: "Successfully Upload All Data",
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      }else{
+        Fluttertoast.showToast(
+            msg: "Error: ",
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      }
     });
   }
 
@@ -237,228 +249,420 @@ class _ImageCaptureState extends State<ImageCapture> {
         ),
         body: SingleChildScrollView(
             scrollDirection: Axis.vertical,
-            child: Expanded(
-              child: Container(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                      SizedBox(
-                        width: 60.0,
-                        height: 60.0,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.all(2.0),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.0)),
-                          ),
-                          child: const Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(bottom: 2.0),
-                                  child: Icon(
-                                    Icons.camera_alt_outlined,
-                                    size: 24.0,
-                                  ),
-                                ),
-                                Text(
-                                  "Camera",
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                )
-                              ]),
-                          onPressed: () => {
-                            _imageFromCamera(),
-                          },
+            child: Container(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    SizedBox(
+                      width: 60.0,
+                      height: 60.0,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.all(2.0),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0)),
                         ),
-                      ),
-                      const SizedBox(
-                        width: 50.0,
-                      ),
-                      SizedBox(
-                        width: 60.0,
-                        height: 60.0,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.all(2.0),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.0)),
-                          ),
-                          child: const Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(bottom: 2.0),
-                                  child: Icon(
-                                    Icons.photo_library_outlined,
-                                    size: 24.0,
-                                  ),
-                                ),
-                                Text(
-                                  "Gallery",
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                )
-                              ]),
-                          onPressed: () => {
-                            _imageFromGallery(),
-                          },
-                        ),
-                      ),
-                    ]),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Visibility(
-                          visible: _isImageChoose,
-                          child: Column(
+                        child: const Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Align(
-                                alignment: Alignment.topRight,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 12.0),
-                                  child: IconButton(
-                                    icon: const Icon(
-                                      Icons.delete,
-                                      color: Colors.red,
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        _image = null;
-                                        _isImageChoose = false;
-                                      });
-                                    },
-                                  ),
+                              Padding(
+                                padding: EdgeInsets.only(bottom: 2.0),
+                                child: Icon(
+                                  Icons.camera_alt_outlined,
+                                  size: 24.0,
                                 ),
                               ),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width / 2.5,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(8.0),
-                                    child: Image(
-                                      image: FileImage(
-                                        _isImageChoose
-                                            ? _image ?? File('')
-                                            : File(''),
-                                      ),
-                                      fit: BoxFit.fill,
-                                    ),
-                                  ),
+                              Text(
+                                "Camera",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10.0,
-                    ),
-                    TextFormField(
-                      keyboardType: TextInputType.name,
-                      controller: _doctorNameController,
-                      validator: (String? value) {
-                        if (value!.isEmpty) {
-                          return "Doctor name is empty!!";
-                        }
-                        return null;
-                      },
-                      style: const TextStyle(color: Colors.black),
-                      decoration: InputDecoration(
-                        label: const Text("Doctor name"),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          borderSide: const BorderSide(
-                              width: 0.60, color: Color(0xFF6C6A6A)),
-                        ),
+                              )
+                            ]),
+                        onPressed: () => {
+                          _imageFromCamera(),
+                        },
                       ),
                     ),
                     const SizedBox(
-                      height: 20.0,
+                      width: 50.0,
                     ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                    SizedBox(
+                      width: 60.0,
+                      height: 60.0,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.all(2.0),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0)),
+                        ),
+                        child: const Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(bottom: 2.0),
+                                child: Icon(
+                                  Icons.photo_library_outlined,
+                                  size: 24.0,
+                                ),
+                              ),
+                              Text(
+                                "Gallery",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                            ]),
+                        onPressed: () => {
+                          _imageFromGallery(),
+                        },
+                      ),
+                    ),
+                  ]),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Visibility(
+                        visible: _isImageChoose,
+                        child: Column(
+                          children: [
+                            Align(
+                              alignment: Alignment.topRight,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12.0),
+                                child: IconButton(
+                                  icon: const Icon(
+                                    Icons.delete,
+                                    color: Colors.red,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      _image = null;
+                                      _isImageChoose = false;
+                                    });
+                                  },
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width / 2.5,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  child: Image(
+                                    image: FileImage(
+                                      _isImageChoose
+                                          ? _image ?? File('')
+                                          : File(''),
+                                    ),
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10.0,
+                  ),
+                  TextFormField(
+                    keyboardType: TextInputType.name,
+                    controller: _doctorNameController,
+                    validator: (String? value) {
+                      if (value!.isEmpty) {
+                        return "Doctor name is empty!!";
+                      }
+                      return null;
+                    },
+                    style: const TextStyle(color: Colors.black),
+                    decoration: InputDecoration(
+                      label: const Text("Doctor name"),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(
+                            width: 0.60, color: Color(0xFF6C6A6A)),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20.0,
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Padding(
+                          padding:
+                          const EdgeInsets.only(bottom: 10.0, right: 5.0),
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                                backgroundColor: MaterialStateColor.resolveWith(
+                                        (states) => states.isEmpty
+                                        ? primaryButtonColor
+                                        : Colors.black26),
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ))),
+                            onPressed: () async {
+                              var doctorName =
+                              _doctorNameController.text.toString();
+                              var employeeId = currentLoginUser.userID;
+                              if (doctorName.isEmpty) {
+                                Fluttertoast.showToast(
+                                    msg: "Please Enter Doctor Name",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.BOTTOM,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.red,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0);
+                              } else if (_image == null) {
+                                Fluttertoast.showToast(
+                                    msg: "Image is empty!!",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.BOTTOM,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.red,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0);
+                              } else {
+                                enableUploadButtons.value =
+                                !enableUploadButtons.value;
+                                await sendPrescribedProducts(
+                                    _image!,
+                                    doctorName,
+                                    employeeId,
+                                    prescribedProducts, (isSuccess) {
+                                  if (isSuccess) {
+                                    setState(() {
+                                      _doctorNameController.text = "";
+                                      _image = null;
+                                      _isImageChoose = false;
+                                    });
+                                  } else {
+                                    Fluttertoast.showToast(
+                                        msg: "Error!!",
+                                        toastLength: Toast.LENGTH_LONG,
+                                        gravity: ToastGravity.BOTTOM,
+                                        timeInSecForIosWeb: 1,
+                                        backgroundColor: Colors.red,
+                                        textColor: Colors.white,
+                                        fontSize: 16.0);
+                                  }
+                                });
+                                enableUploadButtons.value =
+                                !enableUploadButtons.value;
+                              }
+                            },
+                            child: (enableUploadButtons.value)
+                                ? const Text(
+                              'Upload',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            )
+                                : const Text(
+                              'Uploading...',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Padding(
+                          padding:
+                          const EdgeInsets.only(bottom: 10.0, left: 5.0),
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                                backgroundColor: MaterialStateColor.resolveWith(
+                                        (states) => states.isEmpty
+                                        ? primaryButtonColor
+                                        : Colors.black26),
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ))),
+                            onPressed: () async {
+                              var doctorName =
+                              _doctorNameController.text.toString();
+                              var employeeId = currentLoginUser.userID;
+                              if (doctorName.isEmpty) {
+                                Fluttertoast.showToast(
+                                    msg: "Please Enter Doctor Name",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.BOTTOM,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.red,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0);
+                              } else if (_image == null) {
+                                Fluttertoast.showToast(
+                                    msg: "Image is empty!!",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.BOTTOM,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.red,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0);
+                              } else {
+                                enableUploadButtons.value =
+                                !enableUploadButtons.value;
+                                var data = ImageDataModel(
+                                    imagePath: "",
+                                    doctorName: doctorName,
+                                    employeeId: employeeId);
+                                saveImage(data, _image!, (isDataAdd) {
+                                  setState(() {
+                                    _doctorNameController.text = "";
+                                    _image = null;
+                                    _isImageChoose = false;
+                                    imageDataList = imageHiveBox.getAll();
+                                    imageDataList?.then((value) {
+                                      setState(() {
+                                        isImageDataListIsNotEmpty = value.isNotEmpty;
+                                      });
+                                      print("saveImage imageDataList : $value");
+                                    });
+                                  });
+                                });
+
+                                enableUploadButtons.value =
+                                !enableUploadButtons.value;
+                              }
+                            },
+                            child: (enableUploadButtons.value)
+                                ? const Text(
+                              'Save',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            )
+                                : const Text(
+                              'Loading...',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  Visibility(
+                    visible: isImageDataListIsNotEmpty,
+                    child: Column(
                       children: [
-                        Expanded(
-                          flex: 1,
-                          child: Padding(
-                            padding:
-                            const EdgeInsets.only(bottom: 10.0, right: 5.0),
+                        FutureBuilder<List<ImageDataModel>>(
+                          future: imageDataList,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              final dataList = snapshot.data!;
+                              return ListView.builder(
+                                primary: false,
+                                shrinkWrap: true,
+                                itemCount: dataList.length,
+                                itemBuilder: (context, index) {
+                                  final data = dataList[index];
+                                  return ListTile(
+                                    title: Text(
+                                      "Doctor Name : ${data.doctorName}",
+                                      style: const TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 18.0,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                    subtitle: Text(
+                                      'id : ${data.employeeId}',
+                                      style: const TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w400),
+                                    ),
+                                    leading: Image.file(
+                                      File(data.imagePath),
+                                      height: 80.0,
+                                      width: 80.0,
+                                    ),
+                                    trailing: IconButton(
+                                      icon: const Icon(
+                                        Icons.delete,
+                                        color: Colors.red,
+                                      ),
+                                      onPressed: () {
+                                        imageHiveBox.delete(index);
+                                        setState(() {
+                                          imageDataList = imageHiveBox.getAll();
+                                          imageDataList?.then((value) {
+                                            setState(() {
+                                              isImageDataListIsNotEmpty = value.isNotEmpty;
+                                            });
+                                          });
+                                        });
+                                      },
+                                    ),
+                                  );
+                                },
+                              );
+                            } else if (snapshot.hasError) {
+                              return Center(
+                                  child: Text('Error: ${snapshot.error}'));
+                            }
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          },
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 16.0),
+                          child: SizedBox(
+                            width: double.infinity,
                             child: ElevatedButton(
                               style: ButtonStyle(
-                                  backgroundColor: MaterialStateColor.resolveWith(
-                                          (states) => states.isEmpty
-                                          ? primaryButtonColor
-                                          : Colors.black26),
+                                  backgroundColor:
+                                  MaterialStateColor.resolveWith((states) =>
+                                  states.isEmpty
+                                      ? primaryButtonColor
+                                      : Colors.black26),
                                   shape: MaterialStateProperty.all<
                                       RoundedRectangleBorder>(
                                       RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(10.0),
                                       ))),
                               onPressed: () async {
-                                var doctorName =
-                                _doctorNameController.text.toString();
-                                var employeeId = currentLoginUser.userID;
-                                if (doctorName.isEmpty) {
-                                  Fluttertoast.showToast(
-                                      msg: "Please Enter Doctor Name",
-                                      toastLength: Toast.LENGTH_SHORT,
-                                      gravity: ToastGravity.BOTTOM,
-                                      timeInSecForIosWeb: 1,
-                                      backgroundColor: Colors.red,
-                                      textColor: Colors.white,
-                                      fontSize: 16.0);
-                                } else if (_image == null) {
-                                  Fluttertoast.showToast(
-                                      msg: "Image is empty!!",
-                                      toastLength: Toast.LENGTH_SHORT,
-                                      gravity: ToastGravity.BOTTOM,
-                                      timeInSecForIosWeb: 1,
-                                      backgroundColor: Colors.red,
-                                      textColor: Colors.white,
-                                      fontSize: 16.0);
-                                } else {
-                                  enableUploadButtons.value =
-                                  !enableUploadButtons.value;
-                                  await sendPrescribedProducts(
-                                      _image!,
-                                      doctorName,
-                                      employeeId,
-                                      prescribedProducts, (isSuccess) {
-                                    if (isSuccess) {
-                                      setState(() {
-                                        _doctorNameController.text = "";
-                                        _image = null;
-                                        _isImageChoose = false;
-                                      });
-                                    } else {
-                                      Fluttertoast.showToast(
-                                          msg: "Error!!",
-                                          toastLength: Toast.LENGTH_LONG,
-                                          gravity: ToastGravity.BOTTOM,
-                                          timeInSecForIosWeb: 1,
-                                          backgroundColor: Colors.red,
-                                          textColor: Colors.white,
-                                          fontSize: 16.0);
-                                    }
-                                  });
-                                  enableUploadButtons.value =
-                                  !enableUploadButtons.value;
-                                }
+                                enableUploadButtons.value =
+                                !enableUploadButtons.value;
+                                await sendAllPrescribedProducts();
+                                enableUploadButtons.value =
+                                !enableUploadButtons.value;
                               },
                               child: (enableUploadButtons.value)
                                   ? const Text(
-                                'Upload',
+                                'Upload All',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 20,
@@ -476,231 +680,10 @@ class _ImageCaptureState extends State<ImageCapture> {
                             ),
                           ),
                         ),
-                        Expanded(
-                          flex: 1,
-                          child: Padding(
-                            padding:
-                            const EdgeInsets.only(bottom: 10.0, left: 5.0),
-                            child: ElevatedButton(
-                              style: ButtonStyle(
-                                  backgroundColor: MaterialStateColor.resolveWith(
-                                          (states) => states.isEmpty
-                                          ? primaryButtonColor
-                                          : Colors.black26),
-                                  shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10.0),
-                                      ))),
-                              onPressed: () async {
-                                var doctorName =
-                                _doctorNameController.text.toString();
-                                var employeeId = currentLoginUser.userID;
-                                if (doctorName.isEmpty) {
-                                  Fluttertoast.showToast(
-                                      msg: "Please Enter Doctor Name",
-                                      toastLength: Toast.LENGTH_SHORT,
-                                      gravity: ToastGravity.BOTTOM,
-                                      timeInSecForIosWeb: 1,
-                                      backgroundColor: Colors.red,
-                                      textColor: Colors.white,
-                                      fontSize: 16.0);
-                                } else if (_image == null) {
-                                  Fluttertoast.showToast(
-                                      msg: "Image is empty!!",
-                                      toastLength: Toast.LENGTH_SHORT,
-                                      gravity: ToastGravity.BOTTOM,
-                                      timeInSecForIosWeb: 1,
-                                      backgroundColor: Colors.red,
-                                      textColor: Colors.white,
-                                      fontSize: 16.0);
-                                } else {
-                                  enableUploadButtons.value =
-                                  !enableUploadButtons.value;
-                                  var data = ImageDataModel(
-                                      imagePath: "",
-                                      doctorName: doctorName,
-                                      employeeId: employeeId);
-                                  saveImage(data, _image!, (isDataAdd) {
-                                    setState(() {
-                                      _doctorNameController.text = "";
-                                      _image = null;
-                                      _isImageChoose = false;
-                                      imageDataList = imageHiveBox.getAll();
-                                      imageDataList?.then((value) {
-                                        setState(() {
-                                          isImageDataListIsNotEmpty = value.isNotEmpty;
-                                        });
-                                        print("saveImage imageDataList : $value");
-                                      });
-                                    });
-                                  });
-
-                                  enableUploadButtons.value =
-                                  !enableUploadButtons.value;
-                                }
-                              },
-                              child: (enableUploadButtons.value)
-                                  ? const Text(
-                                'Save',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              )
-                                  : const Text(
-                                'Loading...',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
                       ],
                     ),
-
-                    Visibility(
-                      visible: isImageDataListIsNotEmpty,
-                      child: Column(
-                        children: [
-                          FutureBuilder<List<ImageDataModel>>(
-                            future: imageDataList,
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData) {
-                                final dataList = snapshot.data!;
-                                return ListView.builder(
-                                  scrollDirection: Axis.vertical,
-                                  shrinkWrap: true,
-                                  itemCount: dataList.length,
-                                  itemBuilder: (context, index) {
-                                    final data = dataList[index];
-                                    return ListTile(
-                                      title: Text(
-                                        "Doctor Name : ${data.doctorName}",
-                                        style: const TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 18.0,
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                      subtitle: Text(
-                                        'id : ${data.employeeId}',
-                                        style: const TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 14.0,
-                                            fontWeight: FontWeight.w400),
-                                      ),
-                                      leading: Image.file(
-                                        File(data.imagePath),
-                                        height: 80.0,
-                                        width: 80.0,
-                                      ),
-                                      trailing: IconButton(
-                                        icon: const Icon(
-                                          Icons.delete,
-                                          color: Colors.red,
-                                        ),
-                                        onPressed: () {
-                                          imageHiveBox.delete(index);
-                                          setState(() {
-                                            imageDataList = imageHiveBox.getAll();
-                                            imageDataList?.then((value) {
-                                              setState(() {
-                                                isImageDataListIsNotEmpty = value.isNotEmpty;
-                                              });
-                                            });
-                                          });
-                                        },
-                                      ),
-                                    );
-                                  },
-                                );
-                              } else if (snapshot.hasError) {
-                                return Center(
-                                    child: Text('Error: ${snapshot.error}'));
-                              }
-                              return const Center(
-                                  child: CircularProgressIndicator());
-                            },
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 16.0),
-                            child: SizedBox(
-                              width: double.infinity,
-                              child: ElevatedButton(
-                                style: ButtonStyle(
-                                    backgroundColor:
-                                    MaterialStateColor.resolveWith((states) =>
-                                    states.isEmpty
-                                        ? primaryButtonColor
-                                        : Colors.black26),
-                                    shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                        RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10.0),
-                                        ))),
-                                onPressed: () async {
-                                  enableUploadButtons.value =
-                                  !enableUploadButtons.value;
-                                  await sendAllPrescribedProducts((isSuccess) {
-                                    if (isSuccess) {
-                                      Fluttertoast.showToast(
-                                          msg: "Successfully Upload All Data",
-                                          toastLength: Toast.LENGTH_LONG,
-                                          gravity: ToastGravity.BOTTOM,
-                                          timeInSecForIosWeb: 1,
-                                          backgroundColor: Colors.red,
-                                          textColor: Colors.white,
-                                          fontSize: 16.0);
-                                      setState(() {
-                                        _doctorNameController.text = "";
-                                        _image = null;
-                                        _isImageChoose = false;
-                                        isImageDataListIsNotEmpty = false;
-                                        imageHiveBox.deleteAllData();
-                                      });
-                                    } else {
-                                      Fluttertoast.showToast(
-                                          msg: "Error!!",
-                                          toastLength: Toast.LENGTH_LONG,
-                                          gravity: ToastGravity.BOTTOM,
-                                          timeInSecForIosWeb: 1,
-                                          backgroundColor: Colors.red,
-                                          textColor: Colors.white,
-                                          fontSize: 16.0);
-                                    }
-                                  });
-                                  enableUploadButtons.value =
-                                  !enableUploadButtons.value;
-                                },
-                                child: (enableUploadButtons.value)
-                                    ? const Text(
-                                  'Upload All',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                )
-                                    : const Text(
-                                  'Uploading...',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
         ),
