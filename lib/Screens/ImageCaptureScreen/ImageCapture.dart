@@ -24,8 +24,6 @@ class ImageCapture extends StatefulWidget {
 }
 
 class _ImageCaptureState extends State<ImageCapture> {
-  Future<List<ImageDataModel>>? imageDataList;
-  bool isImageDataListIsNotEmpty = true;
   File? _image;
   bool _isImageChoose = false;
   ImagePicker imagePicker = ImagePicker();
@@ -36,20 +34,6 @@ class _ImageCaptureState extends State<ImageCapture> {
     {'productName': 'Product A', 'quantity': 1},
     {'productName': 'Product B', 'quantity': 2},
   ];
-
-  @override
-  void initState() {
-    setState(() {
-      imageDataList = imageHiveBox.getAll();
-      imageDataList?.then((value) {
-        setState(() {
-          isImageDataListIsNotEmpty = value.isNotEmpty;
-        });
-        print("initState imageDataList : $value");
-      });
-    });
-    super.initState();
-  }
 
   _imageFromCamera() async {
     try {
@@ -165,76 +149,6 @@ class _ImageCaptureState extends State<ImageCapture> {
           fontSize: 16.0);
       print('Error sending data: ${response.reasonPhrase}');
     }
-  }
-
-  sendAllPrescribedProducts() async {
-    imageDataList?.then((value) async {
-      int count = 0;
-      int pos = 0;
-      for (var p in value) {
-        var uri =
-            Uri.parse('${serverPath}/api/ImageCapture/SubmitImageCapture');
-        var request = http.Request('POST', uri);
-        var authorizationToken = currentLoginUser.token;
-        request.headers['accept'] = '*/*';
-        request.headers['Authorization'] = 'Bearer $authorizationToken';
-        request.headers['Content-Type'] = 'application/json';
-
-        var bytes = await File(p.imagePath).readAsBytes();
-        var base64Image = base64Encode(bytes);
-        var data = {
-          'doctorName': p.doctorName,
-          'employeeId': p.employeeId,
-          'base64Image': base64Image,
-          // 'prescribedProducts': prescribedProducts.toString(),
-        };
-
-        var jsonData = jsonEncode(data);
-        request.body = jsonData;
-
-        var response = await request.send();
-        if (response.statusCode == 200) {
-          imageHiveBox.delete(pos);
-          setState(() {
-            imageDataList = imageHiveBox.getAll();
-            imageDataList?.then((value) {
-              setState(() {
-                pos--;
-                isImageDataListIsNotEmpty = value.isNotEmpty;
-              });
-            });
-          });
-          count++;
-          print('upload pending: $count');
-        } else {
-          print('error $count');
-        }
-        pos++;
-      }
-
-      print('count : $count');
-      print('list size : ${value.length}');
-
-      if (count == value.length) {
-        Fluttertoast.showToast(
-            msg: "Successfully Upload All Data",
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 16.0);
-      } else {
-        Fluttertoast.showToast(
-            msg: "Error: ",
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 16.0);
-      }
-    });
   }
 
   @override
@@ -535,14 +449,6 @@ class _ImageCaptureState extends State<ImageCapture> {
                                   _doctorNameController.text = "";
                                   _image = null;
                                   _isImageChoose = false;
-                                  imageDataList = imageHiveBox.getAll();
-                                  imageDataList?.then((value) {
-                                    setState(() {
-                                      isImageDataListIsNotEmpty =
-                                          value.isNotEmpty;
-                                    });
-                                    print("saveImage imageDataList : $value");
-                                  });
                                 });
                               });
 
@@ -571,125 +477,6 @@ class _ImageCaptureState extends State<ImageCapture> {
                       ),
                     ),
                   ],
-                ),
-                Visibility(
-                  visible: isImageDataListIsNotEmpty,
-                  child: Column(
-                    children: [
-                      FutureBuilder<List<ImageDataModel>>(
-                        future: imageDataList,
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            final dataList = snapshot.data!;
-                            return ListView.builder(
-                              primary: false,
-                              shrinkWrap: true,
-                              itemCount: dataList.length,
-                              itemBuilder: (context, index) {
-                                final data = dataList[index];
-                                return Card(
-                                  elevation: 1,
-                                  child: ListTile(
-                                    title: Text(
-                                      "Dr. Name : ${data.doctorName}",
-                                      style: const TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 12.0,
-                                          fontWeight: FontWeight.w500),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    // subtitle: Text(
-                                    //   'id : ${data.employeeId}',
-                                    //   style: const TextStyle(
-                                    //       color: Colors.black,
-                                    //       fontSize: 14.0,
-                                    //       fontWeight: FontWeight.w400),
-                                    // ),
-                                    leading: Padding(
-                                      padding: const EdgeInsets.all(6.0),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(8),
-                                        child: Image.file(
-                                          File(data.imagePath),
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                    trailing: IconButton(
-                                      icon: const Icon(
-                                        Icons.delete,
-                                        color: Colors.red,
-                                      ),
-                                      onPressed: () {
-                                        imageHiveBox.delete(index);
-                                        setState(() {
-                                          imageDataList = imageHiveBox.getAll();
-                                          imageDataList?.then((value) {
-                                            setState(() {
-                                              isImageDataListIsNotEmpty =
-                                                  value.isNotEmpty;
-                                            });
-                                          });
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                );
-                              },
-                            );
-                          } else if (snapshot.hasError) {
-                            return Center(
-                                child: Text('Error: ${snapshot.error}'));
-                          }
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        },
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 16.0),
-                        child: SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            style: ButtonStyle(
-                                backgroundColor: MaterialStateColor.resolveWith(
-                                    (states) => states.isEmpty
-                                        ? primaryButtonColor
-                                        : Colors.black26),
-                                shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                ))),
-                            onPressed: () async {
-                              enableUploadButtons.value =
-                                  !enableUploadButtons.value;
-                              await sendAllPrescribedProducts();
-                              enableUploadButtons.value =
-                                  !enableUploadButtons.value;
-                            },
-                            child: (enableUploadButtons.value)
-                                ? const Text(
-                                    'Upload All',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  )
-                                : const Text(
-                                    'Uploading...',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
                 ),
               ],
             ),

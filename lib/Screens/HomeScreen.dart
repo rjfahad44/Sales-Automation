@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:location/location.dart';
 import 'package:sales_automation/Screens/Attendance/AttendanceScreen.dart';
+import 'package:sales_automation/Screens/ImageArchive/ImageArchive.dart';
 import 'package:sales_automation/Screens/ImageCaptureScreen/ImageCapture.dart';
 
 import '../Components/Components.dart';
@@ -154,7 +155,7 @@ class Menu extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10.0),
                     ))),
                 onPressed: () {
-                  // goToPage(OrderCreateScreen(), context);
+                  goToPage(const ImageArchive(), context);
                 },
                 child: MenuButton(90, "assets/images/archive.png",
                     "Image Archive", textWidth)),
