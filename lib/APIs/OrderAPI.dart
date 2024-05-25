@@ -10,7 +10,7 @@ import '../global.dart';
 class OrderAPI {
   Future<List<Item>> getItems() async {
     final response = await http.get(
-      Uri.parse('${serverPath}/api/Products/Dropdowns'),
+      Uri.parse('$serverPath/api/Products/Dropdowns'),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
@@ -27,7 +27,7 @@ class OrderAPI {
       Map resp = json.decode(response.body);
 
       for (int i = 0; i < resp["data"].length; i++) {
-        items.add(new Item(resp["data"][i]["id"], resp["data"][i]["text"],
+        items.add(Item(resp["data"][i]["id"], resp["data"][i]["text"],
             TextEditingController()));
       }
 
@@ -62,9 +62,10 @@ class OrderAPI {
   //   }
   // }
 
-  Future<List<Item>> getChemis() async {
+  Future<List<Item>> getChemistListForDropdown() async {
+    // currentLoginUser.userID
     final response = await http.get(
-      Uri.parse('${serverPath}/api/Chemists/ChemistListForDropdowns?id=${currentLoginUser.userID}'),
+      Uri.parse('$serverPath/api/Chemists/ChemistListForDropdowns?id=${828}'),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
@@ -79,8 +80,9 @@ class OrderAPI {
 
       for (int i = 0; i < resp["data"].length; i++) {
         items.add(
-          new Item(resp["data"][i]["id"], resp["data"][i]["text"],
-              TextEditingController()),
+          Item(resp["data"][i]["id"], resp["data"][i]["text"],
+              TextEditingController()
+          ),
         );
       }
       print(items.length);
@@ -96,7 +98,7 @@ class OrderAPI {
   Future<double> getItemPrice(int itemID) async {
     final response = await http.get(
       Uri.parse(
-          '${serverPath}/api/Products/ById?id=$itemID'),
+          '$serverPath/api/Products/ById?id=$itemID'),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
@@ -142,7 +144,7 @@ class OrderAPI {
 
     final response = await http.post(
       Uri.parse(
-          '${serverPath}/api/Order'),
+          '$serverPath/api/Order'),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",

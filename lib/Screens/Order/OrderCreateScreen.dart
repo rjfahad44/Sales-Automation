@@ -18,6 +18,7 @@ class _OrderCreateScreenState extends State<OrderCreateScreen> {
 
   List<String> deliveryTimes = ['Morning', 'Evening', 'Night'];
   List<String> paymentTypes = ['Cash', 'Bank deposit', 'Bkash'];
+  List<Item> chemistDropdownList = [];
   String selecteddeliveryTimes = 'Morning';
   String chemistHint = "Select Chemist";
   String selectedPaymentTypes = 'Cash';
@@ -29,6 +30,11 @@ class _OrderCreateScreenState extends State<OrderCreateScreen> {
     super.initState();
     selecteddeliveryTimes = deliveryTimes[0];
     selectedPaymentTypes = paymentTypes[0];
+    api.getChemistListForDropdown().then((value) {
+      setState(() {
+        chemistDropdownList = value;
+      });
+    });
   }
 
   @override
@@ -111,70 +117,39 @@ class _OrderCreateScreenState extends State<OrderCreateScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  MyTextView("Chemist: ", 12, FontWeight.normal, Colors.black,
-                      TextAlign.center),
                   Flexible(
+                    flex: 1,
+                    child: MyTextView("Chemist: ", 12, FontWeight.normal, Colors.black, TextAlign.center),
+                  ),
+                  Flexible(
+                    flex: 4,
                     child: Card(
                       surfaceTintColor: Colors.white,
-                      child: SizedBox(
-                        width: 280,
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(8, 2, 8, 2),
-                          child: FutureBuilder<List<Item>>(
-                            future: api.getChemis(),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState == ConnectionState.waiting) {
-                                return Text('Loading');
-                              } else if (snapshot.hasError) {
-                                return Text('Error: ${snapshot.error}');
-                              } else {
-                                List<Item> items = snapshot.data ?? [];
-                                return DropdownButton<Item>(
-                                  hint: MyTextView(chemistHint, 12, FontWeight.normal, Colors.black,
-                                      TextAlign.center),
-                                  value: null, // Initially, no item is selected
-                                  isExpanded: true,
-                                  underline: Container(),
-                                  onChanged: (Item? selectedValue) {
-                                    chemistHint = selectedValue!.itemName;
-                                    selectedChemist = selectedValue;
-                                    setState(() {
-
-                                    });
-                                  },
-                                  items: items.map((Item item) {
-                                    return DropdownMenuItem<Item>(
-                                      value: item,
-                                      child: Text(item.itemName),
-                                    );
-                                  }).toList(),
-                                );
-                              }
-                            },
-                          )
-
-
-
-
-
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(8, 2, 8, 2),
+                        child: DropdownButton<Item>(
+                          hint: MyTextView(chemistHint, 12, FontWeight.normal, Colors.black, TextAlign.center),
+                          value: null, // Initially, no item is selected
+                          isExpanded: true,
+                          underline: Container(),
+                          onChanged: (Item? selectedValue) {
+                            setState(() {
+                              chemistHint = selectedValue!.itemName;
+                              selectedChemist = selectedValue;
+                            });
+                          },
+                          items: chemistDropdownList.map((Item item) {
+                            return DropdownMenuItem<Item>(
+                              value: item,
+                              child: Text(item.itemName),
+                            );
+                          }).toList(),
                         ),
                       ),
                     ),
                   ),
                 ],
               ),
-
-
-
-
-
-
-
-
-
-
-
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -236,7 +211,7 @@ class _OrderCreateScreenState extends State<OrderCreateScreen> {
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               ElevatedButton(

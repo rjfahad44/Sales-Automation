@@ -9,6 +9,7 @@ import '../Components/Components.dart';
 import '../Components/MenuButton.dart';
 import '../Services/LocationServices.dart';
 import '../global.dart';
+import 'Chemist/ChemistListScreen.dart';
 import 'Order/OrderCreateScreen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -63,6 +64,7 @@ class Menu extends StatelessWidget {
       child: SingleChildScrollView(
         child: Column(
           children: [
+
             const Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -383,7 +385,7 @@ class Menu extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(10.0),
                               ))),
                       onPressed: () {
-                        // goToPage(OrderCreateScreen(), context);
+                        goToPage(const ChemistListScreen(), context);
                       },
                       child: MenuButton(
                           90, "assets/images/chemist.png", "Chemist", textWidth)),

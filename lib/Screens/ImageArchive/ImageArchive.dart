@@ -162,87 +162,6 @@ class _ImageArchiveState extends State<ImageArchive> {
                                           )
                                         ],
                                       ),
-
-                                      // ListTile(
-                                      //   title: Text(
-                                      //     "Dr. Name : ${data.doctorName}",
-                                      //     style: const TextStyle(
-                                      //         color: Colors.black,
-                                      //         fontSize: 12.0,
-                                      //         fontWeight: FontWeight.w500),
-                                      //     maxLines: 1,
-                                      //     overflow: TextOverflow.ellipsis,
-                                      //   ),
-                                      //   leading: Padding(
-                                      //     padding: const EdgeInsets.all(6.0),
-                                      //     child: ClipRRect(
-                                      //       borderRadius:
-                                      //           BorderRadius.circular(8),
-                                      //       child: Image.file(
-                                      //         File(data.imagePath),
-                                      //         fit: BoxFit.cover,
-                                      //       ),
-                                      //     ),
-                                      //   ),
-                                      //   trailing: Row(
-                                      //     children: [
-                                      //       IconButton(
-                                      //         icon: const Icon(
-                                      //           Icons.delete,
-                                      //           color: Colors.red,
-                                      //         ),
-                                      //         onPressed: () {
-                                      //           imageHiveBox.delete(index);
-                                      //           setState(() {
-                                      //             imageDataList =
-                                      //                 imageHiveBox.getAll();
-                                      //             imageDataList?.then((value) {
-                                      //               setState(() {
-                                      //                 isImageDataListIsNotEmpty =
-                                      //                     value.isNotEmpty;
-                                      //               });
-                                      //             });
-                                      //           });
-                                      //         },
-                                      //       ),
-                                      //       IconButton(
-                                      //         icon: const Icon(
-                                      //           Icons.send,
-                                      //           color: Colors.blue,
-                                      //         ),
-                                      //         onPressed: () {
-                                      //           sendPrescribedProducts(
-                                      //               File(data.imagePath),
-                                      //               data.doctorName,
-                                      //               data.employeeId,
-                                      //               prescribedProducts,
-                                      //               (isSuccess) {
-                                      //                 if(isSuccess){
-                                      //                   imageHiveBox.delete(index);
-                                      //                   setState(() {
-                                      //                     imageDataList = imageHiveBox.getAll();
-                                      //                     imageDataList?.then((value) {
-                                      //                       setState(() {
-                                      //                         isImageDataListIsNotEmpty = value.isNotEmpty;
-                                      //                       });
-                                      //                     });
-                                      //                   });
-                                      //                 }else{
-                                      //                   Fluttertoast.showToast(
-                                      //                       msg: "Error!!",
-                                      //                       toastLength: Toast.LENGTH_LONG,
-                                      //                       gravity: ToastGravity.BOTTOM,
-                                      //                       timeInSecForIosWeb: 1,
-                                      //                       backgroundColor: Colors.red,
-                                      //                       textColor: Colors.white,
-                                      //                       fontSize: 16.0);
-                                      //                 }
-                                      //               });
-                                      //         },
-                                      //       ),
-                                      //     ],
-                                      //   ),
-                                      // ),
                                     );
                                   },
                                 );
@@ -304,7 +223,7 @@ class _ImageArchiveState extends State<ImageArchive> {
                 ),
               )
             : Center(
-                child: MyTextView("No Data Found!", 16, FontWeight.bold,
+                child: MyTextView("No Data Found!", 18, FontWeight.bold,
                     Colors.black, TextAlign.center),
               ),
       ),
