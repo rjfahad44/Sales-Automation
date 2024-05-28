@@ -6,11 +6,10 @@ import 'package:intl/intl.dart';
 
 class AttendanceAPI {
   Future<String> submitAttendance(LocationInf locationInf) async {
-    String now =
-        DateFormat('yyyy-MM-ddTHH:mm:ss.SSS').format(DateTime.now()) + 'Z';
+    String now = '${DateFormat('yyyy-MM-ddTHH:mm:ss.SSS').format(DateTime.now())}Z';
 
     Map map = {
-      "employeeID": currentLoginUser.userID,
+      "employeeID": userData.employeeId,
       "date": now,
       "status": true,
       "isApproved": true,
@@ -24,29 +23,11 @@ class AttendanceAPI {
       "ip": "string"
     };
 
-
-    // {
-    //   "employeeID": currentLoginUser.userID,
-    //   "date": now,
-    //   "signInTime": now,
-    //   "signOutTime": now,
-    //   "status": true,
-    //   "isApproved": true,
-    //   "signInLatitude": locationInf.lat.toString(),
-    //   "signInLongitude": locationInf.lon.toString(),
-    //   "signInAddress": locationInf.locationDetails,
-    //   "signOutLatitude": locationInf.lat.toString(),
-    //   "signOutLongitude": locationInf.lon.toString(),
-    //   "signOutAddress": locationInf.locationDetails,
-    //   "deviceID": "string",
-    //   "ip": "string"
-    // };
-
     final response = await http.post(
-      Uri.parse('${serverPath}/api/Attendances/SubmitAttendance'),
+      Uri.parse('$serverPath/api/Attendances/SubmitAttendance'),
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer $token",
+        "Authorization": "Bearer ${userData.token}",
       },
       body: jsonEncode(map),
     );

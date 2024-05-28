@@ -6,26 +6,21 @@ import 'package:location/location.dart';
 import 'package:sales_automation/Models/LocationInfo.dart';
 import 'package:sales_automation/global.dart';
 
-class LocationServices{
-
-
+class LocationServices {
   Future<LocationInf> getCurrentLocation() async {
     Marker marker = Marker(
-      point: LatLng(23.23, 23.23),
+      point: const LatLng(23.23, 23.23),
       height: 12,
       width: 12,
       child: ColoredBox(color: Colors.blue[900]!),
     );
-
-
-    LocationInf locationInf = new LocationInf(0, 0, "locationName", marker);
-
+    LocationInf locationInf = LocationInf(0, 0, "locationName", marker);
 
     try {
-      Location location = new Location();
+      Location location = Location();
       var currentLocation = await location.getLocation();
-      double lat = await currentLocation.latitude!;
-      double lon = await currentLocation.longitude!;
+      double lat = currentLocation.latitude!;
+      double lon = currentLocation.longitude!;
 
       marker = Marker(
         point: LatLng(lat, lon),
@@ -33,24 +28,19 @@ class LocationServices{
         width: 12,
         child: ColoredBox(color: Colors.blue[900]!),
       );
-
-      locationInf = new LocationInf(lat, lon, "locationName", marker);
-
-
-
+      locationInf = LocationInf(lat, lon, "locationName", marker);
     } catch (e) {
       locationInf.locationDetails = e.toString();
     }
-
     return locationInf;
   }
 
   void enablePermission() async {
-    Location location = new Location();
-    var _permission = await location.hasPermission();
-    if (_permission == PermissionStatus.denied) {
-      _permission = await location.requestPermission();
-      if (_permission == PermissionStatus.granted) {
+    Location location = Location();
+    var permission = await location.hasPermission();
+    if (permission == PermissionStatus.denied) {
+      permission = await location.requestPermission();
+      if (permission == PermissionStatus.granted) {
         enableLocation();
       } else {
         Fluttertoast.showToast(
@@ -67,7 +57,7 @@ class LocationServices{
   }
 
   Future<bool> enableLocation() async {
-    Location location = new Location();
+    Location location = Location();
     var serviceEnabled = await location.serviceEnabled();
     if (!serviceEnabled) {
       serviceEnabled = await location.requestService();
@@ -78,8 +68,6 @@ class LocationServices{
           backgroundColor: themeColor,
           textColor: primaryTextColor,
           fontSize: 16.0);
-
-
     } else {
       Fluttertoast.showToast(
           msg: "Location service enabled",
@@ -91,8 +79,4 @@ class LocationServices{
     }
     return true;
   }
-
-
-
-
 }

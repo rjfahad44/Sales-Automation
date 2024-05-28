@@ -21,7 +21,6 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   final ValueNotifier<bool> enableButton = ValueNotifier(true);
   LocationServices locationServices = LocationServices();
 
-
   @override
   void initState() {
     // TODO: implement initState
@@ -41,7 +40,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
         future: locationServices.getCurrentLocation(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: Text('Tracking location...'));
+            return const Center(child: Text('Tracking location...'));
           } else if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           } else {
@@ -50,107 +49,86 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Container(
+                  SizedBox(
                     height: 500,
                     child: FlutterMap(
                       options: MapOptions(
                         initialCameraFit: CameraFit.bounds(
                           bounds: LatLngBounds(
-                              LatLng(snapshot.data!.marker.point.latitude - 0.002,
-                                  snapshot.data!.marker.point.longitude - 0.002),
-                              LatLng(snapshot.data!.marker.point.latitude + 0.002, snapshot.data!.marker.point.longitude + 0.002)),
+                              LatLng(
+                                  snapshot.data!.marker.point.latitude - 0.002,
+                                  snapshot.data!.marker.point.longitude -
+                                      0.002),
+                              LatLng(
+                                  snapshot.data!.marker.point.latitude + 0.002,
+                                  snapshot.data!.marker.point.longitude +
+                                      0.002)),
                           padding: const EdgeInsets.all(8),
                         ),
                       ),
-
                       children: [
                         openStreetMapTileLayer,
                       ],
                     ),
                   ),
-
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ValueListenableBuilder<bool>(
                         valueListenable: enableButton,
                         builder: (context, val, child) {
                           return ElevatedButton(
-                            onPressed: (val)?() async {
+                            onPressed: (val)
+                                ? () async {
+                                    enableButton.value = !enableButton.value;
+                                    AttendanceAPI api = AttendanceAPI();
+                                    String status = await api
+                                        .submitAttendance(snapshot.data!);
+                                    Fluttertoast.showToast(
+                                        msg: status,
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.BOTTOM,
+                                        timeInSecForIosWeb: 1,
+                                        backgroundColor: Colors.red,
+                                        textColor: Colors.white,
+                                        fontSize: 16.0);
 
-                              enableButton.value = !enableButton.value;
-                              AttendanceAPI api = AttendanceAPI();
-                              String status = await api.submitAttendance(snapshot.data!);
-                              Fluttertoast.showToast(
-                                  msg: status,
-                                  toastLength: Toast.LENGTH_SHORT,
-                                  gravity: ToastGravity.BOTTOM,
-                                  timeInSecForIosWeb: 1,
-                                  backgroundColor: Colors.red,
-                                  textColor: Colors.white,
-                                  fontSize: 16.0);
-
-                              enableButton.value = !enableButton.value;
-
-
-                            }:null,
-                            child: (val)?const Text(
-                              'Submit attendance ',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ):Center(
-                              child: const Text(
-                                'Loading ... ',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                            ),
+                                    enableButton.value = !enableButton.value;
+                                  }
+                                : null,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: themeColor,
                               padding: const EdgeInsets.symmetric(vertical: 13),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8)),
                             ),
+                            child: (val)
+                                ? const Text(
+                                    'Submit attendance ',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  )
+                                : const Center(
+                                    child: Text(
+                                      'Loading ... ',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ),
                           );
-                        })
-
-
-
-
-
-
-
-                    ,
-                  )
+                        }),
+                  ),
                 ],
               ),
             );
           }
         },
-      )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      ,
+      ),
     );
   }
 

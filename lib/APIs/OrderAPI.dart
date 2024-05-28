@@ -8,29 +8,34 @@ import '../Models/Item.dart';
 import '../global.dart';
 
 class OrderAPI {
+
   Future<List<Item>> getItems() async {
+
     final response = await http.get(
       Uri.parse('$serverPath/api/Products/Dropdowns'),
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer $token",
+        "Authorization": "Bearer ${userData.token}",
       },
     );
-
 
     print("--------------------------");
     print(response.body);
     print(response.statusCode);
-    List<Item> items = [];
 
+    List<Item> items = [];
     if (response.statusCode == 200) {
       Map resp = json.decode(response.body);
 
       for (int i = 0; i < resp["data"].length; i++) {
-        items.add(Item(resp["data"][i]["id"], resp["data"][i]["text"],
-            TextEditingController()));
+        items.add(
+          Item(
+            resp["data"][i]["id"],
+            resp["data"][i]["text"],
+            TextEditingController(),
+          ),
+        );
       }
-
       return items;
     } else {
       throw Exception('Failed to load posts');
@@ -65,10 +70,10 @@ class OrderAPI {
   Future<List<Item>> getChemistListForDropdown() async {
     // currentLoginUser.userID
     final response = await http.get(
-      Uri.parse('$serverPath/api/Chemists/ChemistListForDropdowns?id=${828}'),
+      Uri.parse('$serverPath/api/Chemists/ChemistListForDropdowns?id=${userData.id}'),
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer $token",
+        "Authorization": "Bearer ${userData.token}",
       },
     );
     List<Item> items = [];
@@ -81,8 +86,7 @@ class OrderAPI {
       for (int i = 0; i < resp["data"].length; i++) {
         items.add(
           Item(resp["data"][i]["id"], resp["data"][i]["text"],
-              TextEditingController()
-          ),
+              TextEditingController()),
         );
       }
       print(items.length);
@@ -92,16 +96,12 @@ class OrderAPI {
     }
   }
 
-
-
-
   Future<double> getItemPrice(int itemID) async {
     final response = await http.get(
-      Uri.parse(
-          '$serverPath/api/Products/ById?id=$itemID'),
+      Uri.parse('$serverPath/api/Products/ById?id=$itemID'),
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer $token",
+        "Authorization": "Bearer ${userData.token}",
       },
     );
     List<Item> items = [];
@@ -118,36 +118,30 @@ class OrderAPI {
     }
   }
 
-
   Future<bool> submitOrder(List<Cart> carts) async {
-
     List<Map> itemsListJson = [];
-    for(int i = 0; i<carts.length; i++){
+    for (int i = 0; i < carts.length; i++) {
       itemsListJson.add({
         "id": 0,
         "orderId": 0,
         "productId": carts[i].itemID,
         "quantity": carts[i].quantity,
-        "amount": (carts[i].quantity*carts[i].unitPrice)
+        "amount": (carts[i].quantity * carts[i].unitPrice)
       });
     }
 
-    Map map =  {
+    Map map = {
       "orderDate": "2024-01-27",
       "orderNo": "123654",
       "chemistId": carts[0].chemistID,
       "orderDetails": itemsListJson
     };
 
-
-
-
     final response = await http.post(
-      Uri.parse(
-          '$serverPath/api/Order'),
+      Uri.parse('$serverPath/api/Order'),
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer $token",
+        "Authorization": "Bearer ${userData.token}",
       },
       body: jsonEncode(map),
     );
@@ -155,13 +149,8 @@ class OrderAPI {
     if (response.statusCode == 200) {
       Map resp = json.decode(response.body);
       return resp["success"];
-
     } else {
       return false;
-
     }
   }
-
-
-
 }

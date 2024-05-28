@@ -4,13 +4,16 @@ import 'package:location/location.dart';
 import 'package:sales_automation/Screens/Attendance/AttendanceScreen.dart';
 import 'package:sales_automation/Screens/ImageArchive/ImageArchive.dart';
 import 'package:sales_automation/Screens/ImageCaptureScreen/ImageCapture.dart';
+import 'package:sales_automation/Screens/LoginScreen.dart';
 
 import '../Components/Components.dart';
 import '../Components/MenuButton.dart';
+import '../LocalDB/PrefsDb.dart';
 import '../Services/LocationServices.dart';
 import '../global.dart';
 import 'Chemist/ChemistListScreen.dart';
 import 'Order/OrderCreateScreen.dart';
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -20,6 +23,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  var prefs = PrefsDb();
+
   @override
   void initState() {
     super.initState();
@@ -29,13 +34,75 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Scaffold(
-            appBar: AppBar(
-              title: MyTextView("Sales Automation", 16, FontWeight.bold,
-                  Colors.black, TextAlign.center),
-              backgroundColor: themeColor,
+      child: Scaffold(
+        appBar: AppBar(
+          title: MyTextView("Sales Automation", 16, FontWeight.bold,
+              Colors.black, TextAlign.center),
+          backgroundColor: themeColor,
+          actions: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: IconButton(
+                icon: const Icon(
+                  Icons.logout,
+                  color: Colors.red,
+                ),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text(
+                          "Log Out",
+                        ),
+                        content:
+                            const Text("Are you sure you want to log out?"),
+                        actions: [
+                          TextButton(
+                            child: const Text(
+                              "No",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 16.0,
+                              ),
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          TextButton(
+                            child: const Text(
+                              "Yes",
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 16.0,
+                              ),
+                            ),
+                            onPressed: () {
+                              prefs.saveDataToSP(PrefsDb.USER_DATA, '');
+                              prefs.saveDataToSP(PrefsDb.USER_NAME_AND_PASS, '');
+                              Navigator.of(context).pop();
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const LogInScreen()),
+                              );
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+              ),
             ),
-            body: Menu()));
+          ],
+        ),
+        body: const Menu(),
+      ),
+    );
   }
 
   Future<void> loadData() async {
@@ -64,25 +131,22 @@ class Menu extends StatelessWidget {
       child: SingleChildScrollView(
         child: Column(
           children: [
-
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
+                const Text(
                   'Welcome: ',
                   style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black
-                  ),
+                      color: Colors.black),
                 ),
                 Text(
-                  '27211',
-                  style: TextStyle(
+                  "${userData.id}",
+                  style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black
-                  ),
+                      color: Colors.black),
                 ),
               ],
             ),
@@ -95,11 +159,7 @@ class Menu extends StatelessWidget {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(
-                          top: 8.0,
-                          left: 0.0,
-                          right: 8.0,
-                          bottom: 0.0
-                        ),
+                            top: 8.0, left: 0.0, right: 8.0, bottom: 0.0),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(100),
                           child: Image.network(
@@ -108,128 +168,116 @@ class Menu extends StatelessWidget {
                             height: 100,
                             fit: BoxFit.cover,
                             errorBuilder: (context, error, stackTrace) =>
-                            const Icon(Icons.error),
+                                const Icon(Icons.error),
                           ),
                         ),
                       ),
-
-                      const Padding(
-                        padding: EdgeInsets.all(8.0),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
                         child: Text(
-                            'Muhammad Fahad Alam',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black
-                          ),
+                          userData.userName,
+                          style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
                           textAlign: TextAlign.center,
                         ),
                       ),
                     ],
                   ),
                 ),
-                const Expanded(
+                Expanded(
                   flex: 2,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
                         children: [
-                          Text(
+                          const Text(
                             'Name: ',
                             style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.black
-                            ),
+                                color: Colors.black),
                           ),
                           Text(
-                            'Muhammad Fahad Alam',
-                            style: TextStyle(
+                            userData.userName,
+                            style: const TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.black
-                            ),
+                                color: Colors.black),
                           ),
                         ],
                       ),
-                      Row(
+                      const Row(
                         children: [
                           Text(
                             'Designation: ',
                             style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.black
-                            ),
+                                color: Colors.black),
                           ),
                           Text(
-                            'Developer',
+                            '',
                             style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.black
-                            ),
+                                color: Colors.black),
                           ),
                         ],
                       ),
-                      Row(
+                      const Row(
                         children: [
                           Text(
                             'TR Code: ',
                             style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.black
-                            ),
+                                color: Colors.black),
                           ),
                           Text(
-                            'CS45',
+                            '',
                             style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.black
-                            ),
+                                color: Colors.black),
                           ),
                         ],
                       ),
-                      Row(
+                      const Row(
                         children: [
                           Text(
                             'Mobile: ',
                             style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.black
-                            ),
+                                color: Colors.black),
                           ),
                           Text(
-                            '8801843704802',
+                            '',
                             style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.black
-                            ),
+                                color: Colors.black),
                           ),
                         ],
                       ),
-                      Row(
+                      const Row(
                         children: [
                           Text(
                             'Version: ',
                             style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.black
-                            ),
+                                color: Colors.black),
                           ),
                           Text(
-                            '1.6',
+                           '1.0',
                             style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.black
-                            ),
+                                color: Colors.black),
                           ),
                         ],
                       ),
@@ -238,7 +286,6 @@ class Menu extends StatelessWidget {
                 ),
               ],
             ),
-
             GridView.count(
               shrinkWrap: true,
               primary: false,
@@ -250,43 +297,46 @@ class Menu extends StatelessWidget {
                   child: ElevatedButton(
                       style: ButtonStyle(
                           backgroundColor: MaterialStateColor.resolveWith(
-                                  (states) => primaryButtonColor),
-                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ))),
+                              (states) => primaryButtonColor),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ))),
                       onPressed: () {
-                        goToPage(OrderCreateScreen(), context);
+                        goToPage(const OrderCreateScreen(), true, context);
                       },
-                      child: MenuButton(
-                          90, "assets/images/newOrder.png", "New Order", textWidth)),
+                      child: MenuButton(90, "assets/images/newOrder.png",
+                          "New Order", textWidth)),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(2.0),
                   child: ElevatedButton(
                       style: ButtonStyle(
                           backgroundColor: MaterialStateColor.resolveWith(
-                                  (states) => primaryButtonColor),
-                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ))),
+                              (states) => primaryButtonColor),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ))),
                       onPressed: () {
                         // goToPage(OrderCreateScreen(), context);
                       },
-                      child: MenuButton(
-                          90, "assets/images/draft.png", "Order Draft", textWidth)),
+                      child: MenuButton(90, "assets/images/draft.png",
+                          "Order Draft", textWidth)),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(2.0),
                   child: ElevatedButton(
                       style: ButtonStyle(
                           backgroundColor: MaterialStateColor.resolveWith(
-                                  (states) => primaryButtonColor),
-                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ))),
+                              (states) => primaryButtonColor),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ))),
                       onPressed: () {
                         // goToPage(OrderCreateScreen(), context);
                       },
@@ -298,30 +348,32 @@ class Menu extends StatelessWidget {
                   child: ElevatedButton(
                       style: ButtonStyle(
                           backgroundColor: MaterialStateColor.resolveWith(
-                                  (states) => primaryButtonColor),
-                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ))),
+                              (states) => primaryButtonColor),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ))),
                       onPressed: () {
                         // goToPage(OrderCreateScreen(), context);
                       },
-                      child: MenuButton(
-                          90, "assets/images/sync.png", "Syncronize", textWidth)),
+                      child: MenuButton(90, "assets/images/sync.png",
+                          "Syncronize", textWidth)),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(2.0),
                   child: ElevatedButton(
                       style: ButtonStyle(
                           backgroundColor: MaterialStateColor.resolveWith(
-                                  (states) => primaryButtonColor),
-                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ))),
+                              (states) => primaryButtonColor),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ))),
                       onPressed: () {
                         //goToPage(OrderCreateScreen(), context);
-                        goToPage(const ImageCapture(), context);
+                        goToPage(const ImageCapture(), true, context);
                       },
                       child: MenuButton(90, "assets/images/camera.png",
                           "Image Capture", textWidth)),
@@ -331,13 +383,14 @@ class Menu extends StatelessWidget {
                   child: ElevatedButton(
                       style: ButtonStyle(
                           backgroundColor: MaterialStateColor.resolveWith(
-                                  (states) => primaryButtonColor),
-                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ))),
+                              (states) => primaryButtonColor),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ))),
                       onPressed: () {
-                        goToPage(const ImageArchive(), context);
+                        goToPage(const ImageArchive(), true, context);
                       },
                       child: MenuButton(90, "assets/images/archive.png",
                           "Image Archive", textWidth)),
@@ -347,11 +400,12 @@ class Menu extends StatelessWidget {
                   child: ElevatedButton(
                       style: ButtonStyle(
                           backgroundColor: MaterialStateColor.resolveWith(
-                                  (states) => primaryButtonColor),
-                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ))),
+                              (states) => primaryButtonColor),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ))),
                       onPressed: () {
                         // goToPage(OrderCreateScreen(), context);
                       },
@@ -363,11 +417,12 @@ class Menu extends StatelessWidget {
                   child: ElevatedButton(
                       style: ButtonStyle(
                           backgroundColor: MaterialStateColor.resolveWith(
-                                  (states) => primaryButtonColor),
-                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ))),
+                              (states) => primaryButtonColor),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ))),
                       onPressed: () {
                         // goToPage(OrderCreateScreen(), context);
                       },
@@ -379,43 +434,46 @@ class Menu extends StatelessWidget {
                   child: ElevatedButton(
                       style: ButtonStyle(
                           backgroundColor: MaterialStateColor.resolveWith(
-                                  (states) => primaryButtonColor),
-                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ))),
+                              (states) => primaryButtonColor),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ))),
                       onPressed: () {
-                        goToPage(const ChemistListScreen(), context);
+                        goToPage(const ChemistListScreen(), true, context);
                       },
-                      child: MenuButton(
-                          90, "assets/images/chemist.png", "Chemist", textWidth)),
+                      child: MenuButton(90, "assets/images/chemist.png",
+                          "Chemist", textWidth)),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(2.0),
                   child: ElevatedButton(
                       style: ButtonStyle(
                           backgroundColor: MaterialStateColor.resolveWith(
-                                  (states) => primaryButtonColor),
-                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ))),
+                              (states) => primaryButtonColor),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ))),
                       onPressed: () {
                         // goToPage(OrderCreateScreen(), context);
                       },
-                      child: MenuButton(
-                          90, "assets/images/products.png", "Product", textWidth)),
+                      child: MenuButton(90, "assets/images/products.png",
+                          "Product", textWidth)),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(2.0),
                   child: ElevatedButton(
                       style: ButtonStyle(
                           backgroundColor: MaterialStateColor.resolveWith(
-                                  (states) => primaryButtonColor),
-                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ))),
+                              (states) => primaryButtonColor),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ))),
                       onPressed: () {
                         // goToPage(OrderCreateScreen(), context);
                       },
@@ -427,13 +485,14 @@ class Menu extends StatelessWidget {
                   child: ElevatedButton(
                     style: ButtonStyle(
                         backgroundColor: MaterialStateColor.resolveWith(
-                                (states) => primaryButtonColor),
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ))),
+                            (states) => primaryButtonColor),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ))),
                     onPressed: () {
-                      goToPage(AttendanceScreen(), context);
+                      goToPage(const AttendanceScreen(), true, context);
                     },
                     child: MenuButton(90, "assets/images/geoPoint.png",
                         "Geo\nAttendance", textWidth),
@@ -446,8 +505,12 @@ class Menu extends StatelessWidget {
       ),
     );
   }
-
-  void goToPage(Widget page, BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => page));
+  void goToPage(Widget page, bool isBackPage, BuildContext context) {
+    if (isBackPage) {
+      Navigator.push(context, MaterialPageRoute(builder: (context) => page));
+    } else {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => page));
+    }
   }
 }

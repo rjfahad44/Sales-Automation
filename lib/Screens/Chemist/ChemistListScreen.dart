@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../APIs/OrderAPI.dart';
@@ -17,7 +16,7 @@ class ChemistListScreen extends StatefulWidget{
 class _ChemistListScreenState extends State<ChemistListScreen> {
 
   OrderAPI api = OrderAPI();
-  bool isChemistListEmpty = true;
+  bool isChemistListEmpty = false;
   List<String> chemistList = ['a', 'b', 'c'];
   List<Item> chemistDropdownList = [];
   String chemistHint = "Select Chemist";
@@ -43,44 +42,6 @@ class _ChemistListScreenState extends State<ChemistListScreen> {
         ),
         body: isChemistListEmpty? Column(
           children: [
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Flexible(
-                  flex: 1,
-                  child: MyTextView("Chemist: ", 12, FontWeight.normal, Colors.black, TextAlign.center),
-                ),
-                Flexible(
-                  flex: 4,
-                  child: Card(
-                    surfaceTintColor: Colors.white,
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(8, 2, 8, 2),
-                      child: DropdownButton<Item>(
-                        hint: MyTextView(chemistHint, 12, FontWeight.normal, Colors.black, TextAlign.center),
-                        value: null, // Initially, no item is selected
-                        isExpanded: true,
-                        underline: Container(),
-                        onChanged: (Item? selectedValue) {
-                          setState(() {
-                            chemistHint = selectedValue!.itemName;
-                            selectedChemist = selectedValue;
-                          });
-                        },
-                        items: chemistDropdownList.map((Item item) {
-                          return DropdownMenuItem<Item>(
-                            value: item,
-                            child: Text(item.itemName),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-
             ListView.builder(
               primary: false,
               shrinkWrap: true,

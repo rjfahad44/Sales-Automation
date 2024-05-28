@@ -1,17 +1,14 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:hive_flutter/adapters.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
+import '../../APIs/ImageUploadApis.dart';
 import '../../Components/Components.dart';
 import '../../LocalDB/DatabaseHelper.dart';
 import '../../global.dart';
 import 'dart:core';
 
-import 'Adapter/ImageDataModelAdapter.dart';
 import 'Model/ImageDataModel.dart';
 
 class ImageCapture extends StatefulWidget {
@@ -24,6 +21,7 @@ class ImageCapture extends StatefulWidget {
 }
 
 class _ImageCaptureState extends State<ImageCapture> {
+  ImageUploadApis imageUploadApis = ImageUploadApis();
   File? _image;
   bool _isImageChoose = false;
   ImagePicker imagePicker = ImagePicker();
@@ -92,64 +90,64 @@ class _ImageCaptureState extends State<ImageCapture> {
     });
   }
 
-  sendPrescribedProducts(
-      File image,
-      String doctorName,
-      int employeeId,
-      List<Map<String, dynamic>> prescribedProducts,
-      Function(bool isSuccess) callback) async {
-    var uri = Uri.parse('${serverPath}/api/ImageCapture/SubmitImageCapture');
-    var request = http.Request('POST', uri);
-    var authorizationToken = currentLoginUser.token;
-    print('\n\nToken : $authorizationToken');
-    request.headers['accept'] = '*/*';
-    request.headers['Authorization'] = 'Bearer $authorizationToken';
-    request.headers['Content-Type'] = 'application/json';
-
-    final bytes = await image.readAsBytes();
-    var base64Image = base64Encode(bytes);
-
-    print('\n\nBase64Image Data => $base64Image');
-    print('\n\nprescribedProducts => $prescribedProducts');
-    final data = {
-      'doctorName': doctorName,
-      'employeeId': employeeId,
-      'base64Image': base64Image,
-      // 'prescribedProducts': prescribedProducts.toString(),
-    };
-
-    var jsonData = jsonEncode(data);
-    request.body = jsonData;
-
-    print('\n\nRequest headers: ${request.headers}');
-    print('\n\nSet Request body data : ${jsonData}');
-    print('\n\nRequest body : ${request.body}');
-    var response = await request.send();
-
-    if (response.statusCode == 200) {
-      callback.call(true);
-      Fluttertoast.showToast(
-          msg: "Successfully upload!",
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
-      print('sent successfully!');
-    } else {
-      callback.call(false);
-      Fluttertoast.showToast(
-          msg: "Error: ${response.reasonPhrase}",
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
-      print('Error sending data: ${response.reasonPhrase}');
-    }
-  }
+  // sendPrescribedProducts(
+  //     File image,
+  //     String doctorName,
+  //     int employeeId,
+  //     List<Map<String, dynamic>> prescribedProducts,
+  //     Function(bool isSuccess) callback) async {
+  //   var uri = Uri.parse('${serverPath}/api/ImageCapture/SubmitImageCapture');
+  //   var request = http.Request('POST', uri);
+  //   var authorizationToken = currentLoginUser.token;
+  //   print('\n\nToken : $authorizationToken');
+  //   request.headers['accept'] = '*/*';
+  //   request.headers['Authorization'] = 'Bearer $authorizationToken';
+  //   request.headers['Content-Type'] = 'application/json';
+  //
+  //   final bytes = await image.readAsBytes();
+  //   var base64Image = base64Encode(bytes);
+  //
+  //   print('\n\nBase64Image Data => $base64Image');
+  //   print('\n\nprescribedProducts => $prescribedProducts');
+  //   final data = {
+  //     'doctorName': doctorName,
+  //     'employeeId': employeeId,
+  //     'base64Image': base64Image,
+  //     // 'prescribedProducts': prescribedProducts.toString(),
+  //   };
+  //
+  //   var jsonData = jsonEncode(data);
+  //   request.body = jsonData;
+  //
+  //   print('\n\nRequest headers: ${request.headers}');
+  //   print('\n\nSet Request body data : ${jsonData}');
+  //   print('\n\nRequest body : ${request.body}');
+  //   var response = await request.send();
+  //
+  //   if (response.statusCode == 200) {
+  //     callback.call(true);
+  //     Fluttertoast.showToast(
+  //         msg: "Successfully upload!",
+  //         toastLength: Toast.LENGTH_LONG,
+  //         gravity: ToastGravity.BOTTOM,
+  //         timeInSecForIosWeb: 1,
+  //         backgroundColor: Colors.red,
+  //         textColor: Colors.white,
+  //         fontSize: 16.0);
+  //     print('sent successfully!');
+  //   } else {
+  //     callback.call(false);
+  //     Fluttertoast.showToast(
+  //         msg: "Error: ${response.reasonPhrase}",
+  //         toastLength: Toast.LENGTH_LONG,
+  //         gravity: ToastGravity.BOTTOM,
+  //         timeInSecForIosWeb: 1,
+  //         backgroundColor: Colors.red,
+  //         textColor: Colors.white,
+  //         fontSize: 16.0);
+  //     print('Error sending data: ${response.reasonPhrase}');
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -335,7 +333,7 @@ class _ImageCaptureState extends State<ImageCapture> {
                           onPressed: () async {
                             var doctorName =
                                 _doctorNameController.text.toString();
-                            var employeeId = currentLoginUser.userID;
+                            var employeeId = userData.employeeId;
                             if (doctorName.isEmpty) {
                               Fluttertoast.showToast(
                                   msg: "Please Enter Doctor Name",
@@ -357,7 +355,7 @@ class _ImageCaptureState extends State<ImageCapture> {
                             } else {
                               enableUploadButtons.value =
                                   !enableUploadButtons.value;
-                              await sendPrescribedProducts(_image!, doctorName,
+                              await imageUploadApis.sendPrescribedProducts(_image!, doctorName,
                                   employeeId, prescribedProducts, (isSuccess) {
                                 if (isSuccess) {
                                   setState(() {
@@ -365,6 +363,14 @@ class _ImageCaptureState extends State<ImageCapture> {
                                     _image = null;
                                     _isImageChoose = false;
                                   });
+                                  Fluttertoast.showToast(
+                                      msg: "Successfully upload!",
+                                      toastLength: Toast.LENGTH_LONG,
+                                      gravity: ToastGravity.BOTTOM,
+                                      timeInSecForIosWeb: 1,
+                                      backgroundColor: Colors.red,
+                                      textColor: Colors.white,
+                                      fontSize: 16.0);
                                 } else {
                                   Fluttertoast.showToast(
                                       msg: "Error!!",
@@ -418,7 +424,7 @@ class _ImageCaptureState extends State<ImageCapture> {
                           onPressed: () async {
                             var doctorName =
                                 _doctorNameController.text.toString();
-                            var employeeId = currentLoginUser.userID;
+                            var employeeId = userData.employeeId;
                             if (doctorName.isEmpty) {
                               Fluttertoast.showToast(
                                   msg: "Please Enter Doctor Name",

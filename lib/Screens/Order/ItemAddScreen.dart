@@ -23,9 +23,8 @@ class _ItemsDetailsState extends State<ItemsDetails> {
 
   @override
   void initState() {
-    // TODO: implement initState
-    super.initState();
     loadItem();
+    super.initState();
   }
 
   @override
@@ -42,7 +41,10 @@ class _ItemsDetailsState extends State<ItemsDetails> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Visibility(visible: isLoading,child: MyTextView("Loading products...", 16, FontWeight.normal, Colors.black, TextAlign.center)),
+              Visibility(
+                  visible: isLoading,
+                  child: MyTextView("Loading products...", 16,
+                      FontWeight.normal, Colors.black, TextAlign.center)),
               Expanded(
                 child: ListView.builder(
                   shrinkWrap: true,
@@ -75,12 +77,13 @@ class _ItemsDetailsState extends State<ItemsDetails> {
                   },
                 ),
               ),
-
-              SizedBox(height: 10,),
+              const SizedBox(
+                height: 10,
+              ),
               ElevatedButton(
                 style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateColor.resolveWith((states) => primaryButtonColor),
+                    backgroundColor: MaterialStateColor.resolveWith(
+                        (states) => primaryButtonColor),
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
@@ -100,24 +103,29 @@ class _ItemsDetailsState extends State<ItemsDetails> {
 
   Future<void> loadItem() async {
     itemsWithCont = await api.getItems();
-    if(itemsWithCont.length>0){
-      isLoading = false;
-      setState(() {});
+    if (itemsWithCont.isNotEmpty) {
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
   void calculatePrice() {
     List<Cart> carts = [];
 
-    for(int i = 0; i<itemsWithCont.length; i++){
-      if(itemsWithCont[i].cont.text.toString().length > 0){
-        Cart cart = Cart(itemsWithCont[i].itemID, int.parse(itemsWithCont[i].cont.text.toString()), itemsWithCont[i].itemName, selectedChemist.itemName, 0.0, selectedChemist.itemID);
+    for (int i = 0; i < itemsWithCont.length; i++) {
+      if (itemsWithCont[i].cont.text.toString().isNotEmpty) {
+        Cart cart = Cart(
+            itemsWithCont[i].itemID,
+            int.parse(itemsWithCont[i].cont.text.toString()),
+            itemsWithCont[i].itemName,
+            selectedChemist.itemName,
+            0.0,
+            selectedChemist.itemID);
         carts.add(cart);
-
-
       }
     }
-    if(carts.length==0){
+    if (carts.isEmpty) {
       Fluttertoast.showToast(
           msg: "Please pick item",
           toastLength: Toast.LENGTH_SHORT,
@@ -125,16 +133,12 @@ class _ItemsDetailsState extends State<ItemsDetails> {
           timeInSecForIosWeb: 1,
           backgroundColor: Colors.red,
           textColor: Colors.white,
-          fontSize: 16.0
-      );
-    } else{
-      Navigator.push(context, MaterialPageRoute(builder: (context) => OrderSummeryScreen(carts: carts)));
+          fontSize: 16.0);
+    } else {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => OrderSummeryScreen(carts: carts)));
     }
-
-
-
   }
 }
-
-
-

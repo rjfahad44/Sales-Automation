@@ -47,7 +47,7 @@ class _OrderCreateScreenState extends State<OrderCreateScreen> {
           backgroundColor: themeColor,
         ),
         body: Container(
-          padding: EdgeInsets.all(8),
+          padding: const EdgeInsets.all(8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [

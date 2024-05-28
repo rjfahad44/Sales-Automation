@@ -1,9 +1,7 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:http/http.dart' as http;
+import 'package:sales_automation/APIs/ImageUploadApis.dart';
 import '../../Components/Components.dart';
 import '../../LocalDB/DatabaseHelper.dart';
 import '../../global.dart';
@@ -17,6 +15,7 @@ class ImageArchive extends StatefulWidget {
 }
 
 class _ImageArchiveState extends State<ImageArchive> {
+  ImageUploadApis imageUploadApis = ImageUploadApis();
   Future<List<ImageDataModel>>? imageDataList;
   bool isImageDataListIsNotEmpty = true;
   File? _image;
@@ -73,35 +72,37 @@ class _ImageArchiveState extends State<ImageArchive> {
                                     return Card(
                                       elevation: 1,
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
-                                         Row(
-                                           children: [
-                                             Padding(
-                                               padding: const EdgeInsets.all(6.0),
-                                               child: ClipRRect(
-                                                 borderRadius:
-                                                 BorderRadius.circular(8),
-                                                 child: Image.file(
-                                                   File(data.imagePath),
-                                                   fit: BoxFit.cover,
-                                                   height: 60,
-                                                   width: 60,
-                                                 ),
-                                               ),
-                                             ),
-                                             Text(
-                                               "Dr. Name : ${data.doctorName}",
-                                               style: const TextStyle(
-                                                   color: Colors.black,
-                                                   fontSize: 12.0,
-                                                   fontWeight: FontWeight.w500),
-                                               maxLines: 1,
-                                               overflow: TextOverflow.ellipsis,
-                                             ),
-                                           ],
-                                         ),
-
+                                          Row(
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(6.0),
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                  child: Image.file(
+                                                    File(data.imagePath),
+                                                    fit: BoxFit.cover,
+                                                    height: 60,
+                                                    width: 60,
+                                                  ),
+                                                ),
+                                              ),
+                                              Text(
+                                                "Dr. Name : ${data.doctorName}",
+                                                style: const TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 12.0,
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ],
+                                          ),
                                           Row(
                                             children: [
                                               IconButton(
@@ -114,7 +115,8 @@ class _ImageArchiveState extends State<ImageArchive> {
                                                   setState(() {
                                                     imageDataList =
                                                         imageHiveBox.getAll();
-                                                    imageDataList?.then((value) {
+                                                    imageDataList
+                                                        ?.then((value) {
                                                       setState(() {
                                                         isImageDataListIsNotEmpty =
                                                             value.isNotEmpty;
@@ -129,33 +131,44 @@ class _ImageArchiveState extends State<ImageArchive> {
                                                   color: Colors.blue,
                                                 ),
                                                 onPressed: () {
-                                                  sendPrescribedProducts(
-                                                      File(data.imagePath),
-                                                      data.doctorName,
-                                                      data.employeeId,
-                                                      prescribedProducts,
+                                                  imageUploadApis
+                                                      .sendPrescribedProducts(
+                                                          File(data.imagePath),
+                                                          data.doctorName,
+                                                          data.employeeId,
+                                                          prescribedProducts,
                                                           (isSuccess) {
-                                                        if(isSuccess){
-                                                          imageHiveBox.delete(index);
+                                                    if (isSuccess) {
+                                                      imageHiveBox
+                                                          .delete(index);
+                                                      setState(() {
+                                                        imageDataList =
+                                                            imageHiveBox
+                                                                .getAll();
+                                                        imageDataList
+                                                            ?.then((value) {
                                                           setState(() {
-                                                            imageDataList = imageHiveBox.getAll();
-                                                            imageDataList?.then((value) {
-                                                              setState(() {
-                                                                isImageDataListIsNotEmpty = value.isNotEmpty;
-                                                              });
-                                                            });
+                                                            isImageDataListIsNotEmpty =
+                                                                value
+                                                                    .isNotEmpty;
                                                           });
-                                                        }else{
-                                                          Fluttertoast.showToast(
-                                                              msg: "Error!!",
-                                                              toastLength: Toast.LENGTH_LONG,
-                                                              gravity: ToastGravity.BOTTOM,
-                                                              timeInSecForIosWeb: 1,
-                                                              backgroundColor: Colors.red,
-                                                              textColor: Colors.white,
-                                                              fontSize: 16.0);
-                                                        }
+                                                        });
                                                       });
+                                                    } else {
+                                                      Fluttertoast.showToast(
+                                                          msg: "Error!!",
+                                                          toastLength:
+                                                              Toast.LENGTH_LONG,
+                                                          gravity: ToastGravity
+                                                              .BOTTOM,
+                                                          timeInSecForIosWeb: 1,
+                                                          backgroundColor:
+                                                              Colors.red,
+                                                          textColor:
+                                                              Colors.white,
+                                                          fontSize: 16.0);
+                                                    }
+                                                  });
                                                 },
                                               ),
                                             ],
@@ -192,7 +205,39 @@ class _ImageArchiveState extends State<ImageArchive> {
                                 onPressed: () async {
                                   enableUploadButtons.value =
                                       !enableUploadButtons.value;
-                                  await sendAllPrescribedProducts();
+                                  await imageUploadApis
+                                      .sendAllPrescribedProducts(
+                                          imageDataList, imageHiveBox,
+                                          (Future<List<ImageDataModel>>?
+                                              dataList) {
+                                    setState(() {
+                                      imageDataList = dataList;
+                                      imageDataList?.then((value) {
+                                        isImageDataListIsNotEmpty =
+                                            value.isNotEmpty;
+                                      });
+                                    });
+                                  }, (isSuccess) {
+                                    if (isSuccess) {
+                                      Fluttertoast.showToast(
+                                          msg: "Successfully Upload All Data",
+                                          toastLength: Toast.LENGTH_LONG,
+                                          gravity: ToastGravity.BOTTOM,
+                                          timeInSecForIosWeb: 1,
+                                          backgroundColor: Colors.red,
+                                          textColor: Colors.white,
+                                          fontSize: 16.0);
+                                    } else {
+                                      Fluttertoast.showToast(
+                                          msg: "Error!!",
+                                          toastLength: Toast.LENGTH_LONG,
+                                          gravity: ToastGravity.BOTTOM,
+                                          timeInSecForIosWeb: 1,
+                                          backgroundColor: Colors.red,
+                                          textColor: Colors.white,
+                                          fontSize: 16.0);
+                                    }
+                                  });
                                   enableUploadButtons.value =
                                       !enableUploadButtons.value;
                                 },
@@ -228,134 +273,5 @@ class _ImageArchiveState extends State<ImageArchive> {
               ),
       ),
     );
-  }
-
-  sendPrescribedProducts(
-      File image,
-      String doctorName,
-      int employeeId,
-      List<Map<String, dynamic>> prescribedProducts,
-      Function(bool isSuccess) callback) async {
-    var uri = Uri.parse('${serverPath}/api/ImageCapture/SubmitImageCapture');
-    var request = http.Request('POST', uri);
-    var authorizationToken = currentLoginUser.token;
-    print('\n\nToken : $authorizationToken');
-    request.headers['accept'] = '*/*';
-    request.headers['Authorization'] = 'Bearer $authorizationToken';
-    request.headers['Content-Type'] = 'application/json';
-
-    final bytes = await image.readAsBytes();
-    var base64Image = base64Encode(bytes);
-
-    print('\n\nBase64Image Data => $base64Image');
-    print('\n\nprescribedProducts => $prescribedProducts');
-    final data = {
-      'doctorName': doctorName,
-      'employeeId': employeeId,
-      'base64Image': base64Image,
-      // 'prescribedProducts': prescribedProducts.toString(),
-    };
-
-    var jsonData = jsonEncode(data);
-    request.body = jsonData;
-
-    print('\n\nRequest headers: ${request.headers}');
-    print('\n\nSet Request body data : ${jsonData}');
-    print('\n\nRequest body : ${request.body}');
-    var response = await request.send();
-
-    if (response.statusCode == 200) {
-      callback.call(true);
-      Fluttertoast.showToast(
-          msg: "Successfully upload!",
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
-      print('sent successfully!');
-    } else {
-      callback.call(false);
-      Fluttertoast.showToast(
-          msg: "Error: ${response.reasonPhrase}",
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
-      print('Error sending data: ${response.reasonPhrase}');
-    }
-  }
-
-  sendAllPrescribedProducts() async {
-    imageDataList?.then((value) async {
-      int count = 0;
-      int pos = 0;
-      for (var p in value) {
-        var uri =
-            Uri.parse('${serverPath}/api/ImageCapture/SubmitImageCapture');
-        var request = http.Request('POST', uri);
-        var authorizationToken = currentLoginUser.token;
-        request.headers['accept'] = '*/*';
-        request.headers['Authorization'] = 'Bearer $authorizationToken';
-        request.headers['Content-Type'] = 'application/json';
-
-        var bytes = await File(p.imagePath).readAsBytes();
-        var base64Image = base64Encode(bytes);
-        var data = {
-          'doctorName': p.doctorName,
-          'employeeId': p.employeeId,
-          'base64Image': base64Image,
-          // 'prescribedProducts': prescribedProducts.toString(),
-        };
-
-        var jsonData = jsonEncode(data);
-        request.body = jsonData;
-
-        var response = await request.send();
-        if (response.statusCode == 200) {
-          imageHiveBox.delete(pos);
-          setState(() {
-            imageDataList = imageHiveBox.getAll();
-            imageDataList?.then((value) {
-              setState(() {
-                pos--;
-                isImageDataListIsNotEmpty = value.isNotEmpty;
-              });
-            });
-          });
-          count++;
-          print('upload pending: $count');
-        } else {
-          print('error $count');
-        }
-        pos++;
-      }
-
-      print('count : $count');
-      print('list size : ${value.length}');
-
-      if (count == value.length) {
-        Fluttertoast.showToast(
-            msg: "Successfully Upload All Data",
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 16.0);
-      } else {
-        Fluttertoast.showToast(
-            msg: "Error: ",
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 16.0);
-      }
-    });
   }
 }
