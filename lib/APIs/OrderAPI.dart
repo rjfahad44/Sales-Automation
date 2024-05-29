@@ -1,4 +1,4 @@
-import 'dart:convert';
+import 'dart:convert' show json, jsonEncode;
 
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
@@ -42,33 +42,7 @@ class OrderAPI {
     }
   }
 
-  // Future<List<Item>> getChemis() async {
-  //   final response = await http.get(
-  //     Uri.parse('${serverPath}/api/Chemists/Dropdowns'),
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       "Authorization": "Bearer $token",
-  //     },
-  //   );
-  //   List<Item> items = [];
-  //
-  //   if (response.statusCode == 200) {
-  //     Map resp = json.decode(response.body);
-  //
-  //     for (int i = 0; i < resp["data"].length; i++) {
-  //       items.add(
-  //         new Item(resp["data"][i]["id"], resp["data"][i]["text"],
-  //             TextEditingController()),
-  //       );
-  //     }
-  //     return items;
-  //   } else {
-  //     throw Exception('Failed to load posts');
-  //   }
-  // }
-
   Future<List<Item>> getChemistListForDropdown() async {
-    // currentLoginUser.userID
     final response = await http.get(
       Uri.parse('$serverPath/api/Chemists/ChemistListForDropdowns?id=${userData.id}'),
       headers: {
@@ -104,17 +78,16 @@ class OrderAPI {
         "Authorization": "Bearer ${userData.token}",
       },
     );
-    List<Item> items = [];
 
     if (response.statusCode == 200) {
       Map resp = json.decode(response.body);
       if (resp["data"]["price"].runtimeType == double) {
         return resp["data"]["price"];
       } else {
-        return 10000000.0;
+        return 0.0;
       }
     } else {
-      return 10000000.0;
+      return 0.0;
     }
   }
 
