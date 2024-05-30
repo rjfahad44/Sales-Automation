@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image/image.dart';
 import 'package:sales_automation/APIs/OrderAPI.dart';
 import 'package:sales_automation/Screens/HomeScreen.dart';
+import 'package:sales_automation/Screens/Order/Models/OrderCreate.dart';
 import '../../Components/Components.dart';
+import '../../LocalDB/DatabaseHelper.dart';
 import '../../Models/Cart.dart';
 import '../../global.dart';
 
@@ -18,9 +21,15 @@ class OrderSummeryScreen extends StatefulWidget {
 class _OrderSummeryScreenState extends State<OrderSummeryScreen> {
   OrderAPI orderAPI = OrderAPI();
   double totalAmount = 0;
+  final orderSaveHiveBox = HiveBoxHelper<OrderCreate>('order_db');
 
   @override
   void initState() {
+
+    orderSaveHiveBox.getAll().then((value) {
+      print("Saved Products : ${value.toString()}");
+    });
+
     priceCalculate();
     super.initState();
   }
@@ -36,47 +45,82 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen> {
         ),
         body: Column(
           children: [
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: widget.carts.length,
-              itemBuilder: (context, index) {
-                return Card(
-                  surfaceTintColor: Colors.white,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        MyTextView(widget.carts[index].itemName, 14,
-                            FontWeight.normal, Colors.black, TextAlign.center),
-                        MyTextView(widget.carts[index].quantity.toString(), 14,
-                            FontWeight.normal, Colors.black, TextAlign.center),
-                      ],
+            Expanded(
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: widget.carts.length,
+                itemBuilder: (context, index) {
+                  return Card(
+                    surfaceTintColor: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          MyTextView(widget.carts[index].itemName, 14,
+                              FontWeight.normal, Colors.black, TextAlign.center),
+                          MyTextView(widget.carts[index].quantity.toString(), 14,
+                              FontWeight.normal, Colors.black, TextAlign.center),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
+
             MyTextView(
                 "Total: ${(totalAmount == 0) ? "Calculating" : totalAmount}",
                 16,
                 FontWeight.bold,
                 Colors.black,
                 TextAlign.center),
-            ElevatedButton(
-              style: ButtonStyle(
-                  backgroundColor:
-                      WidgetStateColor.resolveWith((states) => Colors.cyan),
-                  shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ))),
-              onPressed: () {
-                submitOrder();
-              },
-              child: MyTextView("Submit", 12, FontWeight.bold, Colors.white,
-                  TextAlign.center),
+
+            Row(
+              children: [
+                const SizedBox(width: 8.0,),
+                Expanded(
+                  flex: 1,
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                        backgroundColor:
+                        WidgetStateColor.resolveWith((states) => Colors.cyan),
+                        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ))),
+                    onPressed: () {
+                      submitOrder();
+                    },
+                    child: MyTextView("Submit", 12, FontWeight.bold, Colors.white,
+                        TextAlign.center),
+                  ),
+                ),
+
+                const SizedBox(width: 8.0,),
+
+                Expanded(
+                  flex: 1,
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                        backgroundColor:
+                        WidgetStateColor.resolveWith((states) => Colors.cyan),
+                        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ))),
+                    onPressed: () {
+                      saveOrder();
+                    },
+                    child: MyTextView("Save", 12, FontWeight.bold, Colors.white,
+                        TextAlign.center),
+                  ),
+                ),
+                const SizedBox(width: 8.0,),
+              ],
             ),
+
+            const SizedBox(height: 8.0,),
           ],
         ),
       ),
@@ -84,14 +128,13 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen> {
   }
 
   Future<void> priceCalculate() async {
-    for (int i = 0; i < widget.carts.length; i++) {
-      widget.carts[i].unitPrice =
-          await orderAPI.getItemPrice(widget.carts[i].itemID);
-      setState(() {
-        totalAmount = totalAmount +
-            (widget.carts[i].unitPrice * widget.carts[i].quantity);
-      });
+    double newTotalAmount = 0.0;
+    for (var item in widget.carts) {
+      newTotalAmount += item.unitPrice * item.quantity;
     }
+    setState(() {
+      totalAmount = newTotalAmount;
+    });
   }
 
   Future<void> submitOrder() async {
@@ -106,7 +149,7 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen> {
           textColor: Colors.white,
           fontSize: 16.0);
 
-      Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
     } else {
       Fluttertoast.showToast(
           msg: "Failed",
@@ -117,5 +160,12 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen> {
           textColor: Colors.white,
           fontSize: 16.0);
     }
+  }
+
+  Future<void> saveOrder() async {
+    orderSaveHiveBox.add(orderCreate).then((value) {
+      print("Product Save : ${value}");
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
+    });
   }
 }

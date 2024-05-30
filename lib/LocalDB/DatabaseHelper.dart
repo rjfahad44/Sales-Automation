@@ -1,15 +1,5 @@
-import 'dart:ffi';
 
 import 'package:hive_flutter/adapters.dart';
-import 'package:sales_automation/Screens/ImageCaptureScreen/Model/ImageDataModel.dart';
-
-abstract class HiveBox<T> {
-  Future<void> add(T item);
-  Future<void> update(int index, T item);
-  Future<void> delete(int index);
-  Future<T?> get(int index);
-  Future<List<T>> getAll();
-}
 
 class HiveBoxHelper<T> {
   final String boxName;

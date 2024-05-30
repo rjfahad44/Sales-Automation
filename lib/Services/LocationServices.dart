@@ -14,7 +14,7 @@ class LocationServices {
       width: 12,
       child: ColoredBox(color: Colors.blue[900]!),
     );
-    LocationInf locationInf = LocationInf(0, 0, "locationName", marker);
+    LocationInf locationInf = LocationInf(lat: 0, lon: 0, locationName: "locationName", locationDetails: "locationDetails", marker: marker);
 
     try {
       Location location = Location();
@@ -28,7 +28,7 @@ class LocationServices {
         width: 12,
         child: ColoredBox(color: Colors.blue[900]!),
       );
-      locationInf = LocationInf(lat, lon, "locationName", marker);
+      locationInf = LocationInf(lat: lat, lon: lon, locationName: "locationName", locationDetails: "locationDetails", marker: marker);
     } catch (e) {
       locationInf.locationDetails = e.toString();
     }

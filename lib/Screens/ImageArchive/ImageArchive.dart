@@ -193,11 +193,11 @@ class _ImageArchiveState extends State<ImageArchive> {
                               child: ElevatedButton(
                                 style: ButtonStyle(
                                     backgroundColor:
-                                        MaterialStateColor.resolveWith(
+                                        WidgetStateColor.resolveWith(
                                             (states) => states.isEmpty
                                                 ? primaryButtonColor
                                                 : Colors.black26),
-                                    shape: MaterialStateProperty.all<
+                                    shape: WidgetStateProperty.all<
                                             RoundedRectangleBorder>(
                                         RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10.0),

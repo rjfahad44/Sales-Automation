@@ -16,16 +16,13 @@ class ChemistListScreen extends StatefulWidget{
 class _ChemistListScreenState extends State<ChemistListScreen> {
 
   OrderAPI api = OrderAPI();
-  bool isChemistListEmpty = false;
-  List<String> chemistList = ['a', 'b', 'c'];
-  List<Item> chemistDropdownList = [];
-  String chemistHint = "Select Chemist";
+  List<Item> chemistList = [];
 
   @override
   void initState() {
     api.getChemistListForDropdown().then((value) {
       setState(() {
-        chemistDropdownList = value;
+        chemistList = value;
       });
     });
     super.initState();
@@ -40,54 +37,43 @@ class _ChemistListScreenState extends State<ChemistListScreen> {
               TextAlign.center),
           backgroundColor: themeColor,
         ),
-        body: isChemistListEmpty? Column(
+        body: chemistList.isNotEmpty? Column(
           children: [
-            ListView.builder(
-              primary: false,
-              shrinkWrap: true,
-              itemCount: chemistList.length,
-              itemBuilder: (context, index) {
-                final data = chemistList[index];
-                return Card(
-                  elevation: 1,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
+            Expanded(
+              child: ListView.builder(
+                primary: true,
+                itemCount: chemistList.length,
+                itemBuilder: (context, index) {
+                  final data = chemistList[index];
+                  return Card(
+                    semanticContainer: true,
+                    elevation: 1,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          // Padding(
-                          //   padding: const EdgeInsets.all(6.0),
-                          //   child: ClipRRect(
-                          //     borderRadius:
-                          //     BorderRadius.circular(8),
-                          //     child: Image.file(
-                          //       File(data.imagePath),
-                          //       fit: BoxFit.cover,
-                          //       height: 60,
-                          //       width: 60,
-                          //     ),
-                          //   ),
-                          // ),
-                          Text(
-                            "Chemist Name : ${data}",
-                            style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 12.0,
-                                fontWeight: FontWeight.w500),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
+                          Expanded(
+                            child: Text(
+                              "Chemist Name : ${data.itemName}",
+                              style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 12.0,
+                                  fontWeight: FontWeight.w500),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                         ],
                       ),
-                    ],
-                  ),
-                );
-              },
+                    ),
+                  );
+                },
+              ),
             ),
           ],
-        ): Center(
-          child: MyTextView("No Data Found!", 18, FontWeight.bold,
-              Colors.black, TextAlign.center),
+        ): const Center(
+          child: CircularProgressIndicator()
         ),
       ),
     );

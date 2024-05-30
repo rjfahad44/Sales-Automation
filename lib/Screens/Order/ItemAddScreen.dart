@@ -1,11 +1,10 @@
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:http/http.dart';
 import 'package:sales_automation/APIs/OrderAPI.dart';
 import 'package:sales_automation/Components/Components.dart';
 import 'package:sales_automation/Models/Cart.dart';
-import 'package:sales_automation/Models/Item.dart';
+import 'package:sales_automation/Screens/Order/Models/Product.dart';
 import 'package:sales_automation/Screens/Order/OrderSummeryScreen.dart';
 import 'package:sales_automation/global.dart';
 
@@ -18,12 +17,12 @@ class ItemsDetails extends StatefulWidget {
 
 class _ItemsDetailsState extends State<ItemsDetails> {
   OrderAPI api = OrderAPI();
-  List<Item> itemsWithCont = [];
+  List<Product> productList = [];
   bool isLoading = true;
 
   @override
   void initState() {
-    loadItem();
+    loadProducts();
     super.initState();
   }
 
@@ -38,17 +37,16 @@ class _ItemsDetailsState extends State<ItemsDetails> {
         ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Column(
+          child: isLoading? Container(
+            alignment: Alignment.center,
+            child: const CircularProgressIndicator(),
+          ) : Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Visibility(
-                  visible: isLoading,
-                  child: MyTextView("Loading products...", 16,
-                      FontWeight.normal, Colors.black, TextAlign.center)),
               Expanded(
                 child: ListView.builder(
                   shrinkWrap: true,
-                  itemCount: itemsWithCont!.length,
+                  itemCount: productList.length,
                   itemBuilder: (context, index) {
                     return Card(
                       surfaceTintColor: Colors.white,
@@ -58,7 +56,7 @@ class _ItemsDetailsState extends State<ItemsDetails> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             MyTextView(
-                                itemsWithCont[index].itemName,
+                                productList[index].productName,
                                 14,
                                 FontWeight.normal,
                                 Colors.black,
@@ -66,7 +64,7 @@ class _ItemsDetailsState extends State<ItemsDetails> {
                             SizedBox(
                                 width: 80,
                                 child: TextField(
-                                  controller: itemsWithCont[index].cont,
+                                  controller: productList[index].textEditingController,
                                   keyboardType: TextInputType.number,
                                   onChanged: null,
                                 ))
@@ -82,9 +80,9 @@ class _ItemsDetailsState extends State<ItemsDetails> {
               ),
               ElevatedButton(
                 style: ButtonStyle(
-                    backgroundColor: MaterialStateColor.resolveWith(
+                    backgroundColor: WidgetStateColor.resolveWith(
                         (states) => primaryButtonColor),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ))),
@@ -101,9 +99,9 @@ class _ItemsDetailsState extends State<ItemsDetails> {
     );
   }
 
-  Future<void> loadItem() async {
-    itemsWithCont = await api.getItems();
-    if (itemsWithCont.isNotEmpty) {
+  Future<void> loadProducts() async {
+    productList = await api.getProducts();
+    if (productList.isNotEmpty) {
       setState(() {
         isLoading = false;
       });
@@ -112,18 +110,27 @@ class _ItemsDetailsState extends State<ItemsDetails> {
 
   void calculatePrice() {
     List<Cart> carts = [];
-
-    for (int i = 0; i < itemsWithCont.length; i++) {
-      if (itemsWithCont[i].cont.text.toString().isNotEmpty) {
-        Cart cart = Cart(
-            itemsWithCont[i].itemID,
-            int.parse(itemsWithCont[i].cont.text.toString()),
-            itemsWithCont[i].itemName,
-            selectedChemist.itemName,
-            0.0,
-            selectedChemist.itemID);
-        carts.add(cart);
-      }
+    orderCreate.products.clear();
+    for (var product in productList.where((product) => product.textEditingController.text.isNotEmpty)) {
+      Cart cart = Cart(
+        product.id,
+        int.parse(product.textEditingController.text),
+        product.productName,
+        selectedChemist.itemName,
+        product.price,
+        selectedChemist.itemID,
+      );
+      print("Selected Item : ${cart.quantity}");
+      orderCreate.products.add(
+        Product(
+          id: product.id,
+          productCode: product.productCode,
+          productName: product.productName,
+          price: product.price,
+          productQuantity: product.productQuantity
+        )
+      );
+      carts.add(cart);
     }
     if (carts.isEmpty) {
       Fluttertoast.showToast(

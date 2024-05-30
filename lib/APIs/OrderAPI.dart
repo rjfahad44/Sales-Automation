@@ -1,13 +1,37 @@
-import 'dart:convert' show json, jsonEncode;
-
+import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 import '../Models/Cart.dart';
 import '../Models/Item.dart';
+import '../Screens/Order/Models/Product.dart';
 import '../global.dart';
+import 'package:intl/intl.dart';
 
 class OrderAPI {
+
+  Future<List<Product>> getProducts() async {
+
+    final response = await http.get(
+      Uri.parse('$serverPath/api/Products'),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${userData.token}",
+      },
+    );
+
+    print("--------------------------");
+    print(response.body);
+    print(response.statusCode);
+
+    if (response.statusCode == 200) {
+      final res = jsonDecode(response.body);
+      final productsList = res['data'] as List<dynamic>;
+      return productsList.map((jsonItem) => Product.fromJson(jsonItem)).toList();
+    } else {
+      throw Exception('Failed to load products');
+    }
+  }
 
   Future<List<Item>> getItems() async {
 
@@ -23,50 +47,30 @@ class OrderAPI {
     print(response.body);
     print(response.statusCode);
 
-    List<Item> items = [];
     if (response.statusCode == 200) {
-      Map resp = json.decode(response.body);
-
-      for (int i = 0; i < resp["data"].length; i++) {
-        items.add(
-          Item(
-            resp["data"][i]["id"],
-            resp["data"][i]["text"],
-            TextEditingController(),
-          ),
-        );
-      }
-      return items;
+      final resp = json.decode(response.body);
+      final items = resp['data'] as List<dynamic>;
+      return items.map((jsonItem) => Item.fromJson(jsonItem)).toList();
     } else {
-      throw Exception('Failed to load posts');
+      throw Exception('Failed to load items');
     }
   }
 
   Future<List<Item>> getChemistListForDropdown() async {
     final response = await http.get(
-      Uri.parse('$serverPath/api/Chemists/ChemistListForDropdowns?id=${userData.id}'),
+      Uri.parse('$serverPath/api/Chemists/ChemistListForDropdowns?id=${userData.territoryId}'),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer ${userData.token}",
       },
     );
-    List<Item> items = [];
 
     if (response.statusCode == 200) {
-      Map resp = json.decode(response.body);
-
-      print(resp);
-
-      for (int i = 0; i < resp["data"].length; i++) {
-        items.add(
-          Item(resp["data"][i]["id"], resp["data"][i]["text"],
-              TextEditingController()),
-        );
-      }
-      print(items.length);
-      return items;
+      final resp = json.decode(response.body);
+      final items = resp['data'] as List<dynamic>;
+      return items.map((jsonItem) => Item.fromJson(jsonItem)).toList();
     } else {
-      throw Exception('Failed to load posts');
+      throw Exception('Failed to load items');
     }
   }
 
@@ -103,9 +107,10 @@ class OrderAPI {
       });
     }
 
+    String now = '${DateFormat('yyyy-MM-ddTHH:mm:ss.SSS').format(DateTime.now())}Z';
     Map map = {
-      "orderDate": "2024-01-27",
-      "orderNo": "123654",
+      "orderDate": now,
+      "orderNo": "1",
       "chemistId": carts[0].chemistID,
       "orderDetails": itemsListJson
     };
@@ -118,6 +123,11 @@ class OrderAPI {
       },
       body: jsonEncode(map),
     );
+
+
+    print("-------------------OrderCreate------------------------");
+    print("Request Body : ${jsonEncode(map)}");
+    print(response.body);
 
     if (response.statusCode == 200) {
       Map resp = json.decode(response.body);

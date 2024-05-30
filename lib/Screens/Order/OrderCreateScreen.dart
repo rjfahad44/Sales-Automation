@@ -3,6 +3,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sales_automation/APIs/OrderAPI.dart';
 import 'package:sales_automation/Components/Components.dart';
 import '../../Models/Item.dart';
+import '../../Models/LocationInfo.dart';
+import '../../Services/LocationServices.dart';
 import '../../global.dart';
 import 'ItemAddScreen.dart';
 
@@ -14,8 +16,9 @@ class OrderCreateScreen extends StatefulWidget {
 }
 
 class _OrderCreateScreenState extends State<OrderCreateScreen> {
-  DateTime selectedDate = DateTime.now();
 
+  DateTime selectedDate = DateTime.now();
+  LocationInf locationInf = LocationInf();
   List<String> deliveryTimes = ['Morning', 'Evening', 'Night'];
   List<String> paymentTypes = ['Cash', 'Bank deposit', 'Bkash'];
   List<Item> chemistDropdownList = [];
@@ -62,9 +65,9 @@ class _OrderCreateScreenState extends State<OrderCreateScreen> {
                       child: ElevatedButton(
                         onPressed: () => _selectDate(context),
                         style: ButtonStyle(
-                            surfaceTintColor: MaterialStateColor.resolveWith(
+                            surfaceTintColor: WidgetStateColor.resolveWith(
                                 (states) => Colors.white),
-                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                            shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10.0),
                             ))),
@@ -72,7 +75,7 @@ class _OrderCreateScreenState extends State<OrderCreateScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(deliveryDispDate.split(" ")[0]),
-                            Icon(Icons.calendar_month)
+                            const Icon(Icons.calendar_month)
                           ],
                         ),
                       ),
@@ -164,8 +167,7 @@ class _OrderCreateScreenState extends State<OrderCreateScreen> {
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(8, 2, 8, 2),
                           child: Center(
-                            child: MyTextView(
-                                "Mohammadpur, Dhaka - 1207, Bangladesh",
+                            child: MyTextView( locationInf.locationName ?? "Mohammadpur, Dhaka - 1207, Bangladesh",
                                 12,
                                 FontWeight.normal,
                                 Colors.black,
@@ -216,15 +218,20 @@ class _OrderCreateScreenState extends State<OrderCreateScreen> {
               ),
               ElevatedButton(
                 style: ButtonStyle(
-                    backgroundColor: MaterialStateColor.resolveWith(
+                    backgroundColor: WidgetStateColor.resolveWith(
                             (states) => primaryButtonColor),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
                         ))),
                 onPressed: () {
                   if(selectedChemist.itemName != "InitChem" && deliveryDispDate != 'Select Date') {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => ItemsDetails()));
+                    orderCreate.deliveryDate = deliveryDispDate;
+                    orderCreate.deliveryTime = selecteddeliveryTimes;
+                    orderCreate.chemist = chemistHint;
+                    orderCreate.chemistAddress = locationInf.locationName;
+                    orderCreate.paymentType = selectedPaymentTypes;
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const ItemsDetails()));
                   } else {
                     Fluttertoast.showToast(
                         msg: "Select chemist and date",
@@ -238,7 +245,11 @@ class _OrderCreateScreenState extends State<OrderCreateScreen> {
                   }
                 },
                 child: MyTextView(
-                    "Next", 12, FontWeight.bold, Colors.white, TextAlign.center),
+                    "Next", 12,
+                    FontWeight.bold,
+                    Colors.white,
+                    TextAlign.center,
+                ),
               ),
             ],
           ),
@@ -255,8 +266,14 @@ class _OrderCreateScreenState extends State<OrderCreateScreen> {
       lastDate: DateTime(2101),
     );
     if (picked != null && picked != selectedDate) selectedDate = picked;
-    deliveryDispDate = selectedDate.toString();
+    setState(() {
+      deliveryDispDate = selectedDate.toString();
+    });
+  }
 
-    setState(() {});
+  Future<void> getCurrentLocation() async {
+    LocationServices locationServices = LocationServices();
+    await locationServices.enableLocation();
+    locationInf = await locationServices.getCurrentLocation();
   }
 }

@@ -57,12 +57,13 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                           bounds: LatLngBounds(
                               LatLng(
                                   snapshot.data!.marker.point.latitude - 0.002,
-                                  snapshot.data!.marker.point.longitude -
-                                      0.002),
+                                  snapshot.data!.marker.point.longitude - 0.002,
+                              ),
                               LatLng(
                                   snapshot.data!.marker.point.latitude + 0.002,
-                                  snapshot.data!.marker.point.longitude +
-                                      0.002)),
+                                  snapshot.data!.marker.point.longitude + 0.002,
+                              ),
+                          ),
                           padding: const EdgeInsets.all(8),
                         ),
                       ),

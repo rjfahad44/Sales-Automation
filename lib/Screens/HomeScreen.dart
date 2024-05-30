@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:location/location.dart';
 import 'package:sales_automation/Screens/Attendance/AttendanceScreen.dart';
 import 'package:sales_automation/Screens/ImageArchive/ImageArchive.dart';
 import 'package:sales_automation/Screens/ImageCaptureScreen/ImageCapture.dart';
@@ -27,8 +25,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
+    getCurrentLocation();
     super.initState();
-    loadData();
   }
 
   @override
@@ -105,9 +103,8 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Future<void> loadData() async {
+  Future<void> getCurrentLocation() async {
     LocationServices locationServices = LocationServices();
-
     // await locationServices.enableLocation();
     // cLocationInf = await locationServices.getCurrentLocation();
   }
@@ -296,10 +293,10 @@ class Menu extends StatelessWidget {
                   padding: const EdgeInsets.all(2.0),
                   child: ElevatedButton(
                       style: ButtonStyle(
-                          backgroundColor: MaterialStateColor.resolveWith(
+                          backgroundColor: WidgetStateColor.resolveWith(
                               (states) => primaryButtonColor),
                           shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                              WidgetStateProperty.all<RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
                           ))),
@@ -313,10 +310,10 @@ class Menu extends StatelessWidget {
                   padding: const EdgeInsets.all(2.0),
                   child: ElevatedButton(
                       style: ButtonStyle(
-                          backgroundColor: MaterialStateColor.resolveWith(
+                          backgroundColor: WidgetStateColor.resolveWith(
                               (states) => primaryButtonColor),
                           shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                              WidgetStateProperty.all<RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
                           ))),
@@ -330,10 +327,10 @@ class Menu extends StatelessWidget {
                   padding: const EdgeInsets.all(2.0),
                   child: ElevatedButton(
                       style: ButtonStyle(
-                          backgroundColor: MaterialStateColor.resolveWith(
+                          backgroundColor: WidgetStateColor.resolveWith(
                               (states) => primaryButtonColor),
                           shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                              WidgetStateProperty.all<RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
                           ))),
@@ -347,10 +344,10 @@ class Menu extends StatelessWidget {
                   padding: const EdgeInsets.all(2.0),
                   child: ElevatedButton(
                       style: ButtonStyle(
-                          backgroundColor: MaterialStateColor.resolveWith(
+                          backgroundColor: WidgetStateColor.resolveWith(
                               (states) => primaryButtonColor),
                           shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                              WidgetStateProperty.all<RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
                           ))),
@@ -364,10 +361,10 @@ class Menu extends StatelessWidget {
                   padding: const EdgeInsets.all(2.0),
                   child: ElevatedButton(
                       style: ButtonStyle(
-                          backgroundColor: MaterialStateColor.resolveWith(
+                          backgroundColor: WidgetStateColor.resolveWith(
                               (states) => primaryButtonColor),
                           shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                              WidgetStateProperty.all<RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
                           ))),
@@ -382,10 +379,10 @@ class Menu extends StatelessWidget {
                   padding: const EdgeInsets.all(2.0),
                   child: ElevatedButton(
                       style: ButtonStyle(
-                          backgroundColor: MaterialStateColor.resolveWith(
+                          backgroundColor: WidgetStateColor.resolveWith(
                               (states) => primaryButtonColor),
                           shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                              WidgetStateProperty.all<RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
                           ))),
@@ -399,10 +396,10 @@ class Menu extends StatelessWidget {
                   padding: const EdgeInsets.all(2.0),
                   child: ElevatedButton(
                       style: ButtonStyle(
-                          backgroundColor: MaterialStateColor.resolveWith(
+                          backgroundColor: WidgetStateColor.resolveWith(
                               (states) => primaryButtonColor),
                           shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                              WidgetStateProperty.all<RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
                           ))),
@@ -416,10 +413,10 @@ class Menu extends StatelessWidget {
                   padding: const EdgeInsets.all(2.0),
                   child: ElevatedButton(
                       style: ButtonStyle(
-                          backgroundColor: MaterialStateColor.resolveWith(
+                          backgroundColor: WidgetStateColor.resolveWith(
                               (states) => primaryButtonColor),
                           shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                              WidgetStateProperty.all<RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
                           ))),
@@ -433,10 +430,10 @@ class Menu extends StatelessWidget {
                   padding: const EdgeInsets.all(2.0),
                   child: ElevatedButton(
                       style: ButtonStyle(
-                          backgroundColor: MaterialStateColor.resolveWith(
+                          backgroundColor: WidgetStateColor.resolveWith(
                               (states) => primaryButtonColor),
                           shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                              WidgetStateProperty.all<RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
                           ))),
@@ -450,10 +447,10 @@ class Menu extends StatelessWidget {
                   padding: const EdgeInsets.all(2.0),
                   child: ElevatedButton(
                       style: ButtonStyle(
-                          backgroundColor: MaterialStateColor.resolveWith(
+                          backgroundColor: WidgetStateColor.resolveWith(
                               (states) => primaryButtonColor),
                           shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                              WidgetStateProperty.all<RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
                           ))),
@@ -467,10 +464,10 @@ class Menu extends StatelessWidget {
                   padding: const EdgeInsets.all(2.0),
                   child: ElevatedButton(
                       style: ButtonStyle(
-                          backgroundColor: MaterialStateColor.resolveWith(
+                          backgroundColor: WidgetStateColor.resolveWith(
                               (states) => primaryButtonColor),
                           shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                              WidgetStateProperty.all<RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
                           ))),
@@ -484,10 +481,10 @@ class Menu extends StatelessWidget {
                   padding: const EdgeInsets.all(2.0),
                   child: ElevatedButton(
                     style: ButtonStyle(
-                        backgroundColor: MaterialStateColor.resolveWith(
+                        backgroundColor: WidgetStateColor.resolveWith(
                             (states) => primaryButtonColor),
                         shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                            WidgetStateProperty.all<RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
                         ))),

@@ -6,7 +6,7 @@ class MenuButton extends StatelessWidget {
   final double len, textSize;
   final String assetPath, text;
 
-  MenuButton(this.len, this.assetPath, this.text, this.textSize);
+  const MenuButton(this.len, this.assetPath, this.text, this.textSize, {super.key});
 
   @override
   Widget build(BuildContext context) {
