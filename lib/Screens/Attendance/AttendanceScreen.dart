@@ -4,7 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:sales_automation/APIs/AttendanceAPI.dart';
 import 'package:sales_automation/Models/LocationInfo.dart';
-import 'package:sales_automation/Services/LocationServices.dart';
+import 'package:sales_automation/Services/LocationService.dart';
 
 import '../../Components/Components.dart';
 import '../../global.dart';
@@ -19,11 +19,11 @@ class AttendanceScreen extends StatefulWidget {
 
 class _AttendanceScreenState extends State<AttendanceScreen> {
   final ValueNotifier<bool> enableButton = ValueNotifier(true);
-  LocationServices locationServices = LocationServices();
+  LocationService locationServices = LocationService();
 
   @override
   void initState() {
-    // TODO: implement initState
+
     super.initState();
     // loadData();
   }

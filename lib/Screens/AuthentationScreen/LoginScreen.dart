@@ -1,11 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:location/location.dart';
 import 'package:sales_automation/APIs/AuthenticationAPI.dart';
-import 'package:sales_automation/Screens/HomeScreen.dart';
+import 'package:sales_automation/Screens/HomeScreen/HomeScreen.dart';
 import 'package:sales_automation/global.dart';
-// import 'package:flutter_svg/flutter_svg.dart';
 
 class LogInScreen extends StatefulWidget {
   const LogInScreen({super.key});

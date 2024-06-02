@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'package:sales_automation/Screens/DoctorListScreen/Model/Doctor.dart';
 
 import '../Models/Cart.dart';
 import '../Models/Item.dart';
-import '../Screens/Order/Models/Product.dart';
+import '../Screens/Order/Models/OrderCreate.dart';
+import '../Screens/ProductListScreen/Model/Product.dart';
 import '../global.dart';
 import 'package:intl/intl.dart';
 
@@ -58,7 +60,7 @@ class OrderAPI {
 
   Future<List<Item>> getChemistListForDropdown() async {
     final response = await http.get(
-      Uri.parse('$serverPath/api/Chemists/ChemistListForDropdowns?id=${userData.territoryId}'),
+      Uri.parse('$serverPath/api/Chemists/ChemistListForDropdowns?id=${userData.id}'),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer ${userData.token}",
@@ -70,7 +72,28 @@ class OrderAPI {
       final items = resp['data'] as List<dynamic>;
       return items.map((jsonItem) => Item.fromJson(jsonItem)).toList();
     } else {
-      throw Exception('Failed to load items');
+      throw Exception('Failed to load Chemist List');
+    }
+  }
+
+  Future<List<Doctor>> getDoctorList() async {
+    final response = await http.get(
+      Uri.parse('$serverPath/api/Doctor/TerritoryWiseDoctorList?territoryID=${userData.territoryId}'),
+      headers: {
+        "accept": "*/*",
+        "Authorization": "Bearer ${userData.token}",
+      },
+    );
+
+    print(response.body);
+    print(response.statusCode);
+
+    if (response.statusCode == 200) {
+      final resp = json.decode(response.body);
+      final items = resp['data'] as List<dynamic>;
+      return items.map((jsonItem) => Doctor.fromJson(jsonItem)).toList();
+    } else {
+      throw Exception('Failed to load Doctor List');
     }
   }
 
@@ -112,6 +135,48 @@ class OrderAPI {
       "orderDate": now,
       "orderNo": "1",
       "chemistId": carts[0].chemistID,
+      "orderDetails": itemsListJson
+    };
+
+    final response = await http.post(
+      Uri.parse('$serverPath/api/Order'),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${userData.token}",
+      },
+      body: jsonEncode(map),
+    );
+
+
+    print("-------------------OrderCreate------------------------");
+    print("Request Body : ${jsonEncode(map)}");
+    print(response.body);
+
+    if (response.statusCode == 200) {
+      Map resp = json.decode(response.body);
+      return resp["success"];
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> submitOrderFromArchive(OrderCreate orderCreate) async {
+    List<Map> itemsListJson = [];
+    for (int i = 0; i < orderCreate.products.length; i++) {
+      itemsListJson.add({
+        "id": 0,
+        "orderId": 0,
+        "productId": orderCreate.products[i].id,
+        "quantity": orderCreate.products[i].productQuantity,
+        "amount": (orderCreate.products[i].productQuantity * orderCreate.products[i].price)
+      });
+    }
+
+    String now = '${DateFormat('yyyy-MM-ddTHH:mm:ss.SSS').format(DateTime.now())}Z';
+    Map map = {
+      "orderDate": now,
+      "orderNo": "1",
+      "chemistId": orderCreate.chemistId,
       "orderDetails": itemsListJson
     };
 

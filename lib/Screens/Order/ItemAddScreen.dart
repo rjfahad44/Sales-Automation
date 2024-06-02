@@ -4,7 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sales_automation/APIs/OrderAPI.dart';
 import 'package:sales_automation/Components/Components.dart';
 import 'package:sales_automation/Models/Cart.dart';
-import 'package:sales_automation/Screens/Order/Models/Product.dart';
+import 'package:sales_automation/Screens/ProductListScreen/Model/Product.dart';
 import 'package:sales_automation/Screens/Order/OrderSummeryScreen.dart';
 import 'package:sales_automation/global.dart';
 
@@ -127,7 +127,7 @@ class _ItemsDetailsState extends State<ItemsDetails> {
           productCode: product.productCode,
           productName: product.productName,
           price: product.price,
-          productQuantity: product.productQuantity
+          productQuantity: cart.quantity
         )
       );
       carts.add(cart);

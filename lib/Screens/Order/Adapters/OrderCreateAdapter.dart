@@ -1,5 +1,5 @@
 import 'package:hive/hive.dart';
-import 'package:sales_automation/Screens/Order/Models/Product.dart';
+import 'package:sales_automation/Screens/ProductListScreen/Model/Product.dart';
 import 'package:sales_automation/Screens/Order/Models/OrderCreate.dart';
 
 import '../../../global.dart';
@@ -15,6 +15,7 @@ class OrderCreateAdapter extends TypeAdapter<OrderCreate> {
         return OrderCreate(
           deliveryDate: reader.readString(),
           deliveryTime: reader.readString(),
+          chemistId: reader.readInt(),
           chemist: reader.readString(),
           chemistAddress: reader.readString(),
           paymentType: reader.readString(),
@@ -30,6 +31,7 @@ class OrderCreateAdapter extends TypeAdapter<OrderCreate> {
     writer.writeByte(1); // Version number (update if the model changes)
     writer.writeString(obj.deliveryDate);
     writer.writeString(obj.deliveryTime);
+    writer.writeInt(obj.chemistId);
     writer.writeString(obj.chemist);
     writer.writeString(obj.chemistAddress);
     writer.writeString(obj.paymentType);

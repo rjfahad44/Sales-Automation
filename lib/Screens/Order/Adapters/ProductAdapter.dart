@@ -1,5 +1,5 @@
 import 'package:hive/hive.dart';
-import 'package:sales_automation/Screens/Order/Models/Product.dart';
+import 'package:sales_automation/Screens/ProductListScreen/Model/Product.dart';
 import 'package:sales_automation/Screens/Order/Models/OrderCreate.dart';
 
 import '../../../global.dart';

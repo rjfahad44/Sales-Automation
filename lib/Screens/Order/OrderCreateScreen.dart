@@ -4,7 +4,7 @@ import 'package:sales_automation/APIs/OrderAPI.dart';
 import 'package:sales_automation/Components/Components.dart';
 import '../../Models/Item.dart';
 import '../../Models/LocationInfo.dart';
-import '../../Services/LocationServices.dart';
+import '../../Services/LocationService.dart';
 import '../../global.dart';
 import 'ItemAddScreen.dart';
 
@@ -18,7 +18,6 @@ class OrderCreateScreen extends StatefulWidget {
 class _OrderCreateScreenState extends State<OrderCreateScreen> {
 
   DateTime selectedDate = DateTime.now();
-  LocationInf locationInf = LocationInf();
   List<String> deliveryTimes = ['Morning', 'Evening', 'Night'];
   List<String> paymentTypes = ['Cash', 'Bank deposit', 'Bkash'];
   List<Item> chemistDropdownList = [];
@@ -167,7 +166,8 @@ class _OrderCreateScreenState extends State<OrderCreateScreen> {
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(8, 2, 8, 2),
                           child: Center(
-                            child: MyTextView( locationInf.locationName ?? "Mohammadpur, Dhaka - 1207, Bangladesh",
+                            child: MyTextView(
+                                "${locationInf.locationName}, ${locationInf.locationDetails}",
                                 12,
                                 FontWeight.normal,
                                 Colors.black,
@@ -228,8 +228,9 @@ class _OrderCreateScreenState extends State<OrderCreateScreen> {
                   if(selectedChemist.itemName != "InitChem" && deliveryDispDate != 'Select Date') {
                     orderCreate.deliveryDate = deliveryDispDate;
                     orderCreate.deliveryTime = selecteddeliveryTimes;
-                    orderCreate.chemist = chemistHint;
-                    orderCreate.chemistAddress = locationInf.locationName;
+                    orderCreate.chemistId = selectedChemist.itemID;
+                    orderCreate.chemist = selectedChemist.itemName;
+                    orderCreate.chemistAddress = locationInf.locationName ?? "Not Found!!";
                     orderCreate.paymentType = selectedPaymentTypes;
                     Navigator.push(context, MaterialPageRoute(builder: (context) => const ItemsDetails()));
                   } else {
@@ -269,11 +270,5 @@ class _OrderCreateScreenState extends State<OrderCreateScreen> {
     setState(() {
       deliveryDispDate = selectedDate.toString();
     });
-  }
-
-  Future<void> getCurrentLocation() async {
-    LocationServices locationServices = LocationServices();
-    await locationServices.enableLocation();
-    locationInf = await locationServices.getCurrentLocation();
   }
 }

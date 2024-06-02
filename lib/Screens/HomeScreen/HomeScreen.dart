@@ -2,15 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:sales_automation/Screens/Attendance/AttendanceScreen.dart';
 import 'package:sales_automation/Screens/ImageArchive/ImageArchive.dart';
 import 'package:sales_automation/Screens/ImageCaptureScreen/ImageCapture.dart';
-import 'package:sales_automation/Screens/LoginScreen.dart';
+import 'package:sales_automation/Screens/AuthentationScreen/LoginScreen.dart';
+import 'package:sales_automation/Screens/OrderArchiveScreen/OrderArchiveScreen.dart';
+import 'package:sales_automation/Screens/OrderDraftScreen/OrderDraftScreen.dart';
 
-import '../Components/Components.dart';
-import '../Components/MenuButton.dart';
-import '../LocalDB/PrefsDb.dart';
-import '../Services/LocationServices.dart';
-import '../global.dart';
-import 'Chemist/ChemistListScreen.dart';
-import 'Order/OrderCreateScreen.dart';
+import '../../Components/Components.dart';
+import '../../Components/MenuButton.dart';
+import '../../LocalDB/PrefsDb.dart';
+import '../../Services/LocationService.dart';
+import '../../global.dart';
+import '../ChemistListScreen/ChemistListScreen.dart';
+import '../DoctorListScreen/DoctorListScreen.dart';
+import '../Order/OrderCreateScreen.dart';
+import '../ProductListScreen/ProductListScreen.dart';
 
 
 class HomeScreen extends StatefulWidget {
@@ -21,6 +25,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  LocationService locationServices = LocationService();
   var prefs = PrefsDb();
 
   @override
@@ -104,9 +109,13 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> getCurrentLocation() async {
-    LocationServices locationServices = LocationServices();
-    // await locationServices.enableLocation();
-    // cLocationInf = await locationServices.getCurrentLocation();
+    setState(() async {
+      locationInf = await locationServices.getCurrentLocation();
+      print("Current Location is  lat: ${locationInf.lat}, lon: ${locationInf.lon}");
+      print("Current Location Name: ${locationInf.locationName}");
+      print("Current Location Details: ${locationInf.locationDetails}");
+      print("Current Location Error: ${locationInf.error}");
+    });
   }
 }
 
@@ -318,7 +327,7 @@ class Menu extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10.0),
                           ))),
                       onPressed: () {
-                        // goToPage(OrderCreateScreen(), context);
+                        goToPage(const OrderDraftScreen(), true, context);
                       },
                       child: MenuButton(90, "assets/images/draft.png",
                           "Order Draft", textWidth)),
@@ -335,7 +344,7 @@ class Menu extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10.0),
                           ))),
                       onPressed: () {
-                        // goToPage(OrderCreateScreen(), context);
+                        goToPage(const OrderArchiveScreen(), true, context);
                       },
                       child: MenuButton(90, "assets/images/archive.png",
                           "Order Archive", textWidth)),
@@ -421,7 +430,7 @@ class Menu extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10.0),
                           ))),
                       onPressed: () {
-                        // goToPage(OrderCreateScreen(), context);
+                        goToPage(const DoctorListScreen(), true, context);
                       },
                       child: MenuButton(
                           90, "assets/images/doctor.png", "Doctor", textWidth)),
@@ -455,7 +464,7 @@ class Menu extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10.0),
                           ))),
                       onPressed: () {
-                        // goToPage(OrderCreateScreen(), context);
+                        goToPage(const ProductListScreen(), true, context);
                       },
                       child: MenuButton(90, "assets/images/products.png",
                           "Product", textWidth)),

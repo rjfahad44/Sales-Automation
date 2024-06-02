@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image/image.dart';
 import 'package:sales_automation/APIs/OrderAPI.dart';
-import 'package:sales_automation/Screens/HomeScreen.dart';
+import 'package:sales_automation/Screens/HomeScreen/HomeScreen.dart';
 import 'package:sales_automation/Screens/Order/Models/OrderCreate.dart';
 import '../../Components/Components.dart';
 import '../../LocalDB/DatabaseHelper.dart';
@@ -25,11 +25,6 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen> {
 
   @override
   void initState() {
-
-    orderSaveHiveBox.getAll().then((value) {
-      print("Saved Products : ${value.toString()}");
-    });
-
     priceCalculate();
     super.initState();
   }
@@ -164,7 +159,16 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen> {
 
   Future<void> saveOrder() async {
     orderSaveHiveBox.add(orderCreate).then((value) {
+      orderCreate = OrderCreate();
       print("Product Save : ${value}");
+      Fluttertoast.showToast(
+          msg: "Save successful",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
     });
   }

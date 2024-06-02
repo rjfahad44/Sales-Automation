@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:sales_automation/APIs/AuthenticationAPI.dart';
 import 'package:sales_automation/LocalDB/PrefsDb.dart';
-import 'package:sales_automation/Screens/HomeScreen.dart';
+import 'package:sales_automation/Screens/HomeScreen/HomeScreen.dart';
 
-import 'LoginScreen.dart';
+import '../AuthentationScreen/LoginScreen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

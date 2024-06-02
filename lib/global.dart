@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:sales_automation/Models/Item.dart';
 import 'package:sales_automation/Screens/Order/Models/OrderCreate.dart';
 
+import 'Models/LocationInfo.dart';
 import 'Models/UserData.dart';
 
 UserData userData = UserData();
 OrderCreate orderCreate = OrderCreate();
+LocationInf locationInf = LocationInf();
 double screenwidth = 0.0;
 Item selectedChemist = Item();
 Color themeColor = const Color(0xFFFFC680);
