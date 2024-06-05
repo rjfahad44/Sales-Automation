@@ -3,6 +3,7 @@ import 'package:sales_automation/Screens/Attendance/AttendanceScreen.dart';
 import 'package:sales_automation/Screens/ImageArchive/ImageArchive.dart';
 import 'package:sales_automation/Screens/ImageCaptureScreen/ImageCapture.dart';
 import 'package:sales_automation/Screens/AuthentationScreen/LoginScreen.dart';
+import 'package:sales_automation/Screens/Order/Models/OrderCreate.dart';
 import 'package:sales_automation/Screens/OrderArchiveScreen/OrderArchiveScreen.dart';
 import 'package:sales_automation/Screens/OrderDraftScreen/OrderDraftScreen.dart';
 
@@ -156,142 +157,149 @@ class Menu extends StatelessWidget {
                 ),
               ],
             ),
-            Row(
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            top: 8.0, left: 0.0, right: 8.0, bottom: 0.0),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(100),
-                          child: Image.network(
-                            'https://fastly.picsum.photos/id/267/536/354.jpg?hmac=zVch2Xc4A7TDu19qPBFQxet0q1gXDc3aUr4zEUbs1Ec',
-                            width: 100,
-                            height: 100,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) =>
-                                const Icon(Icons.error),
+
+            Card(
+              color: primaryButtonColor,
+              elevation: 2.0,
+              semanticContainer: true,
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              top: 8.0, left: 0.0, right: 8.0, bottom: 0.0),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(100),
+                            child: Image.network(
+                              'https://media.istockphoto.com/id/2098359215/photo/digital-marketing-concept-businessman-using-laptop-with-ads-dashboard-digital-marketing.jpg?s=1024x1024&w=is&k=20&c=q6RTyRcP6Lli25bBXmKz3F3sIAVSu5PthcuOiAniHzE=',
+                              width: 100,
+                              height: 100,
+                              scale: 1.0,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
+                            ),
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          userData.userName,
-                          style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  flex: 2,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          const Text(
-                            'Name: ',
-                            style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black),
-                          ),
-                          Text(
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
                             userData.userName,
                             style: const TextStyle(
                                 fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black),
+                                fontWeight: FontWeight.normal,
+                                color: Colors.white),
+                            textAlign: TextAlign.center,
                           ),
-                        ],
-                      ),
-                      const Row(
-                        children: [
-                          Text(
-                            'Designation: ',
-                            style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black),
-                          ),
-                          Text(
-                            '',
-                            style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black),
-                          ),
-                        ],
-                      ),
-                      const Row(
-                        children: [
-                          Text(
-                            'TR Code: ',
-                            style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black),
-                          ),
-                          Text(
-                            '',
-                            style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black),
-                          ),
-                        ],
-                      ),
-                      const Row(
-                        children: [
-                          Text(
-                            'Mobile: ',
-                            style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black),
-                          ),
-                          Text(
-                            '',
-                            style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black),
-                          ),
-                        ],
-                      ),
-                      const Row(
-                        children: [
-                          Text(
-                            'Version: ',
-                            style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black),
-                          ),
-                          Text(
-                           '1.0',
-                            style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black),
-                          ),
-                        ],
-                      ),
-                    ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                  Expanded(
+                    flex: 2,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            const Text(
+                              'Name: ',
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                            Text(
+                              userData.userName,
+                              style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.normal,
+                                  color: Colors.white),
+                            ),
+                          ],
+                        ),
+                        const Row(
+                          children: [
+                            Text(
+                              'Designation: ',
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                            Text(
+                              '',
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.normal,
+                                  color: Colors.white),
+                            ),
+                          ],
+                        ),
+                        const Row(
+                          children: [
+                            Text(
+                              'TR Code: ',
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                            Text(
+                              '',
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.normal,
+                                  color: Colors.white),
+                            ),
+                          ],
+                        ),
+                        const Row(
+                          children: [
+                            Text(
+                              'Mobile: ',
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                            Text(
+                              '',
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.normal,
+                                  color: Colors.white),
+                            ),
+                          ],
+                        ),
+                        const Row(
+                          children: [
+                            Text(
+                              'Version: ',
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                            Text(
+                              '1.0',
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.normal,
+                                  color: Colors.white),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
+
             GridView.count(
               shrinkWrap: true,
               primary: false,
@@ -310,6 +318,7 @@ class Menu extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10.0),
                           ))),
                       onPressed: () {
+                        orderCreate = OrderCreate();
                         goToPage(const OrderCreateScreen(), true, context);
                       },
                       child: MenuButton(90, "assets/images/newOrder.png",
@@ -510,13 +519,5 @@ class Menu extends StatelessWidget {
         ),
       ),
     );
-  }
-  void goToPage(Widget page, bool isBackPage, BuildContext context) {
-    if (isBackPage) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => page));
-    } else {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => page));
-    }
   }
 }

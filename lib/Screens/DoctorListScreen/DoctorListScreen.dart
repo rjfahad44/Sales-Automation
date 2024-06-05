@@ -48,6 +48,7 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
                 itemBuilder: (context, index) {
                   final data = doctorList[index];
                   return Card(
+                    color: primaryButtonColor,
                     semanticContainer: true,
                     elevation: 1,
                     child: Padding(
@@ -58,7 +59,7 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
                           Text(
                             "Doctor id : ${data.id}",
                             style: const TextStyle(
-                                color: Colors.black,
+                                color: Colors.white,
                                 fontSize: 12.0,
                                 fontWeight: FontWeight.w500),
                             maxLines: 1,
@@ -68,7 +69,7 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
                           Text(
                             "Doctor Name : ${data.doctorName}",
                             style: const TextStyle(
-                                color: Colors.black,
+                                color: Colors.white,
                                 fontSize: 12.0,
                                 fontWeight: FontWeight.w500),
                             maxLines: 1,
@@ -78,7 +79,7 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
                           Text(
                             "Doctor degree : ${data.degree}",
                             style: const TextStyle(
-                                color: Colors.black,
+                                color: Colors.white,
                                 fontSize: 12.0,
                                 fontWeight: FontWeight.w500),
                             maxLines: 1,
@@ -88,7 +89,7 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
                           Text(
                             "Doctor specialty : ${data.specialtyName}",
                             style: const TextStyle(
-                                color: Colors.black,
+                                color: Colors.white,
                                 fontSize: 12.0,
                                 fontWeight: FontWeight.w500),
                             maxLines: 1,

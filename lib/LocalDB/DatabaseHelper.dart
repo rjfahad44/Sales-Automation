@@ -6,6 +6,17 @@ class HiveBoxHelper<T> {
 
   HiveBoxHelper(this.boxName);
 
+  getPosition(T item) async {
+    try{
+      final box = await Hive.openBox<T>(boxName);
+      var items = box.values.toList();
+      int index = items.indexOf(item);
+      return index;
+    }catch(e){
+      return -1;
+    }
+  }
+
   Future<int> add(T item) async {
     final box = await Hive.openBox<T>(boxName);
     return await box.add(item);

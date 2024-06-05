@@ -14,6 +14,7 @@ double screenwidth = 0.0;
 Item selectedChemist = Item();
 Color themeColor = const Color(0xFFFFC680);
 Color primaryButtonColor = const Color(0xff095f98);
+Color primaryMenuColor = const Color(0xff005586);
 Color secondaryButtonColor =  Colors.redAccent;
 Color primaryTextColor = Colors.black;
 Color secondaryTextColor = Colors.white;
@@ -26,4 +27,13 @@ String serverPath = "http://27.147.221.94:8083";
  const int image_model_type_id = 0;
  const int product_model_type_id = 1;
  const int order_model_type_id = 2;
+
+void goToPage(Widget page, bool isBackPage, BuildContext context) {
+ if (isBackPage) {
+  Navigator.push(context, MaterialPageRoute(builder: (context) => page));
+ } else {
+  Navigator.pushReplacement(
+      context, MaterialPageRoute(builder: (context) => page));
+ }
+}
 

@@ -143,8 +143,7 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen> {
           backgroundColor: Colors.red,
           textColor: Colors.white,
           fontSize: 16.0);
-
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
+      goToPage(const HomeScreen(), false, context);
     } else {
       Fluttertoast.showToast(
           msg: "Failed",
@@ -169,7 +168,7 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen> {
           backgroundColor: Colors.red,
           textColor: Colors.white,
           fontSize: 16.0);
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
+      goToPage(const HomeScreen(), false, context);
     });
   }
 }

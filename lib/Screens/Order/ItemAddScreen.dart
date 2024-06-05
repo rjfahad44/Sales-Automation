@@ -101,11 +101,21 @@ class _ItemsDetailsState extends State<ItemsDetails> {
 
   Future<void> loadProducts() async {
     productList = await api.getProducts();
-    if (productList.isNotEmpty) {
-      setState(() {
+    setState(() {
+      if (productList.isNotEmpty) {
+        for (int i=0; i<orderCreate.products.length; i++) {
+          try{
+            int pos= productList.indexWhere((item) => item.id == orderCreate.products[i].id);
+            print("Product position : ${pos}");
+            print("Product : ${productList[pos]}");
+            productList[pos].textEditingController.text = "${orderCreate.products[i].productQuantity}";
+          }catch(e){
+            print(e);
+          }
+        }
         isLoading = false;
-      });
-    }
+      }
+    });
   }
 
   void calculatePrice() {

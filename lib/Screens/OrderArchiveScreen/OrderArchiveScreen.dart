@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:sales_automation/Screens/Order/OrderCreateScreen.dart';
 
 import '../../APIs/OrderAPI.dart';
 import '../../Components/Components.dart';
@@ -41,6 +42,7 @@ class _OrderArchiveScreenState extends State<OrderArchiveScreen> {
             : orderList.isNotEmpty
                 ? Column(
                     children: [
+                      const SizedBox(height: 4.0,),
                       Expanded(
                         child: ListView.builder(
                             shrinkWrap: true,
@@ -48,96 +50,178 @@ class _OrderArchiveScreenState extends State<OrderArchiveScreen> {
                             itemBuilder: (context, index) {
                               var data = orderList[index];
 
-                              return Card(
-                                elevation: 1,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Expanded(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "chemist Name : ${data.chemist}",
-                                              style: const TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 12.0,
-                                                  fontWeight: FontWeight.w500),
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              softWrap: true,
-                                            ),
-                                            Text(
-                                              "Delivery Date : ${data.deliveryDate}",
-                                              style: const TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 12.0,
-                                                  fontWeight: FontWeight.w500),
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              softWrap: true,
-                                            ),
-                                            Text(
-                                              "Delivery Time : ${data.deliveryTime}",
-                                              style: const TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 12.0,
-                                                  fontWeight: FontWeight.w500),
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              softWrap: true,
-                                            ),
-                                            Text(
-                                              "Total Products : ${data.products.length}",
-                                              style: const TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 12.0,
-                                                  fontWeight: FontWeight.w500),
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              softWrap: true,
-                                            ),
-                                            Text(
-                                              "Total Amount : ${data.totalAmount}",
-                                              style: const TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 12.0,
-                                                  fontWeight: FontWeight.w500),
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              softWrap: true,
-                                            ),
-                                          ],
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8.0),
+                                child: Card(
+                                  semanticContainer: true,
+                                  color: primaryButtonColor,
+                                  elevation: 1,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "chemist Name : ${data.chemist}",
+                                                style: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 12.0,
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                softWrap: true,
+                                              ),
+                                              Text(
+                                                "Delivery Date : ${data.deliveryDate}",
+                                                style: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 12.0,
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                softWrap: true,
+                                              ),
+                                              Text(
+                                                "Delivery Time : ${data.deliveryTime}",
+                                                style: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 12.0,
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                softWrap: true,
+                                              ),
+                                              Text(
+                                                "Total Products : ${data.products.length}",
+                                                style: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 12.0,
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                softWrap: true,
+                                              ),
+                                              Text(
+                                                "Total Amount : ${data.totalAmount}",
+                                                style: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 12.0,
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                softWrap: true,
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    Row(
-                                      children: [
-                                        IconButton(
-                                          icon: const Icon(
-                                            Icons.delete,
-                                            color: Colors.red,
+                                      PopupMenuButton<String>(
+                                        onSelected: (String value) async {
+                                          switch (value) {
+                                            case 'Send':
+                                              submitOrderFromArchive(
+                                                  data, index);
+                                              break;
+                                            case 'Edit':
+                                              print("loop index : $index");
+                                              final pos = await orderSaveHiveBox.getPosition(data);
+                                              print("box index : $pos");
+                                              orderCreate = data;
+                                              goToPage(const OrderCreateScreen(), true, context);
+                                              break;
+                                            case 'Delete':
+                                              final pos = await orderSaveHiveBox.getPosition(data);
+                                              orderSaveHiveBox
+                                                  .delete(pos)
+                                                  .then((value) {
+                                                getAllOrders();
+                                              });
+                                              break;
+                                          }
+                                        },
+                                        itemBuilder: (BuildContext context) => [
+                                          const PopupMenuItem(
+                                            value: 'Send',
+                                            child: Row(
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                      right: 8.0),
+                                                  child: Icon(
+                                                    Icons.send,
+                                                    color: Colors.blueAccent,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  'Send',
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                          onPressed: () {
-                                            orderSaveHiveBox.delete(index);
-                                            getAllOrders();
-                                          },
-                                        ),
-
-                                        IconButton(
-                                          icon: const Icon(
-                                            Icons.send,
-                                            color: Colors.blue,
+                                          const PopupMenuItem(
+                                            value: 'Edit',
+                                            child: Row(
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                      right: 8.0),
+                                                  child: Icon(
+                                                    Icons.edit,
+                                                    color: Colors.orangeAccent,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  'Edit',
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                          onPressed: () {
-                                            submitOrderFromArchive(data, index);
-                                          },
+                                          const PopupMenuItem(
+                                            value: 'Delete',
+                                            child: Row(
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                      right: 8.0),
+                                                  child: Icon(
+                                                    Icons.delete,
+                                                    color: Colors.redAccent,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  'Delete',
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                        icon: const Icon(
+                                          Icons.more_vert,
+                                          color: Colors.white,
                                         ),
-                                      ],
-                                    ),
-                                  ],
+                                        color:
+                                            primaryMenuColor, // Customize the icon as needed
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               );
                             }),
@@ -147,14 +231,14 @@ class _OrderArchiveScreenState extends State<OrderArchiveScreen> {
                         child: ElevatedButton(
                           style: ButtonStyle(
                               backgroundColor: WidgetStateColor.resolveWith(
-                                  (states) => Colors.cyan),
+                                  (states) => primaryButtonColor),
                               shape: WidgetStateProperty.all<
                                       RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.0),
                               ))),
                           onPressed: () {
-                            for(int i=0; i<orderList.length; i++){
+                            for (int i = 0; i < orderList.length; i++) {
                               submitOrderFromArchive(orderList[i], i);
                             }
                           },

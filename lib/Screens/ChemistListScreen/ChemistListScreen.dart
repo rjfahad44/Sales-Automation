@@ -46,23 +46,34 @@ class _ChemistListScreenState extends State<ChemistListScreen> {
                 itemBuilder: (context, index) {
                   final data = chemistList[index];
                   return Card(
+                    color: primaryButtonColor,
                     semanticContainer: true,
                     elevation: 1,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Expanded(
-                            child: Text(
-                              "Chemist Name : ${data.itemName}",
-                              style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 12.0,
-                                  fontWeight: FontWeight.w500),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
+                          Text(
+                            softWrap: true,
+                            "Chemist id : ${data.itemID}",
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.w500,
                             ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            softWrap: true,
+                            "Chemist Name : ${data.itemName}",
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.w500),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ],
                       ),

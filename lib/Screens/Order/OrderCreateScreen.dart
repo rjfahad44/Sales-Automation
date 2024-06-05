@@ -29,14 +29,23 @@ class _OrderCreateScreenState extends State<OrderCreateScreen> {
 
   @override
   void initState() {
-    super.initState();
-    selecteddeliveryTimes = deliveryTimes[0];
-    selectedPaymentTypes = paymentTypes[0];
     api.getChemistListForDropdown().then((value) {
       setState(() {
         chemistDropdownList = value;
       });
     });
+
+    if(orderCreate.products.isEmpty){
+      selecteddeliveryTimes = deliveryTimes[0];
+      selectedPaymentTypes = paymentTypes[0];
+    }else{
+      selecteddeliveryTimes = orderCreate.deliveryTime;
+      selectedPaymentTypes = orderCreate.paymentType;
+      chemistHint = orderCreate.chemist;
+      deliveryDispDate = orderCreate.deliveryDate;
+      selectedDate = DateTime.parse(deliveryDispDate);
+    }
+    super.initState();
   }
 
   @override
@@ -232,7 +241,7 @@ class _OrderCreateScreenState extends State<OrderCreateScreen> {
                     orderCreate.chemist = selectedChemist.itemName;
                     orderCreate.chemistAddress = locationInf.locationName ?? "Not Found!!";
                     orderCreate.paymentType = selectedPaymentTypes;
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const ItemsDetails()));
+                    goToPage(const ItemsDetails(), true, context);
                   } else {
                     Fluttertoast.showToast(
                         msg: "Select chemist and date",
@@ -269,6 +278,7 @@ class _OrderCreateScreenState extends State<OrderCreateScreen> {
     if (picked != null && picked != selectedDate) selectedDate = picked;
     setState(() {
       deliveryDispDate = selectedDate.toString();
+      print("deliveryDispDate : ${deliveryDispDate}");
     });
   }
 }

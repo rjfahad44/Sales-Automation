@@ -49,6 +49,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                 itemBuilder: (context, index) {
                   final data = productList[index];
                   return Card(
+                    color: primaryButtonColor,
                     semanticContainer: true,
                     elevation: 1,
                     child: Padding(
@@ -59,7 +60,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                           Text(
                             "Product id : ${data.id}",
                             style: const TextStyle(
-                                color: Colors.black,
+                                color: Colors.white,
                                 fontSize: 12.0,
                                 fontWeight: FontWeight.w500),
                             maxLines: 1,
@@ -68,7 +69,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                           Text(
                             "Product name : ${data.productName}",
                             style: const TextStyle(
-                                color: Colors.black,
+                                color: Colors.white,
                                 fontSize: 12.0,
                                 fontWeight: FontWeight.w500),
                             maxLines: 1,
@@ -77,7 +78,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                           Text(
                             "Product price : ${data.price}",
                             style: const TextStyle(
-                                color: Colors.black,
+                                color: Colors.white,
                                 fontSize: 12.0,
                                 fontWeight: FontWeight.w500),
                             maxLines: 1,
