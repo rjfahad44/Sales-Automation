@@ -107,7 +107,7 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen> {
                     onPressed: () {
                       saveOrder();
                     },
-                    child: MyTextView("Save", 12, FontWeight.bold, Colors.white,
+                    child: MyTextView(position == -1 ? "Save" : "Update", 12, FontWeight.bold, Colors.white,
                         TextAlign.center),
                   ),
                 ),
@@ -157,18 +157,36 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen> {
   }
 
   Future<void> saveOrder() async {
-    orderSaveHiveBox.add(orderCreate).then((value) {
-      orderCreate = OrderCreate();
-      print("Product Save : ${value}");
-      Fluttertoast.showToast(
-          msg: "Save successful",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
-      goToPage(const HomeScreen(), false, context);
-    });
+    if(position != -1){
+      orderSaveHiveBox.update(position, orderCreate).then((value) {
+        orderCreate = OrderCreate();
+        orderCreateCopy = OrderCreate();
+        print("Product Update position : $position");
+        Fluttertoast.showToast(
+            msg: "update successful",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        goToPage(const HomeScreen(), false, context);
+      });
+    }else{
+      orderSaveHiveBox.add(orderCreate).then((value) {
+        orderCreate = OrderCreate();
+        orderCreateCopy = OrderCreate();
+        print("Product Save : ${value}");
+        Fluttertoast.showToast(
+            msg: "Save successful",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        goToPage(const HomeScreen(), false, context);
+      });
+    }
   }
 }

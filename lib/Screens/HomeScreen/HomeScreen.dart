@@ -319,6 +319,8 @@ class Menu extends StatelessWidget {
                           ))),
                       onPressed: () {
                         orderCreate = OrderCreate();
+                        orderCreateCopy = OrderCreate();
+                        position = -1;
                         goToPage(const OrderCreateScreen(), true, context);
                       },
                       child: MenuButton(90, "assets/images/newOrder.png",

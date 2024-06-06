@@ -136,9 +136,10 @@ class _OrderArchiveScreenState extends State<OrderArchiveScreen> {
                                               break;
                                             case 'Edit':
                                               print("loop index : $index");
-                                              final pos = await orderSaveHiveBox.getPosition(data);
-                                              print("box index : $pos");
+                                              position = await orderSaveHiveBox.getPosition(data);
+                                              print("box index : $position");
                                               orderCreate = data;
+                                              orderCreateCopy = data;
                                               goToPage(const OrderCreateScreen(), true, context);
                                               break;
                                             case 'Delete':

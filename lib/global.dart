@@ -9,6 +9,8 @@ import 'Models/UserData.dart';
 
 UserData userData = UserData();
 OrderCreate orderCreate = OrderCreate();
+OrderCreate orderCreateCopy = OrderCreate();
+int position = -1;
 LocationInf locationInf = LocationInf();
 double screenwidth = 0.0;
 Item selectedChemist = Item();
