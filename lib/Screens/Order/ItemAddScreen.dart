@@ -49,6 +49,7 @@ class _ItemsDetailsState extends State<ItemsDetails> {
                   itemCount: productList.length,
                   itemBuilder: (context, index) {
                     return Card(
+                      color: primaryButtonColor,
                       surfaceTintColor: Colors.white,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -57,17 +58,31 @@ class _ItemsDetailsState extends State<ItemsDetails> {
                           children: [
                             MyTextView(
                                 productList[index].productName,
-                                14,
+                                12,
                                 FontWeight.normal,
-                                Colors.black,
+                                Colors.white,
                                 TextAlign.center),
+                            MyTextView("Price: ${productList[index].price}", 12, FontWeight.normal, Colors.white, TextAlign.center),
                             SizedBox(
                                 width: 80,
                                 child: TextField(
                                   controller: productList[index].textEditingController,
                                   keyboardType: TextInputType.number,
+                                  style:  const TextStyle(color: Colors.white),
+                                  cursorColor: Colors.white,
+                                  decoration: InputDecoration(
+                                    hintText: 'Quantity',
+                                    hintStyle: const TextStyle(color: Colors.white70, fontSize: 11.0),
+                                    filled: true,
+                                    fillColor: Colors.blue[900],
+                                    border: OutlineInputBorder(
+                                      borderSide: BorderSide.none,
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                  ),
                                   onChanged: null,
-                                ))
+                                ),
+                            )
                           ],
                         ),
                       ),

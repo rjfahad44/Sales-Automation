@@ -46,16 +46,16 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen> {
                 itemCount: widget.carts.length,
                 itemBuilder: (context, index) {
                   return Card(
+                    color: primaryButtonColor,
                     surfaceTintColor: Colors.white,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          MyTextView(widget.carts[index].itemName, 14,
-                              FontWeight.normal, Colors.black, TextAlign.center),
-                          MyTextView(widget.carts[index].quantity.toString(), 14,
-                              FontWeight.normal, Colors.black, TextAlign.center),
+                          MyTextView(widget.carts[index].itemName, 12, FontWeight.normal, Colors.white, TextAlign.center),
+                          MyTextView("Quantity: ${widget.carts[index].quantity}", 12, FontWeight.normal, Colors.white, TextAlign.center),
+                          MyTextView("Price: ${widget.carts[index].unitPrice}", 12, FontWeight.normal, Colors.white, TextAlign.center),
                         ],
                       ),
                     ),
