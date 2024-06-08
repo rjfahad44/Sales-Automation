@@ -62,169 +62,192 @@ class _OrderCreateScreenState extends State<OrderCreateScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  MyTextView("Delivary Date: ", 12, FontWeight.normal, Colors.black,
-                      TextAlign.center),
-                  Flexible(
-                    child: SizedBox(
-                      width: 280,
-                      child: ElevatedButton(
-                        onPressed: () => _selectDate(context),
-                        style: ButtonStyle(
-                            surfaceTintColor: WidgetStateColor.resolveWith(
-                                (states) => Colors.white),
-                            shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ))),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(deliveryDispDate.split(" ")[0]),
-                            const Icon(Icons.calendar_month)
-                          ],
+              Expanded(
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: MyTextView("Delivary Date: ", 12, FontWeight.normal, Colors.black, TextAlign.start),
                         ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  MyTextView("Delivary Time: ", 12, FontWeight.normal, Colors.black,
-                      TextAlign.center),
-                  Flexible(
-                    child: Card(
-                      surfaceTintColor: Colors.white,
-                      child: SizedBox(
-                        width: 280,
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(8, 2, 8, 2),
-                          child: DropdownButton<String>(
-                            value: selecteddeliveryTimes,
-                            underline: Container(),
-                            isExpanded: true,
-                            items: deliveryTimes.map((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: MyTextView(value, 12, FontWeight.normal,
-                                    Colors.black, TextAlign.center),
-                              );
-                            }).toList(),
-                            onChanged: (String? newValue) {
-                              selecteddeliveryTimes = newValue!;
-                              setState(() {});
-                            },
+
+                        Expanded(
+                          flex: 3,
+                          child: Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: SizedBox(
+                              height: 52.0,
+                              child: ElevatedButton(
+                                onPressed: () => _selectDate(context),
+                                style: ButtonStyle(
+                                    surfaceTintColor: WidgetStateColor.resolveWith(
+                                            (states) => Colors.white),
+                                    shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(10.0),
+                                        ))),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(deliveryDispDate.split(" ")[0]),
+                                    const Icon(Icons.calendar_month)
+                                  ],
+                                ),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Flexible(
-                    flex: 1,
-                    child: MyTextView("Chemist: ", 12, FontWeight.normal, Colors.black, TextAlign.center),
-                  ),
-                  Flexible(
-                    flex: 4,
-                    child: Card(
-                      surfaceTintColor: Colors.white,
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(8, 2, 8, 2),
-                        child: DropdownButton<Item>(
-                          hint: MyTextView(chemistHint, 12, FontWeight.normal, Colors.black, TextAlign.center),
-                          value: null, // Initially, no item is selected
-                          isExpanded: true,
-                          underline: Container(),
-                          onChanged: (Item? selectedValue) {
-                            setState(() {
-                              chemistHint = selectedValue!.itemName;
-                              selectedChemist = selectedValue;
-                            });
-                          },
-                          items: chemistDropdownList.map((Item item) {
-                            return DropdownMenuItem<Item>(
-                              value: item,
-                              child: Text(item.itemName),
-                            );
-                          }).toList(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: MyTextView("Delivary Time: ", 12, FontWeight.normal, Colors.black, TextAlign.start),
                         ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  MyTextView("Chem.Address: ", 12, FontWeight.normal, Colors.black,
-                      TextAlign.center),
-                  Flexible(
-                    child: Card(
-                      surfaceTintColor: Colors.white,
-                      child: SizedBox(
-                        height: 50,
-                        width: 280,
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(8, 2, 8, 2),
-                          child: Center(
-                            child: MyTextView(
-                                "${locationInf.locationName}, ${locationInf.locationDetails}",
-                                12,
-                                FontWeight.normal,
-                                Colors.black,
-                                TextAlign.left),
+
+                        Expanded(
+                          flex: 3,
+                          child: Card(
+                            surfaceTintColor: Colors.white,
+                            child: SizedBox(
+                              width: 280,
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(8, 2, 8, 2),
+                                child: DropdownButton<String>(
+                                  value: selecteddeliveryTimes,
+                                  underline: Container(),
+                                  isExpanded: true,
+                                  items: deliveryTimes.map((String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: MyTextView(value, 12, FontWeight.normal,
+                                          Colors.black, TextAlign.center),
+                                    );
+                                  }).toList(),
+                                  onChanged: (String? newValue) {
+                                    selecteddeliveryTimes = newValue!;
+                                    setState(() {});
+                                  },
+                                ),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  MyTextView("Payment type: ", 12, FontWeight.normal, Colors.black,
-                      TextAlign.center),
-                  Flexible(
-                    child: Card(
-                      surfaceTintColor: Colors.white,
-                      child: SizedBox(
-                        width: 280,
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(8, 2, 8, 2),
-                          child: DropdownButton<String>(
-                            value: selectedPaymentTypes,
-                            underline: Container(),
-                            isExpanded: true,
-                            items: paymentTypes.map((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: MyTextView(value, 12, FontWeight.normal,
-                                    Colors.black, TextAlign.center),
-                              );
-                            }).toList(),
-                            onChanged: (String? newValue) {
-                              selectedPaymentTypes = newValue!;
-                              setState(() {});
-                            },
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: MyTextView("Chemist: ", 12, FontWeight.normal, Colors.black, TextAlign.start),
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: Card(
+                            surfaceTintColor: Colors.white,
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(8, 2, 8, 2),
+                              child: DropdownButton<Item>(
+                                hint: MyTextView(chemistHint, 12, FontWeight.normal, Colors.black, TextAlign.start),
+                                value: null, // Initially, no item is selected
+                                isExpanded: true,
+                                underline: Container(),
+                                onChanged: (Item? selectedValue) {
+                                  setState(() {
+                                    chemistHint = selectedValue!.itemName;
+                                    selectedChemist = selectedValue;
+                                  });
+                                },
+                                items: chemistDropdownList.map((Item item) {
+                                  return DropdownMenuItem<Item>(
+                                    value: item,
+                                    child: Text(item.itemName),
+                                  );
+                                }).toList(),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
+                      ],
                     ),
-                  ),
-                ],
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: MyTextView("Chem.Address: ", 12, FontWeight.normal, Colors.black, TextAlign.start),
+                        ),
+
+                        Expanded(
+                          flex: 3,
+                          child: Card(
+                            surfaceTintColor: Colors.white,
+                            child: SizedBox(
+                              height: 50,
+                              width: 280,
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(8, 2, 8, 2),
+                                child: Center(
+                                  child: MyTextView(
+                                      "${locationInf.locationName}, ${locationInf.locationDetails}",
+                                      12,
+                                      FontWeight.normal,
+                                      Colors.black,
+                                      TextAlign.left),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: MyTextView("Payment type: ", 12, FontWeight.normal, Colors.black, TextAlign.start),
+                        ),
+
+                        Expanded(
+                          flex: 3,
+                          child: Card(
+                            surfaceTintColor: Colors.white,
+                            child: SizedBox(
+                              width: 280,
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(8, 2, 8, 2),
+                                child: DropdownButton<String>(
+                                  value: selectedPaymentTypes,
+                                  underline: Container(),
+                                  isExpanded: true,
+                                  items: paymentTypes.map((String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: MyTextView(value, 12, FontWeight.normal,
+                                          Colors.black, TextAlign.center),
+                                    );
+                                  }).toList(),
+                                  onChanged: (String? newValue) {
+                                    selectedPaymentTypes = newValue!;
+                                    setState(() {});
+                                  },
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-              const SizedBox(
-                height: 10,
-              ),
+
               ElevatedButton(
                 style: ButtonStyle(
                     backgroundColor: WidgetStateColor.resolveWith(
@@ -234,7 +257,7 @@ class _OrderCreateScreenState extends State<OrderCreateScreen> {
                           borderRadius: BorderRadius.circular(10.0),
                         ))),
                 onPressed: () {
-                  if(selectedChemist.itemName != "InitChem" && deliveryDispDate != 'Select Date') {
+                  if(chemistHint != "Select Chemist" && deliveryDispDate != 'Select Date') {
                     orderCreate.deliveryDate = deliveryDispDate;
                     orderCreate.deliveryTime = selecteddeliveryTimes;
                     orderCreate.chemistId = selectedChemist.itemID;

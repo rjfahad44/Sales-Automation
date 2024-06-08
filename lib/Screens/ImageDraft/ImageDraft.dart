@@ -7,14 +7,14 @@ import '../../LocalDB/DatabaseHelper.dart';
 import '../../global.dart';
 import '../ImageCaptureScreen/Model/ImageDataModel.dart';
 
-class ImageArchive extends StatefulWidget {
-  const ImageArchive({super.key});
+class ImageDraft extends StatefulWidget {
+  const ImageDraft({super.key});
 
   @override
   State<StatefulWidget> createState() => _ImageArchiveState();
 }
 
-class _ImageArchiveState extends State<ImageArchive> {
+class _ImageArchiveState extends State<ImageDraft> {
   ImageUploadApis imageUploadApis = ImageUploadApis();
   Future<List<ImageDataModel>>? imageDataList;
   bool isImageDataListIsNotEmpty = true;
@@ -45,7 +45,7 @@ class _ImageArchiveState extends State<ImageArchive> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: MyTextView("Image Archive", 16, FontWeight.bold, Colors.black,
+          title: MyTextView("Image Draft", 16, FontWeight.bold, Colors.black,
               TextAlign.center),
           backgroundColor: themeColor,
         ),

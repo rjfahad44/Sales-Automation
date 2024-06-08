@@ -1,4 +1,5 @@
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sales_automation/APIs/OrderAPI.dart';
@@ -17,7 +18,9 @@ class ItemsDetails extends StatefulWidget {
 
 class _ItemsDetailsState extends State<ItemsDetails> {
   OrderAPI api = OrderAPI();
+  final TextEditingController _searchController = TextEditingController();
   List<Product> productList = [];
+  List<Product> productSearchList = [];
   bool isLoading = true;
 
   @override
@@ -43,6 +46,31 @@ class _ItemsDetailsState extends State<ItemsDetails> {
           ) : Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+
+              Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: TextField(
+                  controller: _searchController,
+                  style:  const TextStyle(color: Colors.black),
+                  decoration: InputDecoration(
+                    prefixIcon: Icon(Icons.search, color: primaryButtonColor,),
+                    labelText: 'Search..',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                      borderSide: BorderSide(color: primaryButtonColor),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                      borderSide: BorderSide(color: primaryButtonColor, width: 2.0), // Set the focused border color to blue
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                      borderSide: BorderSide(color: primaryButtonColor), // Set the enabled border color to blue
+                    ),
+                  ),
+                ),
+              ),
+
               Expanded(
                 child: ListView.builder(
                   shrinkWrap: true,
@@ -114,6 +142,22 @@ class _ItemsDetailsState extends State<ItemsDetails> {
     );
   }
 
+  void _filterItems() {
+    final query = _searchController.text.toUpperCase();
+    setState(() {
+      productList = productSearchList.where((item) {
+        return (item.productName.contains(query) || item.id.toString().contains(query));
+      }).toList();
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.removeListener(_filterItems);
+    _searchController.dispose();
+    super.dispose();
+  }
+
   Future<void> loadProducts() async {
     productList = await api.getProducts();
     setState(() {
@@ -129,6 +173,8 @@ class _ItemsDetailsState extends State<ItemsDetails> {
           }
         }
         isLoading = false;
+        productSearchList = productList;
+        _searchController.addListener(_filterItems);
       }
     });
   }

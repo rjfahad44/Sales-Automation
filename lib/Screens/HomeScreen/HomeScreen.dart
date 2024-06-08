@@ -1,6 +1,6 @@
+
 import 'package:flutter/material.dart';
 import 'package:sales_automation/Screens/Attendance/AttendanceScreen.dart';
-import 'package:sales_automation/Screens/ImageArchive/ImageArchive.dart';
 import 'package:sales_automation/Screens/ImageCaptureScreen/ImageCapture.dart';
 import 'package:sales_automation/Screens/AuthentationScreen/LoginScreen.dart';
 import 'package:sales_automation/Screens/Order/Models/OrderCreate.dart';
@@ -14,6 +14,7 @@ import '../../Services/LocationService.dart';
 import '../../global.dart';
 import '../ChemistListScreen/ChemistListScreen.dart';
 import '../DoctorListScreen/DoctorListScreen.dart';
+import '../ImageDraft/ImageDraft.dart';
 import '../Order/OrderCreateScreen.dart';
 import '../ProductListScreen/ProductListScreen.dart';
 
@@ -173,11 +174,11 @@ class Menu extends StatelessWidget {
                           padding: const EdgeInsets.only(
                               top: 8.0, left: 0.0, right: 8.0, bottom: 0.0),
                           child: ClipRRect(
-                            borderRadius: BorderRadius.circular(100),
+                            borderRadius: BorderRadius.circular(8.0),
                             child: Image.network(
                               'https://media.istockphoto.com/id/2098359215/photo/digital-marketing-concept-businessman-using-laptop-with-ads-dashboard-digital-marketing.jpg?s=1024x1024&w=is&k=20&c=q6RTyRcP6Lli25bBXmKz3F3sIAVSu5PthcuOiAniHzE=',
                               width: 100,
-                              height: 100,
+                              height: 120,
                               scale: 1.0,
                               fit: BoxFit.cover,
                               errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
@@ -407,10 +408,10 @@ class Menu extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10.0),
                           ))),
                       onPressed: () {
-                        goToPage(const ImageArchive(), true, context);
+                        goToPage(const ImageDraft(), true, context);
                       },
                       child: MenuButton(90, "assets/images/archive.png",
-                          "Image Archive", textWidth)),
+                          "Image Draft", textWidth)),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(2.0),
@@ -512,7 +513,7 @@ class Menu extends StatelessWidget {
                       goToPage(const AttendanceScreen(), true, context);
                     },
                     child: MenuButton(90, "assets/images/geoPoint.png",
-                        "Geo\nAttendance", textWidth),
+                        "Attendance", textWidth),
                   ),
                 ),
               ],

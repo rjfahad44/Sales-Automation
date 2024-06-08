@@ -19,13 +19,19 @@ class ProductListScreen extends StatefulWidget{
 class _ProductListScreenState extends State<ProductListScreen> {
 
   OrderAPI api = OrderAPI();
+  final TextEditingController _searchController = TextEditingController();
   List<Product> productList = [];
+  List<Product> productSearchList = [];
+  bool isLoading = false;
 
   @override
   void initState() {
     api.getProducts().then((value) {
       setState(() {
         productList = value;
+        productSearchList = value;
+        _searchController.addListener(_filterItems);
+        isLoading = true;
       });
     });
     super.initState();
@@ -40,8 +46,40 @@ class _ProductListScreenState extends State<ProductListScreen> {
               TextAlign.center),
           backgroundColor: themeColor,
         ),
-        body: productList.isNotEmpty? Column(
+        body: isLoading?
+        Column(
           children: [
+
+            Padding(
+              padding: const EdgeInsets.only(
+                top: 8.0,
+                left: 4.0,
+                right: 4.0,
+                bottom: 4.0
+              ),
+              child: TextField(
+                controller: _searchController,
+                style:  const TextStyle(color: Colors.black),
+                decoration: InputDecoration(
+                  prefixIcon: Icon(Icons.search, color: primaryButtonColor,),
+                  labelText: 'Search..',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                    borderSide: BorderSide(color: primaryButtonColor),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                    borderSide: BorderSide(color: primaryButtonColor, width: 2.0),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                    borderSide: BorderSide(color: primaryButtonColor),
+                  ),
+                ),
+              ),
+            ),
+
+            productList.isNotEmpty?
             Expanded(
               child: ListView.builder(
                 primary: true,
@@ -90,12 +128,31 @@ class _ProductListScreenState extends State<ProductListScreen> {
                   );
                 },
               ),
+            ):
+            Center(
+              child: MyTextView("No Data Found!", 18, FontWeight.bold,
+                  Colors.black, TextAlign.center),
             ),
+
           ],
         ): const Center(
           child: CircularProgressIndicator()
         ),
       ),
     );
+  }
+
+  void _filterItems() {
+    final query = _searchController.text.toUpperCase();
+    setState(() {
+      productList = productSearchList.where((item) { return (item.productName.contains(query) || item.id.toString().contains(query)); }).toList();
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.removeListener(_filterItems);
+    _searchController.dispose();
+    super.dispose();
   }
 }

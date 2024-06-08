@@ -16,13 +16,19 @@ class ChemistListScreen extends StatefulWidget{
 class _ChemistListScreenState extends State<ChemistListScreen> {
 
   OrderAPI api = OrderAPI();
+  final TextEditingController _searchController = TextEditingController();
   List<Item> chemistList = [];
+  List<Item> chemistSearchList = [];
+  bool isLoading = false;
 
   @override
   void initState() {
     api.getChemistListForDropdown().then((value) {
       setState(() {
         chemistList = value;
+        chemistSearchList = value;
+        _searchController.addListener(_filterItems);
+        isLoading = true;
       });
     });
     super.initState();
@@ -33,12 +39,44 @@ class _ChemistListScreenState extends State<ChemistListScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: MyTextView("Image Archive", 16, FontWeight.bold, Colors.black,
+          title: MyTextView("Chemist List", 16, FontWeight.bold, Colors.black,
               TextAlign.center),
           backgroundColor: themeColor,
         ),
-        body: chemistList.isNotEmpty? Column(
+        body: isLoading ?
+        Column(
           children: [
+
+            Padding(
+              padding: const EdgeInsets.only(
+                  top: 8.0,
+                  left: 4.0,
+                  right: 4.0,
+                  bottom: 4.0
+              ),
+              child: TextField(
+                controller: _searchController,
+                style:  const TextStyle(color: Colors.black),
+                decoration: InputDecoration(
+                  prefixIcon: Icon(Icons.search, color: primaryButtonColor,),
+                  labelText: 'Search..',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                    borderSide: BorderSide(color: primaryButtonColor),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                    borderSide: BorderSide(color: primaryButtonColor, width: 2.0),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                    borderSide: BorderSide(color: primaryButtonColor),
+                  ),
+                ),
+              ),
+            ),
+
+            chemistList.isNotEmpty?
             Expanded(
               child: ListView.builder(
                 primary: true,
@@ -81,12 +119,31 @@ class _ChemistListScreenState extends State<ChemistListScreen> {
                   );
                 },
               ),
+            ) :
+            Center(
+              child: MyTextView("No Data Found!", 18, FontWeight.bold,
+                  Colors.black, TextAlign.center),
             ),
           ],
-        ): const Center(
+        ):
+        const Center(
           child: CircularProgressIndicator()
         ),
       ),
     );
+  }
+
+  void _filterItems() {
+    final query = _searchController.text.toUpperCase();
+    setState(() {
+      chemistList = chemistSearchList.where((item) { return (item.itemName.contains(query) || item.itemID.toString().contains(query)); }).toList();
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.removeListener(_filterItems);
+    _searchController.dispose();
+    super.dispose();
   }
 }

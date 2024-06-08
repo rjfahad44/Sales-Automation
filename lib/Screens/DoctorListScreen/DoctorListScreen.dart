@@ -18,13 +18,19 @@ class DoctorListScreen extends StatefulWidget{
 class _DoctorListScreenState extends State<DoctorListScreen> {
 
   OrderAPI api = OrderAPI();
+  final TextEditingController _searchController = TextEditingController();
   List<Doctor> doctorList = [];
+  List<Doctor> doctorSearchList = [];
+  bool isLoading = false;
 
   @override
   void initState() {
     api.getDoctorList().then((value) {
       setState(() {
         doctorList = value;
+        doctorSearchList = value;
+        _searchController.addListener(_filterItems);
+        isLoading = true;
       });
     });
     super.initState();
@@ -39,8 +45,40 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
               TextAlign.center),
           backgroundColor: themeColor,
         ),
-        body: doctorList.isNotEmpty? Column(
+        body: isLoading?
+        Column(
           children: [
+
+            Padding(
+              padding: const EdgeInsets.only(
+                  top: 8.0,
+                  left: 4.0,
+                  right: 4.0,
+                  bottom: 4.0
+              ),
+              child: TextField(
+                controller: _searchController,
+                style:  const TextStyle(color: Colors.black),
+                decoration: InputDecoration(
+                  prefixIcon: Icon(Icons.search, color: primaryButtonColor,),
+                  labelText: 'Search..',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                    borderSide: BorderSide(color: primaryButtonColor),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                    borderSide: BorderSide(color: primaryButtonColor, width: 2.0),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                    borderSide: BorderSide(color: primaryButtonColor),
+                  ),
+                ),
+              ),
+            ),
+
+            doctorList.isNotEmpty?
             Expanded(
               child: ListView.builder(
                 primary: true,
@@ -101,6 +139,10 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
                   );
                 },
               ),
+            ):
+            Center(
+              child: MyTextView("No Data Found!", 18, FontWeight.bold,
+                  Colors.black, TextAlign.center),
             ),
           ],
         ): const Center(
@@ -108,5 +150,19 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
         ),
       ),
     );
+  }
+
+  void _filterItems() {
+    final query = _searchController.text.toUpperCase();
+    setState(() {
+      doctorList = doctorSearchList.where((item) { return (item.doctorName.contains(query) || item.id.toString().contains(query)); }).toList();
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.removeListener(_filterItems);
+    _searchController.dispose();
+    super.dispose();
   }
 }

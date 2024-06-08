@@ -34,8 +34,8 @@ void goToPage(Widget page, bool isBackPage, BuildContext context) {
  if (isBackPage) {
   Navigator.push(context, MaterialPageRoute(builder: (context) => page));
  } else {
-  Navigator.pushReplacement(
-      context, MaterialPageRoute(builder: (context) => page));
+  Navigator.pushAndRemoveUntil(
+      context, MaterialPageRoute(builder: (context) => page), (Route<dynamic> dynamic) => false);
  }
 }
 

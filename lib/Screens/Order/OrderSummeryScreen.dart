@@ -79,7 +79,7 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen> {
                   child: ElevatedButton(
                     style: ButtonStyle(
                         backgroundColor:
-                        WidgetStateColor.resolveWith((states) => Colors.cyan),
+                        WidgetStateColor.resolveWith((states) => primaryButtonColor),
                         shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10.0),
@@ -99,7 +99,7 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen> {
                   child: ElevatedButton(
                     style: ButtonStyle(
                         backgroundColor:
-                        WidgetStateColor.resolveWith((states) => Colors.cyan),
+                        WidgetStateColor.resolveWith((states) => primaryButtonColor),
                         shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10.0),
