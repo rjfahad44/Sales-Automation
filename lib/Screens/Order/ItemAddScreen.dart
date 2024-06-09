@@ -146,7 +146,7 @@ class _ItemsDetailsState extends State<ItemsDetails> {
     final query = _searchController.text.toUpperCase();
     setState(() {
       productList = productSearchList.where((item) {
-        return (item.productName.contains(query) || item.id.toString().contains(query));
+        return (item.productName.toUpperCase().contains(query) || item.id.toString().contains(query));
       }).toList();
     });
   }

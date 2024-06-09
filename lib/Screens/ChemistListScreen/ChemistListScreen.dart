@@ -136,7 +136,7 @@ class _ChemistListScreenState extends State<ChemistListScreen> {
   void _filterItems() {
     final query = _searchController.text.toUpperCase();
     setState(() {
-      chemistList = chemistSearchList.where((item) { return (item.itemName.contains(query) || item.itemID.toString().contains(query)); }).toList();
+      chemistList = chemistSearchList.where((item) { return (item.itemName.toUpperCase().contains(query) || item.itemID.toString().contains(query)); }).toList();
     });
   }
 

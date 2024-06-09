@@ -155,7 +155,7 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
   void _filterItems() {
     final query = _searchController.text.toUpperCase();
     setState(() {
-      doctorList = doctorSearchList.where((item) { return (item.doctorName.contains(query) || item.id.toString().contains(query)); }).toList();
+      doctorList = doctorSearchList.where((item) { return (item.doctorName.toUpperCase().contains(query) || item.id.toString().contains(query)); }).toList();
     });
   }
 

@@ -145,7 +145,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
   void _filterItems() {
     final query = _searchController.text.toUpperCase();
     setState(() {
-      productList = productSearchList.where((item) { return (item.productName.contains(query) || item.id.toString().contains(query)); }).toList();
+      productList = productSearchList.where((item) { return (item.productName.toUpperCase().contains(query) || item.id.toString().contains(query)); }).toList();
     });
   }
 
