@@ -90,7 +90,7 @@ class _ItemsDetailsState extends State<ItemsDetails> {
                                 FontWeight.normal,
                                 Colors.white,
                                 TextAlign.center),
-                            MyTextView("Price: ${productList[index].price}", 12, FontWeight.normal, Colors.white, TextAlign.center),
+                            MyTextView("Price: ${productList[index].tp}৳", 12, FontWeight.normal, Colors.white, TextAlign.center),
                             SizedBox(
                                 width: 80,
                                 child: TextField(
@@ -185,10 +185,16 @@ class _ItemsDetailsState extends State<ItemsDetails> {
     for (var product in productList.where((product) => product.textEditingController.text.isNotEmpty)) {
       Cart cart = Cart(
         product.id,
-        int.parse(product.textEditingController.text),
         product.productName,
+        product.tp,
+        int.parse(product.textEditingController.text),
+        product.discountName,
+        product.discountType,
+        product.discountValue,
+        product.minimumQuantity,
+        product.vat,
+        product.mrp,
         selectedChemist.itemName,
-        product.price,
         selectedChemist.itemID,
       );
       print("Selected Item : ${cart.quantity}");
@@ -197,8 +203,17 @@ class _ItemsDetailsState extends State<ItemsDetails> {
           id: product.id,
           productCode: product.productCode,
           productName: product.productName,
-          price: product.price,
-          productQuantity: cart.quantity
+          tp: product.tp,
+          productQuantity: cart.quantity,
+          productShortName: product.productShortName,
+          packSize: product.packSize,
+          discountName: product.discountName,
+          discountType: product.discountType,
+          discountValue: product.discountValue,
+          minimumQuantity: product.minimumQuantity,
+          description: product.description,
+          vat: product.vat,
+          mrp: product.mrp
         )
       );
       carts.add(cart);

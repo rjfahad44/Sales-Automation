@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sales_automation/APIs/ImageUploadApis.dart';
 import '../../Components/Components.dart';
+import '../../Components/CustomBottomSheetsDialog.dart';
+import '../../Components/TransparentProgressDialog.dart';
 import '../../LocalDB/DatabaseHelper.dart';
 import '../../global.dart';
 import '../ImageCaptureScreen/Model/ImageDataModel.dart';
@@ -131,13 +133,15 @@ class _ImageArchiveState extends State<ImageDraft> {
                                                   color: Colors.blue,
                                                 ),
                                                 onPressed: () {
+                                                  showTransparentProgressDialog(context);
                                                   imageUploadApis
                                                       .sendPrescribedProducts(
                                                           File(data.imagePath),
                                                           data.doctorName,
                                                           data.employeeId,
                                                           prescribedProducts,
-                                                          (isSuccess) {
+                                                          (isSuccess, response) {
+                                                            hideTransparentProgressDialog(context);
                                                     if (isSuccess) {
                                                       imageHiveBox
                                                           .delete(index);
@@ -154,9 +158,11 @@ class _ImageArchiveState extends State<ImageDraft> {
                                                           });
                                                         });
                                                       });
+
+                                                      showBottomSheetDialog(context, response);
                                                     } else {
                                                       Fluttertoast.showToast(
-                                                          msg: "Error!!",
+                                                          msg: response.message ?? "Error!!",
                                                           toastLength:
                                                               Toast.LENGTH_LONG,
                                                           gravity: ToastGravity
@@ -203,6 +209,7 @@ class _ImageArchiveState extends State<ImageDraft> {
                                       borderRadius: BorderRadius.circular(10.0),
                                     ))),
                                 onPressed: () async {
+                                  showTransparentProgressDialog(context);
                                   enableUploadButtons.value =
                                       !enableUploadButtons.value;
                                   await imageUploadApis
@@ -218,6 +225,7 @@ class _ImageArchiveState extends State<ImageDraft> {
                                       });
                                     });
                                   }, (isSuccess) {
+                                    hideTransparentProgressDialog(context);
                                     if (isSuccess) {
                                       Fluttertoast.showToast(
                                           msg: "Successfully Upload All Data",

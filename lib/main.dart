@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:sales_automation/Screens/AuthentationScreen/LoginScreen.dart';
 import 'package:sales_automation/Screens/Order/Adapters/OrderCreateAdapter.dart';
 import 'package:sales_automation/Screens/Order/Models/OrderCreate.dart';
 import 'package:sales_automation/Screens/ProductListScreen/Model/Product.dart';
@@ -13,10 +11,11 @@ import 'Screens/ImageCaptureScreen/Model/ImageDataModel.dart';
 import 'Screens/Order/Adapters/ProductAdapter.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  Hive.registerAdapter<ImageDataModel>(ImageDataModelAdapter());
   Hive.registerAdapter<Product>(ProductAdapter());
   Hive.registerAdapter<OrderCreate>(OrderCreateAdapter());
+  Hive.registerAdapter<ImageDataModel>(ImageDataModelAdapter());
   runApp(const AppRoot());
 }
 

@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
+
 import '../Screens/ImageCaptureScreen/Model/ImageDataModel.dart';
+import '../Screens/ImageCaptureScreen/Model/ImageUploadResponse.dart';
 import '../global.dart';
 import 'package:http/http.dart' as http;
 
@@ -10,7 +12,7 @@ class ImageUploadApis {
       String doctorName,
       int employeeId,
       List<Map<String, dynamic>> prescribedProducts,
-      Function(bool isSuccess) callback) async {
+      Function(bool isSuccess, ImageUploadResponse respons) callback) async {
 
     final bytes = await image.readAsBytes();
     var base64Image = base64Encode(bytes);
@@ -33,10 +35,15 @@ class ImageUploadApis {
     );
 
     if (response.statusCode == 200) {
-      callback.call(true);
+      var json =  jsonDecode(response.body);
+      ImageUploadResponse res = ImageUploadResponse.fromJson(json as Map<String, dynamic>);
+      callback.call(true, res);
       print('sent successfully!');
+      print('Image Upload Response: ${response.body.toString()}');
     } else {
-      callback.call(false);
+      var json =  jsonDecode(response.body);
+      ImageUploadResponse res = ImageUploadResponse.fromJson(json as Map<String, dynamic>);
+      callback.call(false, res);
       print('Error sending data: ${response.reasonPhrase}');
     }
   }

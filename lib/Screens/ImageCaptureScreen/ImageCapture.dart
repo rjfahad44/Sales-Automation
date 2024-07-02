@@ -5,6 +5,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import '../../APIs/ImageUploadApis.dart';
 import '../../Components/Components.dart';
+import '../../Components/CustomBottomSheetsDialog.dart';
+import '../../Components/TransparentProgressDialog.dart';
 import '../../LocalDB/DatabaseHelper.dart';
 import '../../global.dart';
 import 'dart:core';
@@ -24,6 +26,7 @@ class _ImageCaptureState extends State<ImageCapture> {
   ImageUploadApis imageUploadApis = ImageUploadApis();
   File? _image;
   bool _isImageChoose = false;
+  bool _isLoading = false;
   ImagePicker imagePicker = ImagePicker();
   final imageHiveBox = HiveBoxHelper<ImageDataModel>('image_db');
   final TextEditingController _doctorNameController = TextEditingController();
@@ -321,18 +324,17 @@ class _ImageCaptureState extends State<ImageCapture> {
                             const EdgeInsets.only(bottom: 10.0, right: 5.0),
                         child: ElevatedButton(
                           style: ButtonStyle(
-                              backgroundColor: MaterialStateColor.resolveWith(
+                              backgroundColor: WidgetStateColor.resolveWith(
                                   (states) => states.isEmpty
                                       ? primaryButtonColor
                                       : Colors.black26),
-                              shape: MaterialStateProperty.all<
+                              shape: WidgetStateProperty.all<
                                       RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.0),
                               ))),
                           onPressed: () async {
-                            var doctorName =
-                                _doctorNameController.text.toString();
+                            var doctorName = _doctorNameController.text.toString();
                             var employeeId = userData.employeeId;
                             if (doctorName.isEmpty) {
                               Fluttertoast.showToast(
@@ -353,27 +355,33 @@ class _ImageCaptureState extends State<ImageCapture> {
                                   textColor: Colors.white,
                                   fontSize: 16.0);
                             } else {
-                              enableUploadButtons.value =
-                                  !enableUploadButtons.value;
+                              enableUploadButtons.value = !enableUploadButtons.value;
+                              showTransparentProgressDialog(context);
                               await imageUploadApis.sendPrescribedProducts(_image!, doctorName,
-                                  employeeId, prescribedProducts, (isSuccess) {
+                                  employeeId, prescribedProducts, (isSuccess, response) {
+                                    hideTransparentProgressDialog(context);
                                 if (isSuccess) {
                                   setState(() {
                                     _doctorNameController.text = "";
                                     _image = null;
                                     _isImageChoose = false;
+                                    _isLoading = false;
                                   });
-                                  Fluttertoast.showToast(
-                                      msg: "Successfully upload!",
-                                      toastLength: Toast.LENGTH_LONG,
-                                      gravity: ToastGravity.BOTTOM,
-                                      timeInSecForIosWeb: 1,
-                                      backgroundColor: Colors.red,
-                                      textColor: Colors.white,
-                                      fontSize: 16.0);
+
+
+                                  showBottomSheetDialog(context, response);
+
+                                  // Fluttertoast.showToast(
+                                  //     msg: "Successfully upload!",
+                                  //     toastLength: Toast.LENGTH_LONG,
+                                  //     gravity: ToastGravity.BOTTOM,
+                                  //     timeInSecForIosWeb: 1,
+                                  //     backgroundColor: Colors.red,
+                                  //     textColor: Colors.white,
+                                  //     fontSize: 16.0);
                                 } else {
                                   Fluttertoast.showToast(
-                                      msg: "Error!!",
+                                      msg: response.message ?? "Error!!",
                                       toastLength: Toast.LENGTH_LONG,
                                       gravity: ToastGravity.BOTTOM,
                                       timeInSecForIosWeb: 1,

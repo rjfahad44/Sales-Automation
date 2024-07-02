@@ -114,7 +114,27 @@ class _ProductListScreenState extends State<ProductListScreen> {
                             overflow: TextOverflow.ellipsis,
                           ),
                           Text(
-                            "Product price : ${data.price}",
+                            "Product price : ${data.tp}৳",
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.w500),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+
+                          Text(
+                            "Discount : ${data.discountValue}${data.discountType.toLowerCase() == 'percentage'? "%" : "৳"}",
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.w500),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+
+                          Text(
+                            "Minimum price for applicable discount: ${data.minimumQuantity}৳",
                             style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 12.0,

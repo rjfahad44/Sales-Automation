@@ -5,28 +5,21 @@ import '../../../global.dart';
 
 @HiveType(typeId: order_model_type_id)
 class OrderCreate {
-  @HiveField(0)
-  String deliveryDate;
-  @HiveField(1)
-  String deliveryTime;
-  @HiveField(2)
-  int chemistId;
-  @HiveField(3)
-  String chemist;
-  @HiveField(4)
-  String chemistAddress;
-  @HiveField(5)
-  String paymentType;
-  @HiveField(6)
-  List<Product> products;
+  @HiveField(0) String deliveryDate;
+  @HiveField(1) String deliveryTime;
+  @HiveField(2) int chemistId;
+  @HiveField(3) String chemist;
+  @HiveField(4) String chemistAddress;
+  @HiveField(5) String paymentType;
+  @HiveField(6) List<Product> products;
 
   OrderCreate({
-    this.deliveryDate = '',
-    this.deliveryTime = '',
+    this.deliveryDate = "",
+    this.deliveryTime = "",
     this.chemistId = 0,
-    this.chemist = '',
-    this.chemistAddress = '',
-    this.paymentType = '',
+    this.chemist = "",
+    this.chemistAddress = "",
+    this.paymentType = "",
     List<Product>? products,
   }) : products = products ?? [];
 
@@ -51,7 +44,7 @@ class OrderCreate {
     };
 
   double get totalAmount {
-    return products.map((p) => p.price * p.productQuantity).reduce((value, element) => value + element);
+    return products.map((p) => p.calculateFinalPrice(p.tp, p.productQuantity, p.discountValue, p.discountType, p.minimumQuantity)).reduce((value, element) => value + element);
   }
 
   @override

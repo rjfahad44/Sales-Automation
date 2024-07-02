@@ -1,7 +1,6 @@
+
 import 'package:hive/hive.dart';
 import 'package:sales_automation/Screens/ProductListScreen/Model/Product.dart';
-import 'package:sales_automation/Screens/Order/Models/OrderCreate.dart';
-
 import '../../../global.dart';
 
 @HiveType(typeId: product_model_type_id)
@@ -14,9 +13,18 @@ class ProductAdapter extends TypeAdapter<Product> {
       case 1:
         return Product(
           id: reader.readInt(),
-          productName: reader.readString(),
           productCode: reader.readString(),
-          price: reader.readDouble(),
+          productName: reader.readString(),
+          tp: reader.readDouble(),
+          productShortName: reader.readString(),
+          packSize: reader.readString(),
+          discountName: reader.readString(),
+          discountValue: reader.readDouble(),
+          minimumQuantity: reader.readInt(),
+          discountType: reader.readString(),
+          description: reader.readString(),
+          vat: reader.readDouble(),
+          mrp: reader.readDouble(),
           productQuantity: reader.readInt(),
         );
       default:
@@ -30,7 +38,16 @@ class ProductAdapter extends TypeAdapter<Product> {
     writer.writeInt(obj.id);
     writer.writeString(obj.productCode);
     writer.writeString(obj.productName);
-    writer.writeDouble(obj.price);
+    writer.writeDouble(obj.tp);
+    writer.writeString(obj.productShortName);
+    writer.writeString(obj.packSize);
+    writer.writeString(obj.discountName);
+    writer.writeDouble(obj.discountValue);
+    writer.writeInt(obj.minimumQuantity);
+    writer.writeString(obj.discountType);
+    writer.writeString(obj.description);
+    writer.writeDouble(obj.vat);
+    writer.writeDouble(obj.mrp);
     writer.writeInt(obj.productQuantity);
   }
 

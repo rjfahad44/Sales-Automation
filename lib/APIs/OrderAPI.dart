@@ -6,6 +6,7 @@ import 'package:sales_automation/Screens/DoctorListScreen/Model/Doctor.dart';
 import '../Models/Cart.dart';
 import '../Models/Item.dart';
 import '../Screens/Order/Models/OrderCreate.dart';
+import '../Screens/Order/Models/OrderSendResponse.dart';
 import '../Screens/ProductListScreen/Model/Product.dart';
 import '../global.dart';
 import 'package:intl/intl.dart';
@@ -118,23 +119,28 @@ class OrderAPI {
     }
   }
 
-  Future<bool> submitOrder(List<Cart> carts) async {
+  submitOrder(List<Cart> carts, Function(bool isSuccess, OrderSendResponse response) callBack) async {
     List<Map> itemsListJson = [];
     for (int i = 0; i < carts.length; i++) {
       itemsListJson.add({
-        "id": 0,
-        "orderId": 0,
         "productId": carts[i].itemID,
         "quantity": carts[i].quantity,
-        "amount": (carts[i].quantity * carts[i].unitPrice)
+        "amount": carts[i].unitPrice * carts[i].quantity,
+        "DiscountName": carts[i].discountName,
+        "DiscountType": carts[i].discountType,
+        "DiscountValue": carts[i].discountValue,
+        "MinimumQuantity": carts[i].minimumQuantity,
       });
     }
 
-    String now = '${DateFormat('yyyy-MM-ddTHH:mm:ss.SSS').format(DateTime.now())}Z';
+    //String now = '${DateFormat('yyyy-MM-ddTHH:mm:ss.SSS').format(DateTime.now())}Z';
+    String now = DateFormat('yyyy-MM-dd').format(DateTime.now());
     Map map = {
-      "orderDate": now,
-      "orderNo": "1",
-      "chemistId": carts[0].chemistID,
+      "deliveryDate": now,
+      "depoId": userData.depoId,
+      "employeeID": userData.employeeId,
+      "TerritoryId": userData.territoryId,
+      "chemistId": selectedChemist.itemID,
       "orderDetails": itemsListJson
     };
 
@@ -153,30 +159,40 @@ class OrderAPI {
     print(response.body);
 
     if (response.statusCode == 200) {
-      Map resp = json.decode(response.body);
-      return resp["success"];
+      var resp = json.decode(response.body);
+      OrderSendResponse orderSendResponse = OrderSendResponse.fromJson(resp);
+      callBack.call(true, orderSendResponse);
+      print('Order Submit Response: ${response.body.toString()}');
+      print('message: ${orderSendResponse.message}');
     } else {
-      return false;
+      var resp = json.decode(response.body);
+      OrderSendResponse orderSendResponse = OrderSendResponse.fromJson(resp);
+      callBack.call(false, orderSendResponse);
     }
   }
 
-  Future<bool> submitOrderFromArchive(OrderCreate orderCreate) async {
+  submitOrderFromArchive(OrderCreate orderCreate, Function(bool isSuccess, OrderSendResponse response) callBack) async {
     List<Map> itemsListJson = [];
     for (int i = 0; i < orderCreate.products.length; i++) {
       itemsListJson.add({
-        "id": 0,
-        "orderId": 0,
         "productId": orderCreate.products[i].id,
         "quantity": orderCreate.products[i].productQuantity,
-        "amount": (orderCreate.products[i].productQuantity * orderCreate.products[i].price)
+        "amount": orderCreate.products[i].tp,
+        "DiscountName": orderCreate.products[i].discountName,
+        "DiscountType": orderCreate.products[i].discountType,
+        "DiscountValue": orderCreate.products[i].discountValue,
+        "MinimumQuantity": orderCreate.products[i].minimumQuantity,
       });
     }
 
-    String now = '${DateFormat('yyyy-MM-ddTHH:mm:ss.SSS').format(DateTime.now())}Z';
+    //String now = '${DateFormat('yyyy-MM-ddTHH:mm:ss.SSS').format(DateTime.now())}Z';
+    String now = DateFormat('yyyy-MM-dd').format(DateTime.now());
     Map map = {
-      "orderDate": now,
-      "orderNo": "1",
-      "chemistId": orderCreate.chemistId,
+      "deliveryDate": now,
+      "depoId": userData.depoId,
+      "employeeID": userData.employeeId,
+      "TerritoryId": userData.territoryId,
+      "chemistId": selectedChemist.itemID,
       "orderDetails": itemsListJson
     };
 
@@ -195,10 +211,13 @@ class OrderAPI {
     print(response.body);
 
     if (response.statusCode == 200) {
-      Map resp = json.decode(response.body);
-      return resp["success"];
+      var resp = json.decode(response.body);
+      OrderSendResponse orderSendResponse = OrderSendResponse.fromJson(resp);
+      callBack.call(true, orderSendResponse);
     } else {
-      return false;
+      var resp = json.decode(response.body);
+      OrderSendResponse orderSendResponse = OrderSendResponse.fromJson(resp);
+      callBack.call(false, orderSendResponse);
     }
   }
 }

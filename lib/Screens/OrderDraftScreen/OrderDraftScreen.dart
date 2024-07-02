@@ -5,6 +5,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../APIs/OrderAPI.dart';
 import '../../Components/Components.dart';
+import '../../Components/OrderUploadResponseBottomSheetsDialog.dart';
+import '../../Components/TransparentProgressDialog.dart';
 import '../../LocalDB/DatabaseHelper.dart';
 import '../../global.dart';
 import '../Order/Models/OrderCreate.dart';
@@ -117,7 +119,7 @@ class _OrderDraftScreenState extends State<OrderDraftScreen> {
                                       softWrap: true,
                                     ),
                                     Text(
-                                      "Total Amount : ${data.totalAmount}",
+                                      "Total Amount : ${data.totalAmount.toStringAsFixed(2)}৳",
                                       style: const TextStyle(
                                           color: Colors.white,
                                           fontSize: 12.0,
@@ -275,28 +277,33 @@ class _OrderDraftScreenState extends State<OrderDraftScreen> {
   }
 
   Future<void> submitOrderFromArchive(OrderCreate data, int index) async {
-    bool status = await orderAPI.submitOrderFromArchive(data);
-    if (status) {
-      orderSaveHiveBox.delete(index);
-      getAllOrders();
-      Fluttertoast.showToast(
-          msg: "Submit successful",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
-      //Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
-    } else {
-      Fluttertoast.showToast(
-          msg: "Failed",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
-    }
+    showTransparentProgressDialog(context);
+    orderAPI.submitOrderFromArchive(data, (isSuccess, response){
+      hideTransparentProgressDialog(context);
+      if (isSuccess) {
+        orderSaveHiveBox.delete(index);
+        getAllOrders();
+        // Fluttertoast.showToast(
+        //     msg: "Submit successful",
+        //     toastLength: Toast.LENGTH_SHORT,
+        //     gravity: ToastGravity.CENTER,
+        //     timeInSecForIosWeb: 1,
+        //     backgroundColor: Colors.red,
+        //     textColor: Colors.white,
+        //     fontSize: 16.0);
+        showBottomSheetDialog(context, response, () {
+        });
+        //Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
+      } else {
+        Fluttertoast.showToast(
+            msg: "Failed",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      }
+    });
   }
 }

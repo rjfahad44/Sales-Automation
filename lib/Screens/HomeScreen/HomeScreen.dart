@@ -111,13 +111,13 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> getCurrentLocation() async {
-    setState(() async {
-      locationInf = await locationServices.getCurrentLocation();
-      print("Current Location is  lat: ${locationInf.lat}, lon: ${locationInf.lon}");
-      print("Current Location Name: ${locationInf.locationName}");
-      print("Current Location Details: ${locationInf.locationDetails}");
-      print("Current Location Error: ${locationInf.error}");
-    });
+    locationInf = await locationServices.getCurrentLocation();
+    print("Current Location is  lat: ${locationInf.lat}, lon: ${locationInf.lon}");
+    print("Current Location Name: ${locationInf.locationName}");
+    print("Current Location Details: ${locationInf.locationDetails}");
+    print("Current Location Error: ${locationInf.error}");
+    // setState(() async {
+    // });
   }
 }
 
