@@ -192,7 +192,7 @@ class OrderAPI {
       "depoId": userData.depoId,
       "employeeID": userData.employeeId,
       "TerritoryId": userData.territoryId,
-      "chemistId": selectedChemist.itemID,
+      "chemistId": orderCreate.chemistId,
       "orderDetails": itemsListJson
     };
 
@@ -212,10 +212,12 @@ class OrderAPI {
 
     if (response.statusCode == 200) {
       var resp = json.decode(response.body);
+      print("Success Response : ${resp}");
       OrderSendResponse orderSendResponse = OrderSendResponse.fromJson(resp);
       callBack.call(true, orderSendResponse);
     } else {
       var resp = json.decode(response.body);
+      print("Error Response : ${resp}");
       OrderSendResponse orderSendResponse = OrderSendResponse.fromJson(resp);
       callBack.call(false, orderSendResponse);
     }

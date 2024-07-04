@@ -160,12 +160,12 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen> {
     double newFinalAmount = 0.0;
     for (var item in widget.carts) {
       newTotalAmount += item.quantity * item.unitPrice;
-      newDiscount += item.calculateDiscount(item.unitPrice, item.quantity, item.discountValue, item.discountType, item.minimumQuantity);
+      //newDiscount += item.calculateDiscount(item.unitPrice, item.quantity, item.discountValue, item.discountType, item.minimumQuantity);
       newFinalAmount += item.calculateFinalPrice(item.unitPrice, item.quantity, item.discountValue, item.discountType, item.minimumQuantity);
     }
     setState(() {
       totalAmount = newTotalAmount;
-      totalDiscount =  newTotalAmount == newFinalAmount? 0.0: (newTotalAmount - newDiscount);
+      totalDiscount =  newTotalAmount == newFinalAmount? 0.0: (newTotalAmount - newFinalAmount);
       finalAmount = newFinalAmount;
     });
   }
@@ -184,7 +184,8 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen> {
         //     textColor: Colors.white,
         //     fontSize: 16.0);
 
-        showBottomSheetDialog(context, response, () {
+        showBottomSheetDialog(
+            context, response, totalAmount, totalDiscount, finalAmount, () {
           goToPage(const HomeScreen(), false, context);
         });
       } else {
@@ -222,6 +223,7 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen> {
         orderCreate = OrderCreate();
         orderCreateCopy = OrderCreate();
         print("Product Save : ${value}");
+        print("orderCreate : ${orderCreate}");
         Fluttertoast.showToast(
             msg: "Save successful",
             toastLength: Toast.LENGTH_SHORT,

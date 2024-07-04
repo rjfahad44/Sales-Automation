@@ -25,6 +25,8 @@ class _OrderDraftScreenState extends State<OrderDraftScreen> {
   OrderAPI orderAPI = OrderAPI();
   List<OrderCreate> orderList = [];
   double totalAmount = 0.0;
+  double totalDiscount = 0.0;
+  double finalAmount = 0.0;
   bool isLoading = true;
   final orderSaveHiveBox = HiveBoxHelper<OrderCreate>('order_db');
 
@@ -55,6 +57,9 @@ class _OrderDraftScreenState extends State<OrderDraftScreen> {
                   itemCount: orderList.length,
                   itemBuilder: (context, index) {
                     var data = orderList[index];
+                    totalAmount = data.totalAmount;
+                    finalAmount = data.finalAmount;
+                    totalDiscount = data.totalDiscount;
 
                     return Padding(
                       padding: const EdgeInsets.symmetric(
@@ -119,7 +124,34 @@ class _OrderDraftScreenState extends State<OrderDraftScreen> {
                                       softWrap: true,
                                     ),
                                     Text(
-                                      "Total Amount : ${data.totalAmount.toStringAsFixed(2)}৳",
+                                      "Price : ${totalAmount.toStringAsFixed(2)}৳",
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12.0,
+                                          fontWeight:
+                                          FontWeight.w500),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      softWrap: true,
+                                    ),
+                                    Text(
+                                      "Discount : ${totalDiscount.toStringAsFixed(2)}৳",
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12.0,
+                                          fontWeight:
+                                          FontWeight.w500),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      softWrap: true,
+                                    ),
+                                    Container(
+                                      height: 1,
+                                      color: Colors.grey,
+                                      width: double.infinity,
+                                    ),
+                                    Text(
+                                      "Total Price : ${finalAmount.toStringAsFixed(2)}৳",
                                       style: const TextStyle(
                                           color: Colors.white,
                                           fontSize: 12.0,
@@ -291,7 +323,7 @@ class _OrderDraftScreenState extends State<OrderDraftScreen> {
         //     backgroundColor: Colors.red,
         //     textColor: Colors.white,
         //     fontSize: 16.0);
-        showBottomSheetDialog(context, response, () {
+        showBottomSheetDialog(context, response, totalAmount, totalDiscount, finalAmount, () {
         });
         //Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
       } else {

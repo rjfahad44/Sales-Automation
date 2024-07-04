@@ -106,4 +106,15 @@ class Product {
         ? totalPrice * (1 - discountValue / 100)
         : totalPrice - discountValue;
   }
+
+  double calculateDiscount(double productPrice, int quantity, double discountValue, String discountType, int minimumQuantity){
+    double totalPrice = productPrice * quantity;
+    if (totalPrice >= minimumQuantity) {
+      return discountType.toLowerCase() == 'percentage'
+          ? totalPrice * (1 - discountValue / 100)
+          : totalPrice - discountValue;
+    } else {
+      return 0;
+    }
+  }
 }

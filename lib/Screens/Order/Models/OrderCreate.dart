@@ -44,7 +44,15 @@ class OrderCreate {
     };
 
   double get totalAmount {
+    return products.map((p) => p.tp * p.productQuantity).reduce((value, element) => value + element);
+  }
+
+  double get finalAmount {
     return products.map((p) => p.calculateFinalPrice(p.tp, p.productQuantity, p.discountValue, p.discountType, p.minimumQuantity)).reduce((value, element) => value + element);
+  }
+
+  double get totalDiscount {
+    return totalAmount == finalAmount ? 0.0 : (totalAmount - finalAmount);
   }
 
   @override
@@ -57,7 +65,6 @@ class OrderCreate {
         'chemistAddress: $chemistAddress'
         'paymentType: $paymentType'
         'products: $products'
-        'totalAmount: $totalAmount'
         ')';
   }
 }

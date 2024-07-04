@@ -213,7 +213,7 @@ class _ItemsDetailsState extends State<ItemsDetails> {
           minimumQuantity: product.minimumQuantity,
           description: product.description,
           vat: product.vat,
-          mrp: product.mrp
+          mrp: product.mrp,
         )
       );
       carts.add(cart);
