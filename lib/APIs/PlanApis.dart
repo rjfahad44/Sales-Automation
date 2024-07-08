@@ -19,6 +19,6 @@ getPlansToVisitList(String fromDate, String toDate) async {
     // final items = resp['data'] as List<dynamic>;
     // return items.map((jsonItem) => Item.fromJson(jsonItem)).toList();
   } else {
-    print('Failed to load Chemist List');
+    print('Failed to load visit List');
   }
 }
