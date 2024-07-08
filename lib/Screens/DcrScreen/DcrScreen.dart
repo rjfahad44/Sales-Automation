@@ -3,6 +3,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../../APIs/PlanApis.dart';
 import '../../Components/Components.dart';
 import '../../global.dart';
 import 'package:intl/intl.dart';
@@ -17,6 +18,7 @@ class DcrScreen extends StatefulWidget {
 
 class _DcrScreenState extends State<DcrScreen> {
 
+  PlanApis planApis = PlanApis();
   DateTime _selectedDate = DateTime.now();
   DateTime _focusedDay = DateTime.now();
   bool _isAscending = false;
@@ -108,6 +110,10 @@ class _DcrScreenState extends State<DcrScreen> {
 
   @override
   void initState() {
+    planApis.getPlansToVisitList("2024-07-01", "2024-07-01");
+    // Future.delayed(const Duration(minutes: 2)).then((value){
+    //   planApis.doctorVisitSubmit();
+    // });
     setState(() {
     });
     super.initState();
