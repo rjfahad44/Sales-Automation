@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sales_automation/APIs/ImageUploadApis.dart';
 import '../../Components/Components.dart';
-import '../../Components/CustomBottomSheetsDialog.dart';
+import '../../Components/ImageUploadResponseCustomDialog.dart';
 import '../../Components/TransparentProgressDialog.dart';
 import '../../LocalDB/DatabaseHelper.dart';
 import '../../global.dart';

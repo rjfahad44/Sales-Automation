@@ -5,7 +5,7 @@ import 'package:sales_automation/APIs/OrderAPI.dart';
 import 'package:sales_automation/Screens/HomeScreen/HomeScreen.dart';
 import 'package:sales_automation/Screens/Order/Models/OrderCreate.dart';
 import '../../Components/Components.dart';
-import '../../Components/OrderUploadResponseBottomSheetsDialog.dart';
+import '../../Components/OrderUploadResponseCustomDialog.dart';
 import '../../Components/TransparentProgressDialog.dart';
 import '../../LocalDB/DatabaseHelper.dart';
 import '../../Models/Cart.dart';

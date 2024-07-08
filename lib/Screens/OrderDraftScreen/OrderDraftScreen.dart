@@ -5,7 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../APIs/OrderAPI.dart';
 import '../../Components/Components.dart';
-import '../../Components/OrderUploadResponseBottomSheetsDialog.dart';
+import '../../Components/OrderUploadResponseCustomDialog.dart';
 import '../../Components/TransparentProgressDialog.dart';
 import '../../LocalDB/DatabaseHelper.dart';
 import '../../global.dart';

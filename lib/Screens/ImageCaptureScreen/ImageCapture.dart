@@ -5,7 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import '../../APIs/ImageUploadApis.dart';
 import '../../Components/Components.dart';
-import '../../Components/CustomBottomSheetsDialog.dart';
+import '../../Components/ImageUploadResponseCustomDialog.dart';
 import '../../Components/TransparentProgressDialog.dart';
 import '../../LocalDB/DatabaseHelper.dart';
 import '../../global.dart';

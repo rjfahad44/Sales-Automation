@@ -20,7 +20,7 @@ Future<T?> showBottomSheetDialog<T>(
     context: context,
     barrierDismissible: true,
     builder: (BuildContext context) {
-      return CustomBottomSheetsDialog(
+      return CustomDialog(
         response: response,
         totalAmount: totalAmount,
         totalDiscount: totalDiscount,
@@ -31,13 +31,13 @@ Future<T?> showBottomSheetDialog<T>(
   );
 }
 
-class CustomBottomSheetsDialog extends StatefulWidget{
+class CustomDialog extends StatefulWidget{
   final OrderSendResponse response;
   final double totalAmount;
   final double totalDiscount;
   final double finalAmount;
   final Function() callBack;
-  const CustomBottomSheetsDialog({
+  const CustomDialog({
     super.key,
     required this.response,
     required this.totalAmount,
@@ -46,11 +46,11 @@ class CustomBottomSheetsDialog extends StatefulWidget{
     required this.callBack});
 
   @override
-  State<StatefulWidget> createState() => _BuildBottomSheetDialogState();
+  State<StatefulWidget> createState() => _BuildCustomDialogState();
 
 }
 
-class _BuildBottomSheetDialogState extends State<CustomBottomSheetsDialog>{
+class _BuildCustomDialogState extends State<CustomDialog>{
 
   @override
   Widget build(BuildContext context) {
@@ -62,17 +62,18 @@ class _BuildBottomSheetDialogState extends State<CustomBottomSheetsDialog>{
         width: MediaQuery.of(context).size.width,
         // height: MediaQuery.of(context).size.height/3,
         padding: const EdgeInsets.all(10.0),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(12.0),
-            topRight: Radius.circular(12.0),
-            bottomLeft: Radius.circular(0),
-            bottomRight: Radius.circular(0),
-          ),
-        ),
+        // decoration: const BoxDecoration(
+        //   color: Colors.white,
+        //   borderRadius: BorderRadius.only(
+        //     topLeft: Radius.circular(12.0),
+        //     topRight: Radius.circular(12.0),
+        //     bottomLeft: Radius.circular(0),
+        //     bottomRight: Radius.circular(0),
+        //   ),
+        // ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           //mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
 

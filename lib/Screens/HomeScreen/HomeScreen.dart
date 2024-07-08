@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:sales_automation/Screens/Attendance/AttendanceScreen.dart';
+import 'package:sales_automation/Screens/DcrScreen/DcrScreen.dart';
 import 'package:sales_automation/Screens/ImageCaptureScreen/ImageCapture.dart';
 import 'package:sales_automation/Screens/AuthentationScreen/LoginScreen.dart';
 import 'package:sales_automation/Screens/Order/Models/OrderCreate.dart';
@@ -493,10 +494,10 @@ class Menu extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10.0),
                           ))),
                       onPressed: () {
-                        // goToPage(OrderCreateScreen(), context);
+                        goToPage(const DcrScreen(), true, context);
                       },
                       child: MenuButton(90, "assets/images/archive.png",
-                          "Archiver Guide", textWidth)),
+                          "DCR", textWidth)),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(2.0),
