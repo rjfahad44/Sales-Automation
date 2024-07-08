@@ -27,6 +27,7 @@ class AuthenticationAPI {
       print("UserId : ${userData.id}");
       print("employeeId : ${userData.employeeId}");
       print("territoryId : ${userData.territoryId}");
+      // tokenDecoder(userData.token);
       return true;
     } else {
       print('Request failed with status: ${response.statusCode}.');
