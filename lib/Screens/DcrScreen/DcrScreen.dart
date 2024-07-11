@@ -113,6 +113,7 @@ class _DcrScreenState extends State<DcrScreen> {
                       ],
                     ),
                   ),
+                  doctorPlanList.isNotEmpty ?
                   ListView.builder(
                     shrinkWrap: true,
                     primary: false,
@@ -127,54 +128,66 @@ class _DcrScreenState extends State<DcrScreen> {
                           title: Text(doctor.doctorName),
                           subtitle: Text(
                               '${doctor.shift} | ${doctor.designation}\n${doctor.doctorAddress}'),
-                          trailing: ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                                _isLoading = true;
-                              });
-                              showPlanUploadDialog(
-                                context,
-                                (data) {
-                                  print('doctorId: ${doctor.doctorID}');
-                                  print('Accompany: ${data['accompany']}');
-                                  print('Promote: ${data['promote']}');
-                                  print('Remarks: ${data['remarks']}');
-                                  print('SampleQty: ${data['sampleQty']}');
-                                  print('GiftQty: ${data['giftQty']}');
-                                  print(
-                                      'LiteratureQty: ${data['literatureQty']}');
-
-                                  planApis.doctorVisitSubmit(
-                                      doctor.doctorID,
-                                      data['accompany'],
-                                      data['promote'],
-                                      data['remarks'],
-                                      data['sampleQty'],
-                                      data['giftQty'],
-                                      data['literatureQty'], (response) {
-                                    setState(() {
-                                      _isLoading = false;
-                                    });
-                                    if (response.statusCode == 200) {
-                                      getData();
-                                      var resp = jsonDecode(response.body);
-                                      print('resp: ${resp}');
-                                    } else {
-                                      print('Failed : ${response.toString()}');
-                                    }
+                          trailing: Visibility(
+                            visible: !doctor.isVisited,
+                              child:  ElevatedButton(
+                                onPressed: () {
+                                  setState(() {
+                                    _isLoading = true;
                                   });
+                                  showPlanUploadDialog(
+                                    context,
+                                        (data) {
+                                      print('doctorId: ${doctor.doctorID}');
+                                      print('Accompany: ${data['accompany']}');
+                                      print('Promote: ${data['promote']}');
+                                      print('Remarks: ${data['remarks']}');
+                                      print('SampleQty: ${data['sampleQty']}');
+                                      print('GiftQty: ${data['giftQty']}');
+                                      print(
+                                          'LiteratureQty: ${data['literatureQty']}');
+
+                                      planApis.doctorVisitSubmit(
+                                          doctor.doctorID,
+                                          data['accompany'],
+                                          data['promote'],
+                                          data['remarks'],
+                                          data['sampleQty'],
+                                          data['giftQty'],
+                                          data['literatureQty'], (response) {
+                                        setState(() {
+                                          _isLoading = false;
+                                        });
+                                        if (response.statusCode == 200) {
+                                          getData();
+                                          var resp = jsonDecode(response.body);
+                                          print('resp: ${resp}');
+                                        } else {
+                                          print('Failed : ${response.toString()}');
+                                        }
+                                      });
+                                    },
+                                  );
                                 },
-                              );
-                            },
-                            child: Visibility(
-                              visible: !doctor.isVisited,
-                              child:
-                                  Text(doctor.isVisited ? "History" : "Visit"),
-                            ),
+                                child: const Text("Visit"),
+                              ),
                           ),
                         ),
                       );
                     },
+                  ) :
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8.0,
+                      vertical: 70.0
+                    ),
+                    child: const Text(
+                      "Data not found!!",
+                      style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.black
+                      ),
+                    ),
                   ),
                 ],
               ),
