@@ -10,9 +10,9 @@ class AuthenticationAPI {
   var prefs = PrefsDb();
 
   Future<bool> login(String userName, String password) async {
-    var userNameAndPass = json.encode({PrefsDb.USER_NAME: userName, PrefsDb.USER_PASS: password});
+    var userNameAndPass = json.encode({PrefsDb.USER_ID: userName, PrefsDb.USER_PASS: password});
     var response = await http.post(
-        Uri.parse("$serverPath/api/login"),
+        Uri.parse("$serverPath/api/Login"),
         headers: {
           'Content-Type': 'application/json',
         },

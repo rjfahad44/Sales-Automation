@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class PrefsDb{
   static const USER_DATA = "USER_DATA";
   static const USER_NAME_AND_PASS = "USER_NAME_AND_PASS";
-  static const USER_NAME = "userName";
+  static const USER_ID = "userID";
   static const USER_PASS = "password";
 
   Future<void> saveDataToSP(String key, dynamic value) async {

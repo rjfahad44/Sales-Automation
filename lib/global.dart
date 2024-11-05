@@ -21,7 +21,7 @@ Color primaryTextColor = Colors.black;
 Color secondaryTextColor = Colors.white;
 
 // String serverPath = "https://osapi.bunoporibrajok.com";
-String serverPath = "http://27.147.221.94:8083";
+String serverPath = "http://103.84.252.146:8080";
 
 // late LocationInf cLocationInf;
 

@@ -5,10 +5,10 @@ import 'package:sales_automation/Screens/Order/Models/OrderCreate.dart';
 import 'package:sales_automation/Screens/ProductListScreen/Model/Product.dart';
 import 'package:sales_automation/Screens/SplashScreen/SplashScreen.dart';
 import 'package:sales_automation/global.dart';
-
 import 'Screens/ImageCaptureScreen/Adapter/ImageDataModelAdapter.dart';
 import 'Screens/ImageCaptureScreen/Model/ImageDataModel.dart';
 import 'Screens/Order/Adapters/ProductAdapter.dart';
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,7 +24,7 @@ class AppRoot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    screenwidth =  MediaQuery.of(context).size.width;
+    screenwidth =  MediaQuery.sizeOf(context).width;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(

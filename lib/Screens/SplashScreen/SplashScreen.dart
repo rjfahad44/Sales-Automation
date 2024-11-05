@@ -24,7 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
       prefs.getStringDataSP(PrefsDb.USER_NAME_AND_PASS).then((value) {
         if (value.isNotEmpty) {
           var jsonData = jsonDecode(value);
-          var userName = jsonData[PrefsDb.USER_NAME];
+          var userName = jsonData[PrefsDb.USER_ID];
           var password = jsonData[PrefsDb.USER_PASS];
           authApi.login(userName, password).then((value) {
             value
