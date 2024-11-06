@@ -6,6 +6,8 @@ import 'package:sales_automation/Models/UserData.dart';
 
 import 'package:sales_automation/global.dart';
 
+import '../Models/LoginApiResponse.dart';
+
 class AuthenticationAPI {
   var prefs = PrefsDb();
 
@@ -23,10 +25,10 @@ class AuthenticationAPI {
       print("jsonResponse : $jsonResponse \n");
       prefs.saveDataToSP(PrefsDb.USER_DATA, jsonResponse);
       prefs.saveDataToSP(PrefsDb.USER_NAME_AND_PASS, userNameAndPass);
-      userData = UserData.fromJson(jsonResponse);
-      print("UserId : ${userData.id}");
-      print("employeeId : ${userData.employeeId}");
-      print("territoryId : ${userData.territoryId}");
+      userData = LoginApiResponse.fromJson(jsonResponse);
+      print("UserId : ${userData.data.id}");
+      print("employeeId : ${userData.data.employeeId}");
+      print("territoryId : ${userData.data.territoryId}");
       // tokenDecoder(userData.token);
       return true;
     } else {

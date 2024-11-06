@@ -9,7 +9,7 @@ class AttendanceAPI {
     String now = '${DateFormat('yyyy-MM-ddTHH:mm:ss.SSS').format(DateTime.now())}Z';
 
     Map map = {
-      "employeeID": userData.employeeId,
+      "employeeID": userData.data.employeeId,
       "date": now,
       "status": true,
       "isApproved": true,
@@ -27,7 +27,7 @@ class AttendanceAPI {
       Uri.parse('$serverPath/api/Attendances/SubmitAttendance'),
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer ${userData.token}",
+        "Authorization": "Bearer ${userData.data.token}",
       },
       body: jsonEncode(map),
     );

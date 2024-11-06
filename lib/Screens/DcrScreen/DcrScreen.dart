@@ -182,7 +182,7 @@ class _DcrScreenState extends State<DcrScreen> {
                       vertical: 70.0
                     ),
                     child: const Text(
-                      "Data not found!!",
+                      "CurrentUserData not found!!",
                       style: TextStyle(
                           fontSize: 18,
                           color: Colors.black

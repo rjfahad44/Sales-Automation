@@ -4,9 +4,10 @@ import 'package:sales_automation/Models/Item.dart';
 import 'package:sales_automation/Screens/Order/Models/OrderCreate.dart';
 
 import 'Models/LocationInfo.dart';
+import 'Models/LoginApiResponse.dart';
 import 'Models/UserData.dart';
 
-UserData userData = UserData();
+LoginApiResponse userData = LoginApiResponse();
 OrderCreate orderCreate = OrderCreate();
 OrderCreate orderCreateCopy = OrderCreate();
 LocationInf locationInf = LocationInf();
@@ -22,8 +23,6 @@ Color secondaryTextColor = Colors.white;
 
 // String serverPath = "https://osapi.bunoporibrajok.com";
 String serverPath = "http://103.84.252.146:8080";
-
-// late LocationInf cLocationInf;
 
  const int image_model_type_id = 0;
  const int product_model_type_id = 1;

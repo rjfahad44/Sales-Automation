@@ -15,7 +15,7 @@ class PlanApis{
           '$serverPath/api/Plans/tovisit?onDate=${onDate}'),
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer ${userData.token}",
+        "Authorization": "Bearer ${userData.data.token}",
       },
     );
     responseCallback.call(response);
@@ -34,8 +34,8 @@ class PlanApis{
     String now = DateFormat('yyyy-MM-dd').format(DateTime.now());
     Map bodyMap = {
       "DoctorID": doctorId,
-      "TerritoryId": userData.territoryId,
-      "MioID": userData.employeeId,
+      "TerritoryId": userData.data.territoryId,
+      "MioID": userData.data.employeeId,
       "Accompany": accompany,
       "Promote": promote,
       "Remarks": remarks,
@@ -51,7 +51,7 @@ class PlanApis{
       Uri.parse('$serverPath/api/DoctorVisit/SubmitVisit'),
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer ${userData.token}",
+        "Authorization": "Bearer ${userData.data.token}",
       },
       body: jsonEncode(bodyMap),
     );

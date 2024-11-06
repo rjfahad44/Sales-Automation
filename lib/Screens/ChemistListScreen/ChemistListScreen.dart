@@ -121,7 +121,7 @@ class _ChemistListScreenState extends State<ChemistListScreen> {
               ),
             ) :
             Center(
-              child: MyTextView("No Data Found!", 18, FontWeight.bold,
+              child: MyTextView("No CurrentUserData Found!", 18, FontWeight.bold,
                   Colors.black, TextAlign.center),
             ),
           ],

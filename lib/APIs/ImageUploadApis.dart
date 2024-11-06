@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import '../Screens/ImageCaptureScreen/Model/ImageDataModel.dart';
 import '../Screens/ImageCaptureScreen/Model/ImageUploadResponse.dart';
 import '../global.dart';
@@ -18,10 +17,13 @@ class ImageUploadApis {
     var base64Image = base64Encode(bytes);
 
     final data = {
-      'doctorName': doctorName,
-      'employeeId': employeeId,
+      'imageName': doctorName,
+      'doctorId': 0,
+      'employeeId': 0,
+      'longitude': locationInf.lat,
+      'latitude': locationInf.lon,
       'base64Image': base64Image,
-      // 'prescribedProducts': prescribedProducts.toString(),
+      // 'prescribedProducts':prescribedProducts,
     };
 
     final response = await http.post(
@@ -29,10 +31,13 @@ class ImageUploadApis {
       headers: {
         "accept": "*/*",
         "Content-Type": "application/json",
-        "Authorization": "Bearer ${userData.token}",
+        "Authorization": "Bearer ${userData.data.token}",
       },
       body: jsonEncode(data),
     );
+
+    String encodedData = jsonEncode(data);
+    print('Image Upload Request Body : $encodedData');
 
     if (response.statusCode == 200) {
       var json =  jsonDecode(response.body);
@@ -42,6 +47,7 @@ class ImageUploadApis {
       print('Image Upload Response: ${response.body.toString()}');
     } else {
       var json =  jsonDecode(response.body);
+      //print('Error body : $json');
       ImageUploadResponse res = ImageUploadResponse.fromJson(json as Map<String, dynamic>);
       callback.call(false, res);
       print('Error sending data: ${response.reasonPhrase}');
@@ -71,7 +77,7 @@ class ImageUploadApis {
           headers: {
             "accept": "*/*",
             "Content-Type": "application/json",
-            "Authorization": "Bearer ${userData.token}",
+            "Authorization": "Bearer ${userData.data.token}",
           },
           body: jsonEncode(data),
         );

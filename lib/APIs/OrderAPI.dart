@@ -19,7 +19,7 @@ class OrderAPI {
       Uri.parse('$serverPath/api/Products'),
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer ${userData.token}",
+        "Authorization": "Bearer ${userData.data.token}",
       },
     );
 
@@ -42,7 +42,7 @@ class OrderAPI {
       Uri.parse('$serverPath/api/Products/Dropdowns'),
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer ${userData.token}",
+        "Authorization": "Bearer ${userData.data.token}",
       },
     );
 
@@ -61,10 +61,10 @@ class OrderAPI {
 
   Future<List<Item>> getChemistListForDropdown() async {
     final response = await http.get(
-      Uri.parse('$serverPath/api/Chemists/ChemistListForDropdowns?id=${userData.id}'),
+      Uri.parse('$serverPath/api/Chemists/ChemistListForDropdowns?id=${userData.data.id}'),
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer ${userData.token}",
+        "Authorization": "Bearer ${userData.data.token}",
       },
     );
 
@@ -79,10 +79,10 @@ class OrderAPI {
 
   Future<List<Doctor>> getDoctorList() async {
     final response = await http.get(
-      Uri.parse('$serverPath/api/Doctor/TerritoryWiseDoctorList?territoryID=${userData.territoryId}'),
+      Uri.parse('$serverPath/api/Doctor/TerritoryWiseDoctorList?territoryID=${userData.data.territoryId}'),
       headers: {
         "accept": "*/*",
-        "Authorization": "Bearer ${userData.token}",
+        "Authorization": "Bearer ${userData.data.token}",
       },
     );
 
@@ -103,7 +103,7 @@ class OrderAPI {
       Uri.parse('$serverPath/api/Products/ById?id=$itemID'),
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer ${userData.token}",
+        "Authorization": "Bearer ${userData.data.token}",
       },
     );
 
@@ -137,9 +137,9 @@ class OrderAPI {
     String now = DateFormat('yyyy-MM-dd').format(DateTime.now());
     Map map = {
       "deliveryDate": now,
-      "depoId": userData.depoId,
-      "employeeID": userData.employeeId,
-      "TerritoryId": userData.territoryId,
+      "depoId": userData.data.depoId,
+      "employeeID": userData.data.employeeId,
+      "TerritoryId": userData.data.territoryId,
       "chemistId": selectedChemist.itemID,
       "orderDetails": itemsListJson
     };
@@ -148,7 +148,7 @@ class OrderAPI {
       Uri.parse('$serverPath/api/Order'),
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer ${userData.token}",
+        "Authorization": "Bearer ${userData.data.token}",
       },
       body: jsonEncode(map),
     );
@@ -189,9 +189,9 @@ class OrderAPI {
     String now = DateFormat('yyyy-MM-dd').format(DateTime.now());
     Map map = {
       "deliveryDate": now,
-      "depoId": userData.depoId,
-      "employeeID": userData.employeeId,
-      "TerritoryId": userData.territoryId,
+      "depoId": userData.data.depoId,
+      "employeeID": userData.data.employeeId,
+      "TerritoryId": userData.data.territoryId,
       "chemistId": orderCreate.chemistId,
       "orderDetails": itemsListJson
     };
@@ -200,7 +200,7 @@ class OrderAPI {
       Uri.parse('$serverPath/api/Order'),
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer ${userData.token}",
+        "Authorization": "Bearer ${userData.data.token}",
       },
       body: jsonEncode(map),
     );

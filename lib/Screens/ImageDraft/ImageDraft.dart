@@ -228,7 +228,7 @@ class _ImageArchiveState extends State<ImageDraft> {
                                     hideTransparentProgressDialog(context);
                                     if (isSuccess) {
                                       Fluttertoast.showToast(
-                                          msg: "Successfully Upload All Data",
+                                          msg: "Successfully Upload All CurrentUserData",
                                           toastLength: Toast.LENGTH_LONG,
                                           gravity: ToastGravity.BOTTOM,
                                           timeInSecForIosWeb: 1,
@@ -276,7 +276,7 @@ class _ImageArchiveState extends State<ImageDraft> {
                 ),
               )
             : Center(
-                child: MyTextView("No Data Found!", 18, FontWeight.bold,
+                child: MyTextView("No CurrentUserData Found!", 18, FontWeight.bold,
                     Colors.black, TextAlign.center),
               ),
       ),

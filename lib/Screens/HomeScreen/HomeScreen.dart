@@ -151,7 +151,7 @@ class Menu extends StatelessWidget {
                       color: Colors.black),
                 ),
                 Text(
-                  "${userData.id}",
+                  "${userData.data.employeeId}",
                   style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -189,7 +189,7 @@ class Menu extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            userData.userName,
+                            userData.data.userName,
                             style: const TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.normal,
@@ -215,7 +215,7 @@ class Menu extends StatelessWidget {
                                   color: Colors.white),
                             ),
                             Text(
-                              userData.userName,
+                              userData.data.userName,
                               style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.normal,

@@ -45,7 +45,7 @@ class HiveBoxHelper<T> {
     if (box.containsKey(item)) {
       await box.delete(item);
     } else {
-      throw Exception('Data Not Found!!');
+      throw Exception('CurrentUserData Not Found!!');
     }
   }
 

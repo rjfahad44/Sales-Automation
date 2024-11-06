@@ -110,7 +110,7 @@ class _ImageCaptureState extends State<ImageCapture> {
   //   final bytes = await image.readAsBytes();
   //   var base64Image = base64Encode(bytes);
   //
-  //   print('\n\nBase64Image Data => $base64Image');
+  //   print('\n\nBase64Image CurrentUserData => $base64Image');
   //   print('\n\nprescribedProducts => $prescribedProducts');
   //   final data = {
   //     'doctorName': doctorName,
@@ -335,7 +335,7 @@ class _ImageCaptureState extends State<ImageCapture> {
                               ))),
                           onPressed: () async {
                             var doctorName = _doctorNameController.text.toString();
-                            var employeeId = userData.employeeId;
+                            var employeeId = userData.data.employeeId;
                             if (doctorName.isEmpty) {
                               Fluttertoast.showToast(
                                   msg: "Please Enter Doctor Name",
@@ -432,7 +432,7 @@ class _ImageCaptureState extends State<ImageCapture> {
                           onPressed: () async {
                             var doctorName =
                                 _doctorNameController.text.toString();
-                            var employeeId = userData.employeeId;
+                            var employeeId = userData.data.employeeId;
                             if (doctorName.isEmpty) {
                               Fluttertoast.showToast(
                                   msg: "Please Enter Doctor Name",
