@@ -34,7 +34,7 @@ class _ItemsDetailsState extends State<ItemsDetails> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: MyTextView("Add Item for ${selectedChemist.itemName}", 16,
+          title: MyTextView("Add Item for ${selectedChemist.name}", 16,
               FontWeight.bold, Colors.black, TextAlign.center),
           backgroundColor: themeColor,
         ),
@@ -194,8 +194,8 @@ class _ItemsDetailsState extends State<ItemsDetails> {
         product.minimumQuantity,
         product.vat,
         product.mrp,
-        selectedChemist.itemName,
-        selectedChemist.itemID,
+        selectedChemist.name,
+        int.tryParse(selectedChemist.chemistID) ?? 0,
       );
       print("Selected Item : ${cart.quantity}");
       orderCreate.products.add(

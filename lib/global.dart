@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sales_automation/Models/Item.dart';
 import 'package:sales_automation/Screens/Order/Models/OrderCreate.dart';
 
+import 'Models/ChemistDropdownResponse.dart';
 import 'Models/LocationInfo.dart';
 import 'Models/LoginApiResponse.dart';
 import 'Models/UserData.dart';
@@ -11,7 +12,7 @@ LoginApiResponse userData = LoginApiResponse();
 OrderCreate orderCreate = OrderCreate();
 OrderCreate orderCreateCopy = OrderCreate();
 LocationInf locationInf = LocationInf();
-Item selectedChemist = Item();
+ChemistModel selectedChemist = ChemistModel();
 int position = -1;
 double screenwidth = 0.0;
 Color themeColor = const Color(0xFFFFC680);

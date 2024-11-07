@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:sales_automation/Screens/DoctorListScreen/Model/Doctor.dart';
 
 import '../Models/Cart.dart';
+import '../Models/ChemistDropdownResponse.dart';
 import '../Models/Item.dart';
 import '../Screens/Order/Models/OrderCreate.dart';
 import '../Screens/Order/Models/OrderSendResponse.dart';
@@ -59,9 +60,9 @@ class OrderAPI {
     }
   }
 
-  Future<List<Item>> getChemistListForDropdown() async {
+  Future<List<ChemistModel>> getChemistListForDropdown() async {
     final response = await http.get(
-      Uri.parse('$serverPath/api/Chemists/ChemistListForDropdowns?id=${userData.data.id}'),
+      Uri.parse('$serverPath/api/Chemists/ChemistListForDropdowns?territoryId=${userData.data.employeeId}'),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer ${userData.data.token}",
@@ -71,7 +72,7 @@ class OrderAPI {
     if (response.statusCode == 200) {
       final resp = json.decode(response.body);
       final items = resp['data'] as List<dynamic>;
-      return items.map((jsonItem) => Item.fromJson(jsonItem)).toList();
+      return items.map((jsonItem) => ChemistModel.fromJson(jsonItem)).toList();
     } else {
       throw Exception('Failed to load Chemist List');
     }
@@ -140,7 +141,7 @@ class OrderAPI {
       "depoId": userData.data.depoId,
       "employeeID": userData.data.employeeId,
       "TerritoryId": userData.data.territoryId,
-      "chemistId": selectedChemist.itemID,
+      "chemistId": selectedChemist.chemistID,
       "orderDetails": itemsListJson
     };
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sales_automation/APIs/OrderAPI.dart';
 import 'package:sales_automation/Components/Components.dart';
+import '../../Models/ChemistDropdownResponse.dart';
 import '../../Models/Item.dart';
 import '../../Models/LocationInfo.dart';
 import '../../Services/LocationService.dart';
@@ -20,7 +21,7 @@ class _OrderCreateScreenState extends State<OrderCreateScreen> {
   DateTime selectedDate = DateTime.now();
   List<String> deliveryTimes = ['Morning', 'Evening', 'Night'];
   List<String> paymentTypes = ['Cash', 'Bank deposit', 'Bkash'];
-  List<Item> chemistDropdownList = [];
+  List<ChemistModel> chemistDropdownList = [];
   String selecteddeliveryTimes = 'Morning';
   String chemistHint = "Select Chemist";
   String selectedPaymentTypes = 'Cash';
@@ -152,21 +153,21 @@ class _OrderCreateScreenState extends State<OrderCreateScreen> {
                             surfaceTintColor: Colors.white,
                             child: Padding(
                               padding: const EdgeInsets.fromLTRB(8, 2, 8, 2),
-                              child: DropdownButton<Item>(
+                              child: DropdownButton<ChemistModel>(
                                 hint: MyTextView(chemistHint, 12, FontWeight.normal, Colors.black, TextAlign.start),
                                 value: null, // Initially, no item is selected
                                 isExpanded: true,
                                 underline: Container(),
-                                onChanged: (Item? selectedValue) {
+                                onChanged: (ChemistModel? selectedValue) {
                                   setState(() {
-                                    chemistHint = selectedValue!.itemName;
+                                    chemistHint = selectedValue!.name;
                                     selectedChemist = selectedValue;
                                   });
                                 },
-                                items: chemistDropdownList.map((Item item) {
-                                  return DropdownMenuItem<Item>(
+                                items: chemistDropdownList.map((ChemistModel item) {
+                                  return DropdownMenuItem<ChemistModel>(
                                     value: item,
-                                    child: Text(item.itemName),
+                                    child: Text(item.name.isEmpty ? "No Name!" : item.name),
                                   );
                                 }).toList(),
                               ),
@@ -260,8 +261,8 @@ class _OrderCreateScreenState extends State<OrderCreateScreen> {
                   if(chemistHint != "Select Chemist" && deliveryDispDate != 'Select Date') {
                     orderCreate.deliveryDate = deliveryDispDate;
                     orderCreate.deliveryTime = selecteddeliveryTimes;
-                    orderCreate.chemistId = selectedChemist.itemID;
-                    orderCreate.chemist = selectedChemist.itemName;
+                    orderCreate.chemistId = int.tryParse(selectedChemist.chemistID) ?? 0;
+                    orderCreate.chemist = selectedChemist.name;
                     orderCreate.chemistAddress = locationInf.locationName ?? "Not Found!!";
                     orderCreate.paymentType = selectedPaymentTypes;
                     goToPage(const ItemsDetails(), true, context);

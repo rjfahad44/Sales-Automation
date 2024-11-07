@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../APIs/OrderAPI.dart';
 import '../../Components/Components.dart';
+import '../../Models/ChemistDropdownResponse.dart';
 import '../../Models/Item.dart';
 import '../../global.dart';
 
@@ -17,8 +18,8 @@ class _ChemistListScreenState extends State<ChemistListScreen> {
 
   OrderAPI api = OrderAPI();
   final TextEditingController _searchController = TextEditingController();
-  List<Item> chemistList = [];
-  List<Item> chemistSearchList = [];
+  List<ChemistModel> chemistList = [];
+  List<ChemistModel> chemistSearchList = [];
   bool isLoading = false;
 
   @override
@@ -94,7 +95,7 @@ class _ChemistListScreenState extends State<ChemistListScreen> {
                         children: [
                           Text(
                             softWrap: true,
-                            "Chemist id : ${data.itemID}",
+                            "Chemist id : ${data.chemistID}",
                             style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 12.0,
@@ -105,7 +106,7 @@ class _ChemistListScreenState extends State<ChemistListScreen> {
                           ),
                           Text(
                             softWrap: true,
-                            "Chemist Name : ${data.itemName}",
+                            "Chemist Name : ${data.name}",
                             style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 12.0,
@@ -136,7 +137,7 @@ class _ChemistListScreenState extends State<ChemistListScreen> {
   void _filterItems() {
     final query = _searchController.text.toUpperCase();
     setState(() {
-      chemistList = chemistSearchList.where((item) { return (item.itemName.toUpperCase().contains(query) || item.itemID.toString().contains(query)); }).toList();
+      chemistList = chemistSearchList.where((item) { return (item.name.toUpperCase().contains(query) || item.chemistID.toString().contains(query)); }).toList();
     });
   }
 
