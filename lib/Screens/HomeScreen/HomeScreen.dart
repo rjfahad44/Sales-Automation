@@ -215,7 +215,7 @@ class Menu extends StatelessWidget {
                                   color: Colors.white),
                             ),
                             Text(
-                              userData.data.userName,
+                              userData.data.employeeName,
                               style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.normal,
