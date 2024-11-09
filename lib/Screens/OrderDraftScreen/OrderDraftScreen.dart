@@ -1,5 +1,4 @@
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -8,8 +7,8 @@ import '../../Components/Components.dart';
 import '../../Components/OrderUploadResponseCustomDialog.dart';
 import '../../Components/TransparentProgressDialog.dart';
 import '../../LocalDB/DatabaseHelper.dart';
+import '../../Models/OrderCreate.dart';
 import '../../global.dart';
-import '../Order/Models/OrderCreate.dart';
 import '../Order/OrderCreateScreen.dart';
 
 
@@ -57,7 +56,7 @@ class _OrderDraftScreenState extends State<OrderDraftScreen> {
                   itemCount: orderList.length,
                   itemBuilder: (context, index) {
                     var data = orderList[index];
-                    totalAmount = data.totalAmount;
+                    totalAmount = data.totalAmount.toDouble();
                     finalAmount = data.finalAmount;
                     totalDiscount = data.totalDiscount;
 

@@ -1,8 +1,8 @@
 import 'package:hive/hive.dart';
 import 'package:sales_automation/Screens/ProductListScreen/Model/Product.dart';
-import 'package:sales_automation/Screens/Order/Models/OrderCreate.dart';
 
 import '../../../global.dart';
+import '../../Models/OrderCreate.dart';
 
 @HiveType(typeId: order_model_type_id)
 class OrderCreateAdapter extends TypeAdapter<OrderCreate> {

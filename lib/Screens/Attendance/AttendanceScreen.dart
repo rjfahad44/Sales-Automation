@@ -20,6 +20,7 @@ class AttendanceScreen extends StatefulWidget {
 class _AttendanceScreenState extends State<AttendanceScreen> {
   final ValueNotifier<bool> enableButton = ValueNotifier(true);
   LocationService locationServices = LocationService();
+  LatLng? selectedLocation;
 
   @override
   void initState() {
@@ -44,89 +45,88 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
           } else if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           } else {
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  SizedBox(
-                    height: 500,
-                    child: FlutterMap(
-                      options: MapOptions(
-                        initialCameraFit: CameraFit.bounds(
-                          bounds: LatLngBounds(
-                              LatLng(
-                                  snapshot.data!.marker.point.latitude - 0.002,
-                                  snapshot.data!.marker.point.longitude - 0.002,
-                              ),
-                              LatLng(
-                                  snapshot.data!.marker.point.latitude + 0.002,
-                                  snapshot.data!.marker.point.longitude + 0.002,
-                              ),
-                          ),
-                          padding: const EdgeInsets.all(8),
+            return  Stack(
+              children: [
+                FlutterMap(
+                  options: MapOptions(
+                    initialCameraFit: CameraFit.bounds(
+                      bounds: LatLngBounds(
+                        LatLng(
+                          snapshot.data!.marker.point.latitude - 0.002,
+                          snapshot.data!.marker.point.longitude - 0.002,
+                        ),
+                        LatLng(
+                          snapshot.data!.marker.point.latitude + 0.002,
+                          snapshot.data!.marker.point.longitude + 0.002,
                         ),
                       ),
-                      children: [
-                        openStreetMapTileLayer,
-                      ],
+                      padding: const EdgeInsets.all(8),
                     ),
+                    onTap: _onMapTapped,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ValueListenableBuilder<bool>(
-                        valueListenable: enableButton,
-                        builder: (context, val, child) {
-                          return ElevatedButton(
-                            onPressed: (val)
-                                ? () async {
-                                    enableButton.value = !enableButton.value;
-                                    AttendanceAPI api = AttendanceAPI();
-                                    String status = await api
-                                        .submitAttendance(snapshot.data!);
-                                    Fluttertoast.showToast(
-                                        msg: status,
-                                        toastLength: Toast.LENGTH_SHORT,
-                                        gravity: ToastGravity.BOTTOM,
-                                        timeInSecForIosWeb: 1,
-                                        backgroundColor: Colors.red,
-                                        textColor: Colors.white,
-                                        fontSize: 16.0);
-
-                                    enableButton.value = !enableButton.value;
-                                  }
-                                : null,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: themeColor,
-                              padding: const EdgeInsets.symmetric(vertical: 13),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8)),
-                            ),
-                            child: (val)
-                                ? const Text(
-                                    'Submit attendance ',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  )
-                                : const Center(
-                                    child: Text(
-                                      'Loading ... ',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                  ),
+                  children: [
+                    openStreetMapTileLayer,
+                  ],
+                ),
+                Positioned(
+                  bottom: 16.0, // Adjust this value as needed to control the distance from the bottom
+                  left: 16.0, // Adjust for padding on the left
+                  right: 16.0, // Adjust for padding on the right
+                  child: ValueListenableBuilder<bool>(
+                    valueListenable: enableButton,
+                    builder: (context, val, child) {
+                      return ElevatedButton(
+                        onPressed: (val)
+                            ? () async {
+                          enableButton.value = !enableButton.value;
+                          AttendanceAPI api = AttendanceAPI();
+                          String status = await api.submitAttendance(snapshot.data!);
+                          Fluttertoast.showToast(
+                            msg: status,
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Colors.red,
+                            textColor: Colors.white,
+                            fontSize: 16.0,
                           );
-                        }),
+
+                          enableButton.value = !enableButton.value;
+                        }
+                            : null,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: themeColor,
+                          padding: const EdgeInsets.symmetric(vertical: 13),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        child: (val)
+                            ? const Text(
+                          'Submit attendance ',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        )
+                            : const Center(
+                          child: Text(
+                            'Loading ... ',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                ],
-              ),
+                ),
+              ],
             );
+
           }
         },
       ),
@@ -134,30 +134,36 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   }
 
   // Future<void> loadData() async {
-  //   // LocationServices locationServices = LocationServices();
-  //   // LocationInf locationInf = await locationServices.getCurrentLocation();
-  //   //
-  //   // currentLocationMarker = Marker(
-  //   //   point: LatLng(locationInf.lat, locationInf.lon),
-  //   //   height: 12,
-  //   //   width: 12,
-  //   //   child: ColoredBox(color: Colors.blue[900]!),
-  //   // );
+  //   LocationService locationServices = LocationService();
+  //   LocationInf locationInf = await locationServices.getCurrentLocation();
   //
-  //   // print("-------------------");
-  //   // print(locationInf.lat);
-  //   // print(locationInf.lon);
-  //   //
-  //   // setState(() {});
+  //   currentLocationMarker = Marker(
+  //     point: LatLng(locationInf.lat, locationInf.lon),
+  //     height: 12,
+  //     width: 12,
+  //     child: ColoredBox(color: Colors.blue[900]!),
+  //   );
   //
-  //   // Fluttertoast.showToast(
-  //   //     msg: "Lat: ${locationInf.lat}, Lon: ${locationInf.lon}, Msg: ${locationInf.locationDetails} ",
-  //   //     toastLength: Toast.LENGTH_LONG,
-  //   //     gravity: ToastGravity.BOTTOM,
-  //   //     backgroundColor: themeColor,
-  //   //     textColor: primaryTextColor,
-  //   //     fontSize: 16.0);
+  //   print("-------------------");
+  //   print(locationInf.lat);
+  //   print(locationInf.lon);
+  //
+  //   setState(() {});
+  //
+  //   Fluttertoast.showToast(
+  //       msg: "Lat: ${locationInf.lat}, Lon: ${locationInf.lon}, Msg: ${locationInf.locationDetails} ",
+  //       toastLength: Toast.LENGTH_LONG,
+  //       gravity: ToastGravity.BOTTOM,
+  //       backgroundColor: themeColor,
+  //       textColor: primaryTextColor,
+  //       fontSize: 16.0);
   // }
+
+  void _onMapTapped(TapPosition tapPosition, LatLng tappedPosition) {
+    setState(() {
+      selectedLocation = tappedPosition;
+    });
+  }
 
   TileLayer get openStreetMapTileLayer => TileLayer(
         urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',

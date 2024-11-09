@@ -19,7 +19,7 @@ class ProductAdapter extends TypeAdapter<Product> {
           productShortName: reader.readString(),
           packSize: reader.readString(),
           discountName: reader.readString(),
-          discountValue: reader.readDouble(),
+          discountValue: reader.readInt(),
           minimumQuantity: reader.readInt(),
           discountType: reader.readString(),
           description: reader.readString(),
@@ -42,7 +42,7 @@ class ProductAdapter extends TypeAdapter<Product> {
     writer.writeString(obj.productShortName);
     writer.writeString(obj.packSize);
     writer.writeString(obj.discountName);
-    writer.writeDouble(obj.discountValue);
+    writer.writeInt(obj.discountValue);
     writer.writeInt(obj.minimumQuantity);
     writer.writeString(obj.discountType);
     writer.writeString(obj.description);

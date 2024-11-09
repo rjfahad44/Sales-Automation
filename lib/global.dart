@@ -1,12 +1,11 @@
 
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:sales_automation/Models/Item.dart';
-import 'package:sales_automation/Screens/Order/Models/OrderCreate.dart';
-
 import 'Models/ChemistDropdownResponse.dart';
 import 'Models/LocationInfo.dart';
 import 'Models/LoginApiResponse.dart';
-import 'Models/UserData.dart';
+import 'Models/OrderCreate.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 
 LoginApiResponse userData = LoginApiResponse();
 OrderCreate orderCreate = OrderCreate();
@@ -36,5 +35,17 @@ void goToPage(Widget page, bool isBackPage, BuildContext context) {
   Navigator.pushAndRemoveUntil(
       context, MaterialPageRoute(builder: (context) => page), (Route<dynamic> dynamic) => false);
  }
+}
+
+Future<String?> getDeviceId() async {
+ final deviceInfo = DeviceInfoPlugin();
+ if (Platform.isAndroid) {
+  final androidInfo = await deviceInfo.androidInfo;
+  return androidInfo.id; // Unique ID on Android
+ } else if (Platform.isIOS) {
+  final iosInfo = await deviceInfo.iosInfo;
+  return iosInfo.identifierForVendor; // Unique ID on iOS
+ }
+ return null;
 }
 

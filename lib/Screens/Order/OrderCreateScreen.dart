@@ -263,7 +263,7 @@ class _OrderCreateScreenState extends State<OrderCreateScreen> {
                     orderCreate.deliveryTime = selecteddeliveryTimes;
                     orderCreate.chemistId = int.tryParse(selectedChemist.chemistID) ?? 0;
                     orderCreate.chemist = selectedChemist.name;
-                    orderCreate.chemistAddress = locationInf.locationName ?? "Not Found!!";
+                    orderCreate.chemistAddress = selectedChemist.address;
                     orderCreate.paymentType = selectedPaymentTypes;
                     goToPage(const ItemsDetails(), true, context);
                   } else {

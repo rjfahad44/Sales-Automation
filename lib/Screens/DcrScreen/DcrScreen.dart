@@ -7,8 +7,8 @@ import '../../Components/Components.dart';
 import '../../global.dart';
 import 'package:intl/intl.dart';
 
-import 'Models/DoctorPlan.dart';
-import 'Models/DoctorPlanResponse.dart';
+import '../../Models/DoctorPlan.dart';
+import '../../Models/DoctorPlanResponse.dart';
 
 class DcrScreen extends StatefulWidget {
   const DcrScreen({super.key});

@@ -1,4 +1,6 @@
 
+import 'dart:ffi';
+
 import 'package:flutter/cupertino.dart';
 import 'package:hive/hive.dart';
 import '../../../global.dart';
@@ -12,7 +14,7 @@ class Product {
   @HiveField(4)   String productShortName;
   @HiveField(5)   String packSize;
   @HiveField(6)   String discountName;
-  @HiveField(7)   double discountValue;
+  @HiveField(7)   int discountValue;
   @HiveField(8)   int minimumQuantity;
   @HiveField(9)   String discountType;
   @HiveField(10)  String description;
@@ -25,16 +27,16 @@ class Product {
     this.id = 0,
     this.productCode = "",
     this.productName = "",
-    this.tp = 0.0,
+    this.tp = 0,
     this.productShortName = "",
     this.packSize = "",
     this.discountName = "",
-    this.discountValue = 0.0,
+    this.discountValue = 0,
     this.minimumQuantity = 0,
     this.discountType = "",
     this.description = "",
     this.vat = 0.0,
-    this.mrp = 0.0,
+    this.mrp = 0,
     this.productQuantity = 0,
     TextEditingController? textEditingController,
   }) : textEditingController = textEditingController ?? TextEditingController();
@@ -54,7 +56,7 @@ class Product {
       minimumQuantity: json['minimumQuantity'],
       discountType: json['discountType'],
       description: json['description'],
-      vat: json['vat'],
+      vat: json['vat'] != null ? json['vat'] : 0.0,
       mrp: json['mrp'],
       productQuantity: 0,
       textEditingController: TextEditingController(),

@@ -1,8 +1,8 @@
 
 
 class Cart{
-  int itemID = 0, quantity = 0, chemistID = 0, minimumQuantity = 0;
-  double unitPrice = 0.0, discountValue =0.0, vat =0.0, mrp = 0.0;
+  int itemID = 0, quantity = 0, chemistID = 0, minimumQuantity = 0,  discountValue =0;
+  double vat =0.0, unitPrice = 0.0, mrp = 0.0;
   String itemName = "", chemistName = "", discountName ="", discountType ="";
 
   Cart(
@@ -20,7 +20,7 @@ class Cart{
       this.chemistID
       );
 
-  double calculateFinalPrice(double productPrice, int quantity, double discountValue, String discountType, int minimumQuantity) {
+  double calculateFinalPrice(double productPrice, int quantity, int discountValue, String discountType, int minimumQuantity) {
     double totalPrice = productPrice * quantity;
     if (totalPrice < minimumQuantity) return totalPrice;
     return discountType.toLowerCase() == 'percentage'

@@ -5,8 +5,8 @@ import 'package:sales_automation/Screens/Order/OrderCreateScreen.dart';
 import '../../APIs/OrderAPI.dart';
 import '../../Components/Components.dart';
 import '../../LocalDB/DatabaseHelper.dart';
+import '../../Models/OrderCreate.dart';
 import '../../global.dart';
-import '../Order/Models/OrderCreate.dart';
 
 class OrderArchiveScreen extends StatefulWidget {
   const OrderArchiveScreen({super.key});

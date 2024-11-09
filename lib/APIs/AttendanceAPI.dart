@@ -6,22 +6,27 @@ import 'package:intl/intl.dart';
 
 class AttendanceAPI {
   Future<String> submitAttendance(LocationInf locationInf) async {
-    String now = '${DateFormat('yyyy-MM-ddTHH:mm:ss.SSS').format(DateTime.now())}Z';
+    String now = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(DateTime.now());
+    String? deviceId = "";
+    try{
+      deviceId = await getDeviceId();
+    }catch(e){
+      print('deviceId error: $e');
+    }
 
     Map map = {
-      "employeeID": userData.data.employeeId,
+      "id": userData.data.id,
+      "employeeId": userData.data.employeeId,
       "date": now,
       "status": true,
       "isApproved": true,
-      "signInLatitude": locationInf.lat.toString(),
-      "signInLongitude": locationInf.lon.toString(),
-      "signInAddress": "string",
-      "signOutLatitude": locationInf.lat.toString(),
-      "signOutLongitude": locationInf.lon.toString(),
-      "signOutAddress": "string",
-      "deviceID": "string",
+      "latitude": locationInf.lat.toString(),
+      "longitude": locationInf.lon.toString(),
+      "address": locationInf.locationDetails,
+      "deviceID": deviceId,
       "ip": "string"
     };
+    print("attendance body : $map");
 
     final response = await http.post(
       Uri.parse('$serverPath/api/Attendances/SubmitAttendance'),

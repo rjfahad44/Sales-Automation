@@ -1,13 +1,11 @@
 import 'dart:convert';
-import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
-import 'package:sales_automation/Screens/DoctorListScreen/Model/Doctor.dart';
-
+import 'package:sales_automation/Models/Doctor.dart';
 import '../Models/Cart.dart';
 import '../Models/ChemistDropdownResponse.dart';
 import '../Models/Item.dart';
-import '../Screens/Order/Models/OrderCreate.dart';
-import '../Screens/Order/Models/OrderSendResponse.dart';
+import '../Models/OrderCreate.dart';
+import '../Models/OrderSendResponse.dart';
 import '../Screens/ProductListScreen/Model/Product.dart';
 import '../global.dart';
 import 'package:intl/intl.dart';
@@ -80,7 +78,7 @@ class OrderAPI {
 
   Future<List<Doctor>> getDoctorList() async {
     final response = await http.get(
-      Uri.parse('$serverPath/api/Doctor/TerritoryWiseDoctorList?territoryID=${userData.data.territoryId}'),
+      Uri.parse('$serverPath/api/Doctor/TerritoryWiseDoctorList?territoryID=${userData.data.employeeId}'),
       headers: {
         "accept": "*/*",
         "Authorization": "Bearer ${userData.data.token}",
@@ -127,21 +125,18 @@ class OrderAPI {
         "productId": carts[i].itemID,
         "quantity": carts[i].quantity,
         "amount": carts[i].unitPrice * carts[i].quantity,
-        "DiscountName": carts[i].discountName,
-        "DiscountType": carts[i].discountType,
-        "DiscountValue": carts[i].discountValue,
-        "MinimumQuantity": carts[i].minimumQuantity,
+        "unitPrice": carts[i].unitPrice,
       });
     }
 
     //String now = '${DateFormat('yyyy-MM-ddTHH:mm:ss.SSS').format(DateTime.now())}Z';
-    String now = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    String now = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(DateTime.now());
     Map map = {
+      "orderDate": now,
       "deliveryDate": now,
-      "depoId": userData.data.depoId,
-      "employeeID": userData.data.employeeId,
-      "TerritoryId": userData.data.territoryId,
       "chemistId": selectedChemist.chemistID,
+      "depoId": userData.data.depoId,
+      "employeeId": userData.data.employeeId,
       "orderDetails": itemsListJson
     };
 
@@ -178,22 +173,19 @@ class OrderAPI {
       itemsListJson.add({
         "productId": orderCreate.products[i].id,
         "quantity": orderCreate.products[i].productQuantity,
-        "amount": orderCreate.products[i].tp,
-        "DiscountName": orderCreate.products[i].discountName,
-        "DiscountType": orderCreate.products[i].discountType,
-        "DiscountValue": orderCreate.products[i].discountValue,
-        "MinimumQuantity": orderCreate.products[i].minimumQuantity,
+        "amount": orderCreate.products[i].tp * orderCreate.products[i].productQuantity,
+        "unitPrice": orderCreate.products[i].tp,
       });
     }
 
     //String now = '${DateFormat('yyyy-MM-ddTHH:mm:ss.SSS').format(DateTime.now())}Z';
-    String now = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    String now = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(DateTime.now());
     Map map = {
+      "orderDate": now,
       "deliveryDate": now,
+      "chemistId": orderCreate.chemistId,
       "depoId": userData.data.depoId,
       "employeeID": userData.data.employeeId,
-      "TerritoryId": userData.data.territoryId,
-      "chemistId": orderCreate.chemistId,
       "orderDetails": itemsListJson
     };
 

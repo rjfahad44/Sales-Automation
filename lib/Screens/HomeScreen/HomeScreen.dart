@@ -4,13 +4,13 @@ import 'package:sales_automation/Screens/Attendance/AttendanceScreen.dart';
 import 'package:sales_automation/Screens/DcrScreen/DcrScreen.dart';
 import 'package:sales_automation/Screens/ImageCaptureScreen/ImageCapture.dart';
 import 'package:sales_automation/Screens/AuthentationScreen/LoginScreen.dart';
-import 'package:sales_automation/Screens/Order/Models/OrderCreate.dart';
 import 'package:sales_automation/Screens/OrderArchiveScreen/OrderArchiveScreen.dart';
 import 'package:sales_automation/Screens/OrderDraftScreen/OrderDraftScreen.dart';
 
 import '../../Components/Components.dart';
 import '../../Components/MenuButton.dart';
 import '../../LocalDB/PrefsDb.dart';
+import '../../Models/OrderCreate.dart';
 import '../../Services/LocationService.dart';
 import '../../global.dart';
 import '../ChemistListScreen/ChemistListScreen.dart';

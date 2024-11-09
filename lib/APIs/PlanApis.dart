@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:ffi';
 import 'package:http/http.dart';
 
-import '../Screens/DcrScreen/Models/DoctorPlanResponse.dart';
+import '../Models/DoctorPlanResponse.dart';
 import '../global.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;

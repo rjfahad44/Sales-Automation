@@ -48,7 +48,7 @@ class OrderCreate {
   }
 
   double get finalAmount {
-    return products.map((p) => p.calculateFinalPrice(p.tp, p.productQuantity, p.discountValue, p.discountType, p.minimumQuantity)).reduce((value, element) => value + element);
+    return products.map((p) => p.calculateFinalPrice(p.tp, p.productQuantity, p.discountValue.toDouble(), p.discountType, p.minimumQuantity)).reduce((value, element) => value + element);
   }
 
   double get totalDiscount {

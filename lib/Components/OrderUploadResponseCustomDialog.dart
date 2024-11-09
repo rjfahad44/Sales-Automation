@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:sales_automation/global.dart';
 import 'dart:convert';
 import 'package:intl/intl.dart';
-import '../Screens/Order/Models/OrderSendResponse.dart';
+import '../Models/OrderSendResponse.dart';
 import 'Components.dart';
 
 

@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:sales_automation/Screens/DoctorListScreen/Model/Doctor.dart';
+import 'package:sales_automation/Models/Doctor.dart';
 import 'package:sales_automation/Screens/ProductListScreen/Model/Product.dart';
 
 import '../../APIs/OrderAPI.dart';
