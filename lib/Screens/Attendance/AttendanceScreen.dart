@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -5,7 +6,6 @@ import 'package:latlong2/latlong.dart';
 import 'package:sales_automation/APIs/AttendanceAPI.dart';
 import 'package:sales_automation/Models/LocationInfo.dart';
 import 'package:sales_automation/Services/LocationService.dart';
-
 import '../../Components/Components.dart';
 import '../../global.dart';
 import 'package:flutter_map_cancellable_tile_provider/flutter_map_cancellable_tile_provider.dart';
@@ -18,15 +18,14 @@ class AttendanceScreen extends StatefulWidget {
 }
 
 class _AttendanceScreenState extends State<AttendanceScreen> {
+
   final ValueNotifier<bool> enableButton = ValueNotifier(true);
   LocationService locationServices = LocationService();
   LatLng? selectedLocation;
 
   @override
   void initState() {
-
     super.initState();
-    // loadData();
   }
 
   @override
@@ -62,7 +61,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                       ),
                       padding: const EdgeInsets.all(8),
                     ),
-                    onTap: _onMapTapped,
+                    //onTap: _onMapTapped,
                   ),
                   children: [
                     openStreetMapTileLayer,
@@ -132,32 +131,6 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       ),
     );
   }
-
-  // Future<void> loadData() async {
-  //   LocationService locationServices = LocationService();
-  //   LocationInf locationInf = await locationServices.getCurrentLocation();
-  //
-  //   currentLocationMarker = Marker(
-  //     point: LatLng(locationInf.lat, locationInf.lon),
-  //     height: 12,
-  //     width: 12,
-  //     child: ColoredBox(color: Colors.blue[900]!),
-  //   );
-  //
-  //   print("-------------------");
-  //   print(locationInf.lat);
-  //   print(locationInf.lon);
-  //
-  //   setState(() {});
-  //
-  //   Fluttertoast.showToast(
-  //       msg: "Lat: ${locationInf.lat}, Lon: ${locationInf.lon}, Msg: ${locationInf.locationDetails} ",
-  //       toastLength: Toast.LENGTH_LONG,
-  //       gravity: ToastGravity.BOTTOM,
-  //       backgroundColor: themeColor,
-  //       textColor: primaryTextColor,
-  //       fontSize: 16.0);
-  // }
 
   void _onMapTapped(TapPosition tapPosition, LatLng tappedPosition) {
     setState(() {

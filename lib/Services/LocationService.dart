@@ -11,6 +11,7 @@ import 'package:sales_automation/global.dart';
 class LocationService {
 
   Future<LocationInf> getCurrentLocation() async {
+
     bool serviceEnabled;
     LocationPermission permission;
 
@@ -61,6 +62,6 @@ class LocationService {
       locationInf.error ="Error: ${e.toString()}";
       return locationInf;
     }
-
   }
+
 }
