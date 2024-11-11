@@ -23,10 +23,14 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   LocationService locationServices = LocationService();
   LatLng? selectedLocation;
 
-  @override
-  void initState() {
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   locationServices.getCurrentLocation().then((value){
+  //
+  //   });
+  //   setState(() {});
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -42,56 +46,71 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: Text('Tracking location...'));
           } else if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
+            return Center(child: Text('Error : ${snapshot.error}'));
           } else {
-            return  Stack(
+            selectedLocation ??= LatLng(snapshot.data!.marker.point.latitude, snapshot.data!.marker.point.longitude);
+            return Stack(
               children: [
                 FlutterMap(
                   options: MapOptions(
                     initialCameraFit: CameraFit.bounds(
                       bounds: LatLngBounds(
                         LatLng(
-                          snapshot.data!.marker.point.latitude - 0.002,
-                          snapshot.data!.marker.point.longitude - 0.002,
+                          selectedLocation!.latitude - 0.002,
+                          selectedLocation!.longitude - 0.002,
                         ),
                         LatLng(
-                          snapshot.data!.marker.point.latitude + 0.002,
-                          snapshot.data!.marker.point.longitude + 0.002,
+                          selectedLocation!.latitude + 0.002,
+                          selectedLocation!.longitude + 0.002,
                         ),
                       ),
                       padding: const EdgeInsets.all(8),
                     ),
-                    //onTap: _onMapTapped,
+                    onTap: _onMapTapped,
                   ),
                   children: [
                     openStreetMapTileLayer,
+                    MarkerLayer(
+                      markers: [
+                        if (selectedLocation != null)
+                          Marker(
+                            point: selectedLocation!,
+                            child: const Icon(
+                              Icons.location_on,
+                              color: Colors.red,
+                              size: 30,
+                            ),
+                          ),
+                      ],
+                    ),
                   ],
                 ),
                 Positioned(
-                  bottom: 16.0, // Adjust this value as needed to control the distance from the bottom
-                  left: 16.0, // Adjust for padding on the left
-                  right: 16.0, // Adjust for padding on the right
+                  bottom: 16.0,
+                  left: 16.0,
+                  right: 16.0,
                   child: ValueListenableBuilder<bool>(
                     valueListenable: enableButton,
                     builder: (context, val, child) {
                       return ElevatedButton(
                         onPressed: (val)
                             ? () async {
-                          enableButton.value = !enableButton.value;
-                          AttendanceAPI api = AttendanceAPI();
-                          String status = await api.submitAttendance(snapshot.data!);
-                          Fluttertoast.showToast(
-                            msg: status,
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.BOTTOM,
-                            timeInSecForIosWeb: 1,
-                            backgroundColor: Colors.red,
-                            textColor: Colors.white,
-                            fontSize: 16.0,
-                          );
+                                enableButton.value = !enableButton.value;
+                                AttendanceAPI api = AttendanceAPI();
+                                String status =
+                                    await api.submitAttendance(snapshot.data!);
+                                Fluttertoast.showToast(
+                                  msg: status,
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  timeInSecForIosWeb: 1,
+                                  backgroundColor: Colors.red,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0,
+                                );
 
-                          enableButton.value = !enableButton.value;
-                        }
+                                enableButton.value = !enableButton.value;
+                              }
                             : null,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: themeColor,
@@ -102,41 +121,40 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                         ),
                         child: (val)
                             ? const Text(
-                          'Submit attendance ',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        )
+                                'Submit attendance',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              )
                             : const Center(
-                          child: Text(
-                            'Loading ... ',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ),
+                                child: Text(
+                                  'Loading ...',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ),
                       );
                     },
                   ),
                 ),
               ],
             );
-
           }
         },
       ),
     );
   }
 
-  // void _onMapTapped(TapPosition tapPosition, LatLng tappedPosition) {
-  //   setState(() {
-  //     selectedLocation = tappedPosition;
-  //   });
-  // }
+  void _onMapTapped(TapPosition tapPosition, LatLng tappedPosition) {
+    setState(() {
+      selectedLocation = tappedPosition;
+    });
+  }
 
   TileLayer get openStreetMapTileLayer => TileLayer(
         urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
