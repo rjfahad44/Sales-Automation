@@ -71,7 +71,7 @@ class _OrderCreateScreenState extends State<OrderCreateScreen> {
                       children: [
                         Expanded(
                           flex: 1,
-                          child: MyTextView("Delivary Date: ", 12, FontWeight.normal, Colors.black, TextAlign.start),
+                          child: MyTextView("Delivery Date: ", 12, FontWeight.normal, Colors.black, TextAlign.start),
                         ),
 
                         Expanded(
@@ -92,7 +92,15 @@ class _OrderCreateScreenState extends State<OrderCreateScreen> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(deliveryDispDate.split(" ")[0]),
+                                    Text(
+                                      deliveryDispDate.split(" ")[0],
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 12.0,
+                                      ),
+                                      textAlign: TextAlign.start,
+                                    ),
                                     const Icon(Icons.calendar_month)
                                   ],
                                 ),
@@ -107,7 +115,7 @@ class _OrderCreateScreenState extends State<OrderCreateScreen> {
                       children: [
                         Expanded(
                           flex: 1,
-                          child: MyTextView("Delivary Time: ", 12, FontWeight.normal, Colors.black, TextAlign.start),
+                          child: MyTextView("Delivery Time: ", 12, FontWeight.normal, Colors.black, TextAlign.start),
                         ),
 
                         Expanded(
@@ -125,8 +133,14 @@ class _OrderCreateScreenState extends State<OrderCreateScreen> {
                                   items: deliveryTimes.map((String value) {
                                     return DropdownMenuItem<String>(
                                       value: value,
-                                      child: MyTextView(value, 12, FontWeight.normal,
-                                          Colors.black, TextAlign.center),
+                                      child: Text(
+                                        value,
+                                        style: const TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.normal,
+                                          fontSize: 12.0,
+                                        ),
+                                      ),
                                     );
                                   }).toList(),
                                   onChanged: (String? newValue) {
@@ -159,15 +173,17 @@ class _OrderCreateScreenState extends State<OrderCreateScreen> {
                                 isExpanded: true,
                                 underline: Container(),
                                 onChanged: (ChemistModel? selectedValue) {
+                                  if(selectedValue?.name.isEmpty == true) selectedValue?.name = "No Name! id:${selectedValue.chemistID}";
                                   setState(() {
                                     chemistHint = selectedValue!.name;
                                     selectedChemist = selectedValue;
                                   });
                                 },
                                 items: chemistDropdownList.map((ChemistModel item) {
+                                  if(item.name.isEmpty) item.name = "No Name! id:${item.chemistID}";
                                   return DropdownMenuItem<ChemistModel>(
                                     value: item,
-                                    child: Text(item.name.isEmpty ? "No Name!" : item.name),
+                                    child: Text(item.name),
                                   );
                                 }).toList(),
                               ),
@@ -181,7 +197,7 @@ class _OrderCreateScreenState extends State<OrderCreateScreen> {
                       children: [
                         Expanded(
                           flex: 1,
-                          child: MyTextView("Chem.Address: ", 12, FontWeight.normal, Colors.black, TextAlign.start),
+                          child: MyTextView("Address: ", 12, FontWeight.normal, Colors.black, TextAlign.start),
                         ),
 
                         Expanded(

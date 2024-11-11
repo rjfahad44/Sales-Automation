@@ -84,33 +84,55 @@ class _ItemsDetailsState extends State<ItemsDetails> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            MyTextView(
+                            // Product Name
+                            Expanded(
+                              flex: 3,
+                              child: Text(
                                 productList[index].productName,
-                                12,
-                                FontWeight.normal,
-                                Colors.white,
-                                TextAlign.center),
-                            MyTextView("Price: ${productList[index].tp}৳", 12, FontWeight.normal, Colors.white, TextAlign.center),
-                            SizedBox(
-                                width: 80,
-                                child: TextField(
-                                  controller: productList[index].textEditingController,
-                                  keyboardType: TextInputType.number,
-                                  style:  const TextStyle(color: Colors.white),
-                                  cursorColor: Colors.white,
-                                  decoration: InputDecoration(
-                                    hintText: 'Quantity',
-                                    hintStyle: const TextStyle(color: Colors.white70, fontSize: 11.0),
-                                    filled: true,
-                                    fillColor: Colors.blue[900],
-                                    border: OutlineInputBorder(
-                                      borderSide: BorderSide.none,
-                                      borderRadius: BorderRadius.circular(8.0),
-                                    ),
-                                  ),
-                                  onChanged: null,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 12.0,
                                 ),
-                            )
+                              ),
+                            ),
+
+                            // Product Price
+                            Flexible(
+                              flex: 2,
+                              child: Text(
+                                "Price: ${productList[index].tp}৳",
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 12.0,
+                                ),
+                              ),
+                            ),
+
+                            // Quantity Input
+                            SizedBox(
+                              width: 80, // Set a fixed width to prevent overflow
+                              child: TextField(
+                                controller: productList[index].textEditingController,
+                                keyboardType: TextInputType.number,
+                                style: const TextStyle(color: Colors.white),
+                                cursorColor: Colors.white,
+                                decoration: InputDecoration(
+                                  hintText: 'Quantity',
+                                  hintStyle: const TextStyle(color: Colors.white70, fontSize: 11.0),
+                                  filled: true,
+                                  fillColor: Colors.blue[900],
+                                  border: OutlineInputBorder(
+                                    borderSide: BorderSide.none,
+                                    borderRadius: BorderRadius.circular(8.0),
+                                  ),
+                                ),
+                                onChanged: (value) {
+                                  // Handle quantity change here, if needed
+                                },
+                              ),
+                            ),
                           ],
                         ),
                       ),
