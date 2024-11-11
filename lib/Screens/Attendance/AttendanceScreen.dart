@@ -25,10 +25,6 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
 
   // @override
   // void initState() {
-  //   locationServices.getCurrentLocation().then((value){
-  //
-  //   });
-  //   setState(() {});
   //   super.initState();
   // }
 
