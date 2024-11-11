@@ -132,11 +132,11 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     );
   }
 
-  void _onMapTapped(TapPosition tapPosition, LatLng tappedPosition) {
-    setState(() {
-      selectedLocation = tappedPosition;
-    });
-  }
+  // void _onMapTapped(TapPosition tapPosition, LatLng tappedPosition) {
+  //   setState(() {
+  //     selectedLocation = tappedPosition;
+  //   });
+  // }
 
   TileLayer get openStreetMapTileLayer => TileLayer(
         urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
