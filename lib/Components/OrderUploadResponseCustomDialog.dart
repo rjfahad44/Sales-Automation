@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:sales_automation/global.dart';
 import 'dart:convert';
 import 'package:intl/intl.dart';
-import '../Models/OrderSendResponse.dart';
+import '../Models/OrderResponse.dart';
 import 'Components.dart';
 
 
 Future<T?> showBottomSheetDialog<T>(
     BuildContext context,
-    OrderSendResponse response,
+    OrderResponse response,
     double totalAmount,
     double totalDiscount,
     double finalAmount,
@@ -32,7 +32,7 @@ Future<T?> showBottomSheetDialog<T>(
 }
 
 class CustomDialog extends StatefulWidget{
-  final OrderSendResponse response;
+  final OrderResponse response;
   final double totalAmount;
   final double totalDiscount;
   final double finalAmount;

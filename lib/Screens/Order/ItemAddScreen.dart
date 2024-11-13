@@ -206,7 +206,7 @@ class _ItemsDetailsState extends State<ItemsDetails> {
     orderCreate.products.clear();
     for (var product in productList.where((product) => product.textEditingController.text.isNotEmpty)) {
       Cart cart = Cart(
-        product.id,
+        product.productId,
         product.productName,
         product.tp,
         int.parse(product.textEditingController.text),
@@ -221,22 +221,24 @@ class _ItemsDetailsState extends State<ItemsDetails> {
       );
       print("Selected Item : ${cart.quantity}");
       orderCreate.products.add(
-        Product(
-          id: product.id,
-          productCode: product.productCode,
-          productName: product.productName,
-          tp: product.tp,
-          productQuantity: cart.quantity,
-          productShortName: product.productShortName,
-          packSize: product.packSize,
-          discountName: product.discountName,
-          discountType: product.discountType,
-          discountValue: product.discountValue,
-          minimumQuantity: product.minimumQuantity,
-          description: product.description,
-          vat: product.vat,
-          mrp: product.mrp,
-        )
+        product
+        // Product(
+        //   id: product.id,
+        //   productId: product.productId,
+        //   productCode: product.productCode,
+        //   productName: product.productName,
+        //   tp: product.tp,
+        //   productQuantity: cart.quantity,
+        //   productShortName: product.productShortName,
+        //   packSize: product.packSize,
+        //   discountName: product.discountName,
+        //   discountType: product.discountType,
+        //   discountValue: product.discountValue,
+        //   minimumQuantity: product.minimumQuantity,
+        //   description: product.description,
+        //   vat: product.vat,
+        //   mrp: product.mrp,
+        // )
       );
       carts.add(cart);
     }

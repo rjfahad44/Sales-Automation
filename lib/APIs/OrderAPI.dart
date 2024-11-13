@@ -5,7 +5,7 @@ import '../Models/Cart.dart';
 import '../Models/ChemistDropdownResponse.dart';
 import '../Models/Item.dart';
 import '../Models/OrderCreate.dart';
-import '../Models/OrderSendResponse.dart';
+import '../Models/OrderResponse.dart';
 import '../Screens/ProductListScreen/Model/Product.dart';
 import '../global.dart';
 import 'package:intl/intl.dart';
@@ -118,7 +118,7 @@ class OrderAPI {
     }
   }
 
-  submitOrder(List<Cart> carts, Function(bool isSuccess, OrderSendResponse response) callBack) async {
+  submitOrder(List<Cart> carts, Function(bool isSuccess, OrderResponse response) callBack) async {
     List<Map> itemsListJson = [];
     for (int i = 0; i < carts.length; i++) {
       itemsListJson.add({
@@ -137,8 +137,8 @@ class OrderAPI {
       "depoId": userData.data.depoId,
       "territoryID": userData.data.territoryId,
       "employeeId": userData.data.employeeId,
-      "longitude": locationInf.lat,
-      "latitude": locationInf.lon,
+      "longitude": locationInf.lat.toString(),
+      "latitude": locationInf.lon.toString(),
       "orderDetails": itemsListJson
     };
 
@@ -158,22 +158,22 @@ class OrderAPI {
 
     if (response.statusCode == 200) {
       var resp = json.decode(response.body);
-      OrderSendResponse orderSendResponse = OrderSendResponse.fromJson(resp);
+      OrderResponse orderSendResponse = OrderResponse.fromJson(resp);
       callBack.call(true, orderSendResponse);
       print('Order Submit Response: ${response.body.toString()}');
       print('message: ${orderSendResponse.message}');
     } else {
       var resp = json.decode(response.body);
-      OrderSendResponse orderSendResponse = OrderSendResponse.fromJson(resp);
+      OrderResponse orderSendResponse = OrderResponse.fromJson(resp);
       callBack.call(false, orderSendResponse);
     }
   }
 
-  submitOrderFromArchive(OrderCreate orderCreate, Function(bool isSuccess, OrderSendResponse response) callBack) async {
+  submitOrderFromArchive(OrderCreate orderCreate, Function(bool isSuccess, OrderResponse response) callBack) async {
     List<Map> itemsListJson = [];
     for (int i = 0; i < orderCreate.products.length; i++) {
       itemsListJson.add({
-        "productId": orderCreate.products[i].id,
+        "productId": orderCreate.products[i].productId,
         "quantity": orderCreate.products[i].productQuantity,
         // "amount": orderCreate.products[i].tp * orderCreate.products[i].productQuantity,
         // "unitPrice": orderCreate.products[i].tp,
@@ -188,8 +188,8 @@ class OrderAPI {
       "depoId": userData.data.depoId,
       "territoryID": userData.data.territoryId,
       "employeeId": userData.data.employeeId,
-      "longitude": locationInf.lat,
-      "latitude": locationInf.lon,
+      "longitude": locationInf.lat.toString(),
+      "latitude": locationInf.lon.toString(),
       "orderDetails": itemsListJson
     };
 
@@ -210,12 +210,12 @@ class OrderAPI {
     if (response.statusCode == 200) {
       var resp = json.decode(response.body);
       print("Success Response : ${resp}");
-      OrderSendResponse orderSendResponse = OrderSendResponse.fromJson(resp);
+      OrderResponse orderSendResponse = OrderResponse.fromJson(resp);
       callBack.call(true, orderSendResponse);
     } else {
       var resp = json.decode(response.body);
       print("Error Response : ${resp}");
-      OrderSendResponse orderSendResponse = OrderSendResponse.fromJson(resp);
+      OrderResponse orderSendResponse = OrderResponse.fromJson(resp);
       callBack.call(false, orderSendResponse);
     }
   }

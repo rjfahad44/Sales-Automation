@@ -13,6 +13,7 @@ class ProductAdapter extends TypeAdapter<Product> {
       case 1:
         return Product(
           id: reader.readInt(),
+          productId: reader.readInt(),
           productCode: reader.readString(),
           productName: reader.readString(),
           tp: reader.readDouble(),
@@ -36,6 +37,7 @@ class ProductAdapter extends TypeAdapter<Product> {
   void write(BinaryWriter writer, Product obj) {
     writer.writeByte(1); // Version number (update if the model changes)
     writer.writeInt(obj.id);
+    writer.writeInt(obj.productId);
     writer.writeString(obj.productCode);
     writer.writeString(obj.productName);
     writer.writeDouble(obj.tp);

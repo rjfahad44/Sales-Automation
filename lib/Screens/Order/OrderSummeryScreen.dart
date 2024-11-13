@@ -175,15 +175,6 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen> {
     orderAPI.submitOrder(widget.carts, (isSuccess, response) {
       hideTransparentProgressDialog(context);
       if (isSuccess) {
-        // Fluttertoast.showToast(
-        //     msg: "Submit successful",
-        //     toastLength: Toast.LENGTH_SHORT,
-        //     gravity: ToastGravity.CENTER,
-        //     timeInSecForIosWeb: 1,
-        //     backgroundColor: Colors.red,
-        //     textColor: Colors.white,
-        //     fontSize: 16.0);
-
         showBottomSheetDialog(
             context, response, totalAmount, totalDiscount, finalAmount, () {
           goToPage(const HomeScreen(), false, context);

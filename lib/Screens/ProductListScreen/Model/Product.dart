@@ -8,23 +8,25 @@ import '../../../global.dart';
 @HiveType(typeId: product_model_type_id)
 class Product {
   @HiveField(0)   int id;
-  @HiveField(1)   String productCode;
-  @HiveField(2)   String productName;
-  @HiveField(3)   double tp;
-  @HiveField(4)   String productShortName;
-  @HiveField(5)   String packSize;
-  @HiveField(6)   String discountName;
-  @HiveField(7)   int discountValue;
-  @HiveField(8)   int minimumQuantity;
-  @HiveField(9)   String discountType;
-  @HiveField(10)  String description;
-  @HiveField(11)  double vat;
-  @HiveField(12)  double mrp;
-  @HiveField(13)   int productQuantity;
+  @HiveField(1)   int productId;
+  @HiveField(2)   String productCode;
+  @HiveField(3)   String productName;
+  @HiveField(4)   double tp;
+  @HiveField(5)   String productShortName;
+  @HiveField(6)   String packSize;
+  @HiveField(7)   String discountName;
+  @HiveField(8)   int discountValue;
+  @HiveField(9)   int minimumQuantity;
+  @HiveField(10)   String discountType;
+  @HiveField(11)  String description;
+  @HiveField(12)  double vat;
+  @HiveField(13)  double mrp;
+  @HiveField(14)   int productQuantity;
   TextEditingController textEditingController;
 
   Product({
     this.id = 0,
+    this.productId = 0,
     this.productCode = "",
     this.productName = "",
     this.tp = 0,
@@ -46,6 +48,7 @@ class Product {
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
       id: json['id'],
+      productId: json['productId'],
       productCode: json['productCode'],
       productName: json['productName'],
       tp: json['tp'],
@@ -65,6 +68,7 @@ class Product {
 
   Map<String, dynamic> toJson() => {
     'id': id,
+    'productId': productId,
     'productCode': productCode,
     'productName': productName,
     'tp': tp,
@@ -84,6 +88,7 @@ class Product {
   String toString() {
     return 'Product('
         'id: $id'
+        'productId: $productId'
         'productCode: $productCode'
         'productName: $productName'
         'tp: $tp'

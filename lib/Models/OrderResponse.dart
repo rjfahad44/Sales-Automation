@@ -1,7 +1,7 @@
 
 
-class OrderSendResponse {
-  final Order data;
+class OrderResponse {
+  final OrderData data;
   final bool success;
   final dynamic exception;
   final int messageType;
@@ -9,7 +9,7 @@ class OrderSendResponse {
   final String message;
   final DateTime dateTime;
 
-  OrderSendResponse({
+  OrderResponse({
     required this.data,
     required this.success,
     this.exception,
@@ -19,9 +19,9 @@ class OrderSendResponse {
     required this.dateTime,
   });
 
-  factory OrderSendResponse.fromJson(Map<String, dynamic> json) {
-    return OrderSendResponse(
-      data: Order.fromJson(json['data']),
+  factory OrderResponse.fromJson(Map<String, dynamic> json) {
+    return OrderResponse(
+      data: OrderData.fromJson(json['data']),
       success: json['success'],
       exception: json['exception'],
       messageType: json['messageType'],
@@ -44,46 +44,47 @@ class OrderSendResponse {
   }
 }
 
-class Order {
+
+class OrderData {
   final int id;
   final DateTime orderDate;
-  final String orderNo;
+  final int orderNo;
+  final int orderID;
   final int chemistId;
-  final String? chemistName;
-  final String? chemistCode;
+  final String chemistName;
+  final String chemistCode;
   final double total;
   final String? address;
   final String? contactNo;
   final List<OrderDetail> orderDetails;
 
-  Order({
+  OrderData({
     required this.id,
     required this.orderDate,
     required this.orderNo,
+    required this.orderID,
     required this.chemistId,
-    this.chemistName,
-    this.chemistCode,
+    required this.chemistName,
+    required this.chemistCode,
     required this.total,
     this.address,
     this.contactNo,
     required this.orderDetails,
   });
 
-  factory Order.fromJson(Map<String, dynamic> json) {
-    var orderDetailsFromJson = json['orderDetails'] as List;
-    List<OrderDetail> orderDetailsList = orderDetailsFromJson.map((i) => OrderDetail.fromJson(i)).toList();
-
-    return Order(
+  factory OrderData.fromJson(Map<String, dynamic> json) {
+    return OrderData(
       id: json['id'],
       orderDate: DateTime.parse(json['orderDate']),
       orderNo: json['orderNo'],
+      orderID: json['orderID'],
       chemistId: json['chemistId'],
-      chemistName: json['chemistName'],
-      chemistCode: json['chemistCode'],
-      total: json['total'].toDouble(),
+      chemistName: json['chemistName'] ?? '',
+      chemistCode: json['chemistCode'] ?? '',
+      total: (json['total'] as num).toDouble(),
       address: json['address'],
       contactNo: json['contactNo'],
-      orderDetails: orderDetailsList,
+      orderDetails: (json['orderDetails'] as List).map((detail) => OrderDetail.fromJson(detail)).toList(),
     );
   }
 
@@ -92,69 +93,40 @@ class Order {
       'id': id,
       'orderDate': orderDate.toIso8601String(),
       'orderNo': orderNo,
+      'orderID': orderID,
       'chemistId': chemistId,
       'chemistName': chemistName,
       'chemistCode': chemistCode,
       'total': total,
       'address': address,
       'contactNo': contactNo,
-      'orderDetails': orderDetails.map((e) => e.toJson()).toList(),
+      'orderDetails': orderDetails.map((detail) => detail.toJson()).toList(),
     };
   }
 }
 
+
 class OrderDetail {
-  final int id;
-  final int orderId;
   final int productId;
-  final String? productName;
   final int quantity;
-  final double amount;
-  final double discountValue;
-  final String discountName;
-  final String discountType;
-  final int minimumQuantity;
 
   OrderDetail({
-    required this.id,
-    required this.orderId,
     required this.productId,
-    this.productName,
     required this.quantity,
-    required this.amount,
-    required this.discountValue,
-    required this.discountName,
-    required this.discountType,
-    required this.minimumQuantity,
   });
 
   factory OrderDetail.fromJson(Map<String, dynamic> json) {
     return OrderDetail(
-      id: json['id'],
-      orderId: json['orderId'],
       productId: json['productId'],
-      productName: json['productName'],
       quantity: json['quantity'],
-      amount: json['amount'].toDouble(),
-      discountValue: json['discountValue'].toDouble(),
-      discountName: json['discountName'],
-      discountType: json['discountType'],
-      minimumQuantity: json['minimumQuantity'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      'orderId': orderId,
       'productId': productId,
-      'productName': productName,
       'quantity': quantity,
-      'amount': amount,
-      'discountValue': discountValue,
-      'discountName': discountName,
-      'discountType': discountType,
-      'minimumQuantity': minimumQuantity,
     };
   }
 }
+
