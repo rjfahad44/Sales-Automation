@@ -124,19 +124,21 @@ class OrderAPI {
       itemsListJson.add({
         "productId": carts[i].itemID,
         "quantity": carts[i].quantity,
-        "amount": carts[i].unitPrice * carts[i].quantity,
-        "unitPrice": carts[i].unitPrice,
+        // "amount": carts[i].unitPrice * carts[i].quantity,
+        // "unitPrice": carts[i].unitPrice,
       });
     }
 
     //String now = '${DateFormat('yyyy-MM-ddTHH:mm:ss.SSS').format(DateTime.now())}Z';
     String now = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(DateTime.now());
     Map map = {
-      "orderDate": now,
       "deliveryDate": now,
       "chemistId": selectedChemist.chemistID,
       "depoId": userData.data.depoId,
+      "territoryID": userData.data.territoryId,
       "employeeId": userData.data.employeeId,
+      "longitude": locationInf.lat,
+      "latitude": locationInf.lon,
       "orderDetails": itemsListJson
     };
 
@@ -173,19 +175,21 @@ class OrderAPI {
       itemsListJson.add({
         "productId": orderCreate.products[i].id,
         "quantity": orderCreate.products[i].productQuantity,
-        "amount": orderCreate.products[i].tp * orderCreate.products[i].productQuantity,
-        "unitPrice": orderCreate.products[i].tp,
+        // "amount": orderCreate.products[i].tp * orderCreate.products[i].productQuantity,
+        // "unitPrice": orderCreate.products[i].tp,
       });
     }
 
     //String now = '${DateFormat('yyyy-MM-ddTHH:mm:ss.SSS').format(DateTime.now())}Z';
     String now = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(DateTime.now());
     Map map = {
-      "orderDate": now,
       "deliveryDate": now,
       "chemistId": orderCreate.chemistId,
       "depoId": userData.data.depoId,
-      "employeeID": userData.data.employeeId,
+      "territoryID": userData.data.territoryId,
+      "employeeId": userData.data.employeeId,
+      "longitude": locationInf.lat,
+      "latitude": locationInf.lon,
       "orderDetails": itemsListJson
     };
 
