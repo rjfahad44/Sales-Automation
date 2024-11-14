@@ -19,11 +19,12 @@ class ImageUploadApis {
     final data = {
       'imageName': doctorName,
       'doctorId': 0,
-      'employeeId': 0,
+      'employeeId': userData.data.employeeId,
       'longitude': locationInf.lat,
       'latitude': locationInf.lon,
+      'address': "",
       'base64Image': base64Image,
-      // 'prescribedProducts':prescribedProducts,
+      'prescribedProducts':prescribedProducts,
     };
 
     final response = await http.post(
@@ -66,10 +67,14 @@ class ImageUploadApis {
         var bytes = await File(p.imagePath).readAsBytes();
         var base64Image = base64Encode(bytes);
         var data = {
-          'doctorName': p.doctorName,
+          'imageName': p.doctorName,
+          'doctorId': 0,
           'employeeId': p.employeeId,
+          'longitude': locationInf.lat,
+          'latitude': locationInf.lon,
+          'address': "",
           'base64Image': base64Image,
-          // 'prescribedProducts': prescribedProducts.toString(),
+          // 'prescribedProducts':prescribedProducts,
         };
 
         final response = await http.post(

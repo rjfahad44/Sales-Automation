@@ -175,8 +175,8 @@ class OrderAPI {
       itemsListJson.add({
         "productId": orderCreate.products[i].productId,
         "quantity": orderCreate.products[i].productQuantity,
-        // "amount": orderCreate.products[i].tp * orderCreate.products[i].productQuantity,
-        // "unitPrice": orderCreate.products[i].tp,
+        // "amount": carts[i].unitPrice * carts[i].quantity,
+        // "unitPrice": carts[i].unitPrice,
       });
     }
 
@@ -209,12 +209,12 @@ class OrderAPI {
 
     if (response.statusCode == 200) {
       var resp = json.decode(response.body);
-      print("Success Response : ${resp}");
       OrderResponse orderSendResponse = OrderResponse.fromJson(resp);
       callBack.call(true, orderSendResponse);
+      print('Order Submit Response: ${response.body.toString()}');
+      print('message: ${orderSendResponse.message}');
     } else {
       var resp = json.decode(response.body);
-      print("Error Response : ${resp}");
       OrderResponse orderSendResponse = OrderResponse.fromJson(resp);
       callBack.call(false, orderSendResponse);
     }

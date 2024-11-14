@@ -32,8 +32,8 @@ class _ImageCaptureState extends State<ImageCapture> {
   final TextEditingController _doctorNameController = TextEditingController();
   final ValueNotifier<bool> enableUploadButtons = ValueNotifier(true);
   List<Map<String, dynamic>> prescribedProducts = [
-    {'productName': 'Product A', 'quantity': 1},
-    {'productName': 'Product B', 'quantity': 2},
+    {'productId': '1','productName': 'Product A', 'quantity': 1},
+    {'productId': '2','productName': 'Product A', 'quantity': 1},
   ];
 
   _imageFromCamera() async {
