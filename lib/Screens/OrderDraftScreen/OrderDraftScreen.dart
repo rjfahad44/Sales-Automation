@@ -1,7 +1,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
 import '../../APIs/OrderAPI.dart';
 import '../../Components/Components.dart';
 import '../../Components/OrderUploadResponseCustomDialog.dart';
@@ -175,6 +174,7 @@ class _OrderDraftScreenState extends State<OrderDraftScreen> {
                                     print("loop index : $index");
                                     position = await orderSaveHiveBox.getPosition(data);
                                     print("box index : $position");
+                                    print("data : $data");
                                     orderCreate = data;
                                     orderCreateCopy = data;
                                     goToPage(const OrderCreateScreen(), true, context);
@@ -314,17 +314,8 @@ class _OrderDraftScreenState extends State<OrderDraftScreen> {
       if (isSuccess) {
         orderSaveHiveBox.delete(index);
         getAllOrders();
-        // Fluttertoast.showToast(
-        //     msg: "Submit successful",
-        //     toastLength: Toast.LENGTH_SHORT,
-        //     gravity: ToastGravity.CENTER,
-        //     timeInSecForIosWeb: 1,
-        //     backgroundColor: Colors.red,
-        //     textColor: Colors.white,
-        //     fontSize: 16.0);
         showBottomSheetDialog(context, response, totalAmount, totalDiscount, finalAmount, () {
         });
-        //Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
       } else {
         Fluttertoast.showToast(
             msg: "Failed",

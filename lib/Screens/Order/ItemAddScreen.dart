@@ -186,7 +186,7 @@ class _ItemsDetailsState extends State<ItemsDetails> {
       if (productList.isNotEmpty) {
         for (int i=0; i<orderCreate.products.length; i++) {
           try{
-            int pos= productList.indexWhere((item) => item.id == orderCreate.products[i].id);
+            int pos= productList.indexWhere((item) => item.productId == orderCreate.products[i].productId);
             print("Product position : ${pos}");
             print("Product : ${productList[pos]}");
             productList[pos].textEditingController.text = "${orderCreate.products[i].productQuantity}";
@@ -221,24 +221,23 @@ class _ItemsDetailsState extends State<ItemsDetails> {
       );
       print("Selected Item : ${cart.quantity}");
       orderCreate.products.add(
-        product
-        // Product(
-        //   id: product.id,
-        //   productId: product.productId,
-        //   productCode: product.productCode,
-        //   productName: product.productName,
-        //   tp: product.tp,
-        //   productQuantity: cart.quantity,
-        //   productShortName: product.productShortName,
-        //   packSize: product.packSize,
-        //   discountName: product.discountName,
-        //   discountType: product.discountType,
-        //   discountValue: product.discountValue,
-        //   minimumQuantity: product.minimumQuantity,
-        //   description: product.description,
-        //   vat: product.vat,
-        //   mrp: product.mrp,
-        // )
+        Product(
+          id: product.id,
+          productId: product.productId,
+          productCode: product.productCode,
+          productName: product.productName,
+          tp: product.tp,
+          productQuantity: cart.quantity,
+          productShortName: product.productShortName,
+          packSize: product.packSize,
+          discountName: product.discountName,
+          discountType: product.discountType,
+          discountValue: product.discountValue,
+          minimumQuantity: product.minimumQuantity,
+          description: product.description,
+          vat: product.vat,
+          mrp: product.mrp,
+        )
       );
       carts.add(cart);
     }
