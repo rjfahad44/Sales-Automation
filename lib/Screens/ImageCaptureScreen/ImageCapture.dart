@@ -154,8 +154,7 @@ class _ImageCaptureState extends State<ImageCapture> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           title: MyTextView("Image Capture", 16, FontWeight.bold, Colors.black,
               TextAlign.center),
@@ -504,7 +503,6 @@ class _ImageCaptureState extends State<ImageCapture> {
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 }

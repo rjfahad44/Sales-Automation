@@ -5,6 +5,7 @@ import 'package:sales_automation/APIs/AuthenticationAPI.dart';
 import 'package:sales_automation/LocalDB/PrefsDb.dart';
 import 'package:sales_automation/Screens/HomeScreen/HomeScreen.dart';
 
+import '../../global.dart';
 import '../AuthentationScreen/LoginScreen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -28,11 +29,11 @@ class _SplashScreenState extends State<SplashScreen> {
           var password = jsonData[PrefsDb.USER_PASS];
           authApi.login(userName, password).then((value) {
             value
-                ? goToPage(const HomeScreen(), context)
-                : goToPage(const LogInScreen(), context);
+                ? goToPage(const HomeScreen(), false, context)
+                : goToPage(const LogInScreen(), false, context);
           });
         } else {
-          goToPage(const LogInScreen(), context);
+          goToPage(const LogInScreen(), false,  context);
         }
       });
     });
@@ -55,10 +56,5 @@ class _SplashScreenState extends State<SplashScreen> {
         ],
       ),
     );
-  }
-
-  void goToPage(Widget page, BuildContext context) {
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => page));
   }
 }

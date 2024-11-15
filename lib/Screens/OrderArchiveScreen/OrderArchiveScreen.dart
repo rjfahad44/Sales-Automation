@@ -32,8 +32,7 @@ class _OrderArchiveScreenState extends State<OrderArchiveScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           title: MyTextView("Order Archive", 16, FontWeight.bold, Colors.black,
               TextAlign.center),
@@ -51,7 +50,6 @@ class _OrderArchiveScreenState extends State<OrderArchiveScreen> {
                     child: MyTextView("No CurrentUserData Found!", 18, FontWeight.bold,
                         Colors.black, TextAlign.center),
                   ),
-      ),
-    );
+      );
   }
 }

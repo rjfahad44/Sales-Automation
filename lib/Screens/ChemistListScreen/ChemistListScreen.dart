@@ -37,8 +37,7 @@ class _ChemistListScreenState extends State<ChemistListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           title: MyTextView("Chemist List", 16, FontWeight.bold, Colors.black,
               TextAlign.center),
@@ -130,8 +129,7 @@ class _ChemistListScreenState extends State<ChemistListScreen> {
         const Center(
           child: CircularProgressIndicator()
         ),
-      ),
-    );
+      );
   }
 
   void _filterItems() {

@@ -27,8 +27,7 @@ class _LogInScreenState extends State<LogInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
+    return Scaffold(
           body: SingleChildScrollView(
         child: Form(
           key: _key,
@@ -265,8 +264,7 @@ class _LogInScreenState extends State<LogInScreen> {
             ],
           ),
         ),
-      )),
-    );
+      ));
   }
 
   Future<void> loginProcess() async {

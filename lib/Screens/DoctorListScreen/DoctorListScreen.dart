@@ -38,8 +38,7 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           title: MyTextView("Doctors", 16, FontWeight.bold, Colors.black,
               TextAlign.center),
@@ -148,8 +147,7 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
         ): const Center(
           child: CircularProgressIndicator()
         ),
-      ),
-    );
+      );
   }
 
   void _filterItems() {

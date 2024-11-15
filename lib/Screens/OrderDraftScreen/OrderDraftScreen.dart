@@ -33,8 +33,7 @@ class _OrderDraftScreenState extends State<OrderDraftScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           title: MyTextView("Order Draft", 16, FontWeight.bold, Colors.black,
               TextAlign.center),
@@ -295,8 +294,7 @@ class _OrderDraftScreenState extends State<OrderDraftScreen> {
                     child: MyTextView("No CurrentUserData Found!", 18,
                         FontWeight.bold, Colors.black, TextAlign.center),
                   ),
-      ),
-    );
+      );
   }
 
   getAllOrders() async {

@@ -51,8 +51,7 @@ class _OrderCreateScreenState extends State<OrderCreateScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           title: MyTextView("Order Create", 16, FontWeight.bold, Colors.black,
               TextAlign.center),
@@ -305,8 +304,7 @@ class _OrderCreateScreenState extends State<OrderCreateScreen> {
             ],
           ),
         ),
-      ),
-    );
+      );
   }
 
   Future<void> _selectDate(BuildContext context) async {

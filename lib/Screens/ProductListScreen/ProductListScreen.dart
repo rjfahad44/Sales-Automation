@@ -39,8 +39,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           title: MyTextView("Products", 16, FontWeight.bold, Colors.black,
               TextAlign.center),
@@ -96,7 +95,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Product id : ${data.id}",
+                            "Product id : ${data.productId}",
                             style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 12.0,
@@ -158,8 +157,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
         ): const Center(
           child: CircularProgressIndicator()
         ),
-      ),
-    );
+      );
   }
 
   void _filterItems() {

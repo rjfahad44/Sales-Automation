@@ -35,8 +35,7 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           title: MyTextView(
               "Summery", 16, FontWeight.bold, Colors.black, TextAlign.center),
@@ -150,8 +149,7 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen> {
             const SizedBox(height: 8.0,),
           ],
         ),
-      ),
-    );
+      );
   }
 
   Future<void> priceCalculate() async {

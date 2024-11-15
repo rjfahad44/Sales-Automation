@@ -44,8 +44,7 @@ class _ImageArchiveState extends State<ImageDraft> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           title: MyTextView("Image Draft", 16, FontWeight.bold, Colors.black,
               TextAlign.center),
@@ -279,7 +278,6 @@ class _ImageArchiveState extends State<ImageDraft> {
                 child: MyTextView("No CurrentUserData Found!", 18, FontWeight.bold,
                     Colors.black, TextAlign.center),
               ),
-      ),
-    );
+      );
   }
 }

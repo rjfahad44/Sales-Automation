@@ -31,8 +31,7 @@ class _ItemsDetailsState extends State<ItemsDetails> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           title: MyTextView("Add Item for ${selectedChemist.name}", 16,
               FontWeight.bold, Colors.black, TextAlign.center),
@@ -160,8 +159,7 @@ class _ItemsDetailsState extends State<ItemsDetails> {
             ],
           ),
         ),
-      ),
-    );
+      );
   }
 
   void _filterItems() {

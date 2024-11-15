@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:sales_automation/Screens/ProductListScreen/Model/Product.dart';
 import 'package:sales_automation/Screens/SplashScreen/SplashScreen.dart';
@@ -25,6 +26,15 @@ class AppRoot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     screenwidth =  MediaQuery.sizeOf(context).width;
+    // Set the status bar color globally
+    // SystemChrome.setSystemUIOverlayStyle(
+    //   SystemUiOverlayStyle(
+    //     statusBarColor: themeColor, // Set the status bar background color
+    //     statusBarIconBrightness: Brightness.light, // Set the status bar icon color
+    //     statusBarBrightness: Brightness.dark, // For iOS status bar color
+    //   ),
+    // );
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(

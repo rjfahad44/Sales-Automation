@@ -1,5 +1,5 @@
-
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:sales_automation/Screens/Attendance/AttendanceScreen.dart';
 import 'package:sales_automation/Screens/DcrScreen/DcrScreen.dart';
 import 'package:sales_automation/Screens/ImageCaptureScreen/ImageCapture.dart';
@@ -18,7 +18,6 @@ import '../DoctorListScreen/DoctorListScreen.dart';
 import '../ImageDraft/ImageDraft.dart';
 import '../Order/OrderCreateScreen.dart';
 import '../ProductListScreen/ProductListScreen.dart';
-
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -39,7 +38,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          systemNavigationBarColor: Colors.transparent,
+          systemNavigationBarIconBrightness: Brightness.light,
+          statusBarIconBrightness: Brightness.dark,
+          statusBarBrightness: Brightness.light),
       child: Scaffold(
         appBar: AppBar(
           title: MyTextView("Sales Automation", 16, FontWeight.bold,
@@ -88,7 +93,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             onPressed: () {
                               prefs.saveDataToSP(PrefsDb.USER_DATA, '');
-                              prefs.saveDataToSP(PrefsDb.USER_NAME_AND_PASS, '');
+                              prefs.saveDataToSP(
+                                  PrefsDb.USER_NAME_AND_PASS, '');
                               Navigator.of(context).pop();
                               Navigator.pushReplacement(
                                 context,
@@ -113,7 +119,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> getCurrentLocation() async {
     locationInf = await locationServices.getCurrentLocation();
-    print("Current Location is  lat: ${locationInf.lat}, lon: ${locationInf.lon}");
+    print(
+        "Current Location is  lat: ${locationInf.lat}, lon: ${locationInf.lon}");
     print("Current Location Name: ${locationInf.locationName}");
     print("Current Location Details: ${locationInf.locationDetails}");
     print("Current Location Error: ${locationInf.error}");
@@ -159,7 +166,6 @@ class Menu extends StatelessWidget {
                 ),
               ],
             ),
-
             Card(
               color: primaryButtonColor,
               elevation: 2.0,
@@ -182,7 +188,8 @@ class Menu extends StatelessWidget {
                               height: 120,
                               scale: 1.0,
                               fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
+                              errorBuilder: (context, error, stackTrace) =>
+                                  const Icon(Icons.error),
                             ),
                           ),
                         ),
@@ -301,7 +308,6 @@ class Menu extends StatelessWidget {
                 ],
               ),
             ),
-
             GridView.count(
               shrinkWrap: true,
               primary: false,
@@ -496,8 +502,8 @@ class Menu extends StatelessWidget {
                       onPressed: () {
                         goToPage(const DcrScreen(), true, context);
                       },
-                      child: MenuButton(90, "assets/images/archive.png",
-                          "DCR", textWidth)),
+                      child: MenuButton(
+                          90, "assets/images/archive.png", "DCR", textWidth)),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(2.0),
@@ -505,9 +511,8 @@ class Menu extends StatelessWidget {
                     style: ButtonStyle(
                         backgroundColor: WidgetStateColor.resolveWith(
                             (states) => primaryButtonColor),
-                        shape:
-                            WidgetStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
+                        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
                         ))),
                     onPressed: () {
