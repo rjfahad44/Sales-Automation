@@ -162,14 +162,29 @@ class _ItemsDetailsState extends State<ItemsDetails> {
       );
   }
 
+  // void _filterItems() {
+  //   final query = _searchController.text.toUpperCase();
+  //   setState(() {
+  //     productList = productSearchList.where((item) {
+  //       return (item.productName.toUpperCase().contains(query) || item.id.toString().contains(query));
+  //     }).toList();
+  //   });
+  // }
+
   void _filterItems() {
     final query = _searchController.text.toUpperCase();
     setState(() {
-      productList = productSearchList.where((item) {
-        return (item.productName.toUpperCase().contains(query) || item.id.toString().contains(query));
-      }).toList();
+      if (query.isEmpty) {
+        productList = productSearchList; // Reset to original list
+      } else {
+        productList = productSearchList.where((item) {
+          return (item.productName.toUpperCase().contains(query) ||
+              item.id.toString().contains(query));
+        }).toList();
+      }
     });
   }
+
 
   @override
   void dispose() {
@@ -202,7 +217,7 @@ class _ItemsDetailsState extends State<ItemsDetails> {
   void calculatePrice() {
     List<Cart> carts = [];
     orderCreate.products.clear();
-    for (var product in productList.where((product) => product.textEditingController.text.isNotEmpty)) {
+    for (var product in productSearchList.where((product) => product.textEditingController.text.isNotEmpty)) {
       Cart cart = Cart(
         product.productId,
         product.productName,
