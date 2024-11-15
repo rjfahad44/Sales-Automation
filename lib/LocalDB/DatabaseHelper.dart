@@ -40,12 +40,28 @@ class HiveBoxHelper<T> {
     }
   }
 
+  Future<void> deleteItemByKey(dynamic key) async {
+    final box = await Hive.openBox<T>(boxName);
+    if (box.containsKey(key)) {
+      await box.delete(key);
+    } else {
+      throw Exception('Item Not Found!');
+    }
+  }
+
   Future<void> deleteItem(T item) async {
     final box = await Hive.openBox<T>(boxName);
-    if (box.containsKey(item)) {
-      await box.delete(item);
+
+    // Find the key associated with the item
+    final key = box.keys.firstWhere(
+          (k) => box.get(k) == item,
+      orElse: () => null,
+    );
+
+    if (key != null) {
+      await box.delete(key);
     } else {
-      throw Exception('CurrentUserData Not Found!!');
+      throw Exception('Item Not Found!');
     }
   }
 

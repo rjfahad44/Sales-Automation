@@ -245,9 +245,9 @@ class _ItemsDetailsState extends State<ItemsDetails> {
       Fluttertoast.showToast(
           msg: "Please pick item",
           toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
+          gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
+          backgroundColor: Colors.orange,
           textColor: Colors.white,
           fontSize: 16.0);
     } else {

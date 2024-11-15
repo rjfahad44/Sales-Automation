@@ -209,9 +209,10 @@ class _OrderCreateScreenState extends State<OrderCreateScreen> {
                               width: 280,
                               child: Padding(
                                 padding: const EdgeInsets.fromLTRB(8, 2, 8, 2),
-                                child: Center(
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
                                   child: MyTextView(
-                                      "${locationInf.locationName}, ${locationInf.locationDetails}",
+                                      selectedChemist.address.isEmpty ? "Please Select Chemist" : selectedChemist.address,
                                       12,
                                       FontWeight.normal,
                                       Colors.black,
@@ -286,9 +287,9 @@ class _OrderCreateScreenState extends State<OrderCreateScreen> {
                     Fluttertoast.showToast(
                         msg: "Select chemist and date",
                         toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.CENTER,
+                        gravity: ToastGravity.BOTTOM,
                         timeInSecForIosWeb: 1,
-                        backgroundColor: Colors.red,
+                        backgroundColor: Colors.orange,
                         textColor: Colors.white,
                         fontSize: 16.0
                     );

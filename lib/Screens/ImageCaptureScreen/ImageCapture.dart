@@ -342,7 +342,7 @@ class _ImageCaptureState extends State<ImageCapture> {
                                   toastLength: Toast.LENGTH_SHORT,
                                   gravity: ToastGravity.BOTTOM,
                                   timeInSecForIosWeb: 1,
-                                  backgroundColor: Colors.red,
+                                  backgroundColor: Colors.orange,
                                   textColor: Colors.white,
                                   fontSize: 16.0);
                             } else if (_image == null) {
@@ -351,7 +351,7 @@ class _ImageCaptureState extends State<ImageCapture> {
                                   toastLength: Toast.LENGTH_SHORT,
                                   gravity: ToastGravity.BOTTOM,
                                   timeInSecForIosWeb: 1,
-                                  backgroundColor: Colors.red,
+                                  backgroundColor: Colors.orange,
                                   textColor: Colors.white,
                                   fontSize: 16.0);
                             } else {
@@ -385,7 +385,7 @@ class _ImageCaptureState extends State<ImageCapture> {
                                       toastLength: Toast.LENGTH_LONG,
                                       gravity: ToastGravity.BOTTOM,
                                       timeInSecForIosWeb: 1,
-                                      backgroundColor: Colors.red,
+                                      backgroundColor: Colors.orange,
                                       textColor: Colors.white,
                                       fontSize: 16.0);
                                 }
@@ -439,7 +439,7 @@ class _ImageCaptureState extends State<ImageCapture> {
                                   toastLength: Toast.LENGTH_SHORT,
                                   gravity: ToastGravity.BOTTOM,
                                   timeInSecForIosWeb: 1,
-                                  backgroundColor: Colors.red,
+                                  backgroundColor: Colors.orange,
                                   textColor: Colors.white,
                                   fontSize: 16.0);
                             } else if (_image == null) {
@@ -448,7 +448,7 @@ class _ImageCaptureState extends State<ImageCapture> {
                                   toastLength: Toast.LENGTH_SHORT,
                                   gravity: ToastGravity.BOTTOM,
                                   timeInSecForIosWeb: 1,
-                                  backgroundColor: Colors.red,
+                                  backgroundColor: Colors.orange,
                                   textColor: Colors.white,
                                   fontSize: 16.0);
                             } else {
@@ -469,7 +469,7 @@ class _ImageCaptureState extends State<ImageCapture> {
                                     toastLength: Toast.LENGTH_LONG,
                                     gravity: ToastGravity.BOTTOM,
                                     timeInSecForIosWeb: 1,
-                                    backgroundColor: Colors.red,
+                                    backgroundColor: Colors.orange,
                                     textColor: Colors.white,
                                     fontSize: 16.0);
                               });

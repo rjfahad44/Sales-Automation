@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:sales_automation/Models/Doctor.dart';
+import '../LocalDB/DatabaseHelper.dart';
 import '../Models/Cart.dart';
 import '../Models/ChemistDropdownResponse.dart';
 import '../Models/Item.dart';
@@ -219,4 +220,73 @@ class OrderAPI {
       callBack.call(false, orderSendResponse);
     }
   }
+
+  submitOrderListFromArchive(
+      List<OrderCreate> orderList,
+      HiveBoxHelper<OrderCreate> hiveBox,
+      Function(bool isSuccess, int totalOrders, double totalPrice) callBack
+      ) async {
+
+    double totalPrice = 0.0;
+    int totalOrders;
+    bool isSuccess = true;
+    totalOrders = orderList.length;
+
+    for (int i =0; i< orderList.length; i++) {
+      var order = orderList[i];
+      print("order : $order");
+      List<Map> itemsListJson = [];
+      for (int i = 0; i < order.products.length; i++) {
+        itemsListJson.add({
+          "productId": order.products[i].productId,
+          "quantity": order.products[i].productQuantity,
+        });
+      }
+
+      String now = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(DateTime.now());
+      Map map = {
+        "deliveryDate": now,
+        "chemistId": order.chemistId,
+        "depoId": userData.data.depoId,
+        "territoryID": userData.data.territoryId,
+        "employeeId": userData.data.employeeId,
+        "longitude": locationInf.lat.toString(),
+        "latitude": locationInf.lon.toString(),
+        "orderDetails": itemsListJson,
+      };
+
+      try {
+        final response = await http.post(
+          Uri.parse('$serverPath/api/Order'),
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer ${userData.data.token}",
+          },
+          body: jsonEncode(map),
+        );
+
+        // print("-------------------OrderCreate------------------------");
+        // print("Request Body : ${jsonEncode(map)}");
+        // print("Response Body : ${response.body}");
+
+        if (response.statusCode == 200) {
+          //var resp = json.decode(response.body);
+          //OrderResponse orderResponse = OrderResponse.fromJson(resp);
+          hiveBox.deleteItem(order);
+          totalPrice += order.finalAmount;
+        } else {
+          isSuccess = false;
+          //var resp = json.decode(response.body);
+          //OrderResponse orderResponse = OrderResponse.fromJson(resp);
+        }
+      } catch (e) {
+        isSuccess = false;
+        print('catch Error submitting order: $e');
+      }
+    }
+
+    // Call the callback after processing all orders
+    callBack(isSuccess, totalOrders, totalPrice);
+  }
+
 }

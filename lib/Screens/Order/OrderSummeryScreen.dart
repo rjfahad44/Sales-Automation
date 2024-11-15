@@ -176,16 +176,16 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen> {
       hideTransparentProgressDialog(context);
       if (isSuccess) {
         showBottomSheetDialog(
-            context, response, totalAmount, totalDiscount, finalAmount, () {
+            context, response, response.message, totalAmount, totalDiscount, finalAmount, () {
           goToPage(const HomeScreen(), false, context);
         });
       } else {
         Fluttertoast.showToast(
             msg: "Failed",
             toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.CENTER,
+            gravity: ToastGravity.BOTTOM,
             timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
+            backgroundColor: Colors.orange,
             textColor: Colors.white,
             fontSize: 16.0);
       }
@@ -202,9 +202,9 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen> {
         Fluttertoast.showToast(
             msg: "update successful",
             toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.CENTER,
+            gravity: ToastGravity.BOTTOM,
             timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
+            backgroundColor: Colors.orange,
             textColor: Colors.white,
             fontSize: 16.0);
         goToPage(const HomeScreen(), false, context);
@@ -218,9 +218,9 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen> {
         Fluttertoast.showToast(
             msg: "Save successful",
             toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.CENTER,
+            gravity: ToastGravity.BOTTOM,
             timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
+            backgroundColor: Colors.orange,
             textColor: Colors.white,
             fontSize: 16.0);
         goToPage(const HomeScreen(), false, context);
