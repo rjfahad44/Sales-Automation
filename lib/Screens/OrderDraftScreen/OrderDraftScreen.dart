@@ -166,8 +166,7 @@ class _OrderDraftScreenState extends State<OrderDraftScreen> {
                                         onSelected: (String value) async {
                                           switch (value) {
                                             case 'Send':
-                                              submitOrderFromArchive(
-                                                  data, index);
+                                              submitOrderFromArchive(data);
                                               break;
                                             case 'Edit':
                                               print("loop index : $index");
@@ -183,10 +182,8 @@ class _OrderDraftScreenState extends State<OrderDraftScreen> {
                                                   context);
                                               break;
                                             case 'Delete':
-                                              final pos = await orderSaveHiveBox
-                                                  .getPosition(data);
                                               orderSaveHiveBox
-                                                  .delete(pos)
+                                                  .deleteItem(data)
                                                   .then((value) {
                                                 getAllOrders();
                                               });
@@ -312,12 +309,12 @@ class _OrderDraftScreenState extends State<OrderDraftScreen> {
     });
   }
 
-  Future<void> submitOrderFromArchive(OrderCreate data, int index) async {
+  Future<void> submitOrderFromArchive(OrderCreate data) async {
     showTransparentProgressDialog(context);
     orderAPI.submitOrderFromArchive(data, (isSuccess, response) {
       hideTransparentProgressDialog(context);
       if (isSuccess) {
-        orderSaveHiveBox.delete(index);
+        orderSaveHiveBox.deleteItem(data);
         getAllOrders();
         showBottomSheetDialog(context, response, response.message, totalAmount,
             totalDiscount, finalAmount, () {});
