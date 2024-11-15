@@ -96,48 +96,61 @@ class _BuildCustomDialogState extends State<CustomDialog> {
                 fontWeight: FontWeight.w600,
               ),
             ),
-            Visibility(
-                visible: widget.response != null,
-                child: Column(
-                  children: [
-                    Text(
-                      "Date : ${DateFormat('yyyy-MM-dd').format(widget.response!.dateTime)}",
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    Text(
-                      "ChemistId : ${widget.response!.data.chemistId}",
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    Text(
-                      "Order No : ${widget.response!.data.orderNo}",
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    Text(
-                      "Total Products : ${widget.response!.data.orderDetails.length}",
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                )),
-            MyTextView("Price: ${widget.totalAmount.toStringAsFixed(2)}৳", 16,
-                FontWeight.bold, Colors.black, TextAlign.start),
-            MyTextView("Discount: ${widget.totalDiscount.toStringAsFixed(2)}৳",
-                16, FontWeight.bold, Colors.black, TextAlign.start),
+            if (widget.response != null)
+              Text(
+                "Date : ${DateFormat('yyyy-MM-dd').format(widget.response!.dateTime)}",
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            if (widget.response != null)
+              Text(
+                "ChemistId : ${widget.response!.data.chemistId}",
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            if (widget.response != null)
+              Text(
+                "Order No : ${widget.response!.data.orderNo}",
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            if (widget.response != null)
+              Text(
+                "Total Products : ${widget.response!.data.orderDetails.length}",
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            if(widget.response == null)
+              Text(
+                "Total Order : ${widget.totalDiscount}",
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            if (widget.response != null)
+              MyTextView("Price: ${widget.totalAmount.toStringAsFixed(2)}৳", 16,
+                  FontWeight.bold, Colors.black, TextAlign.start),
+            if (widget.response != null)
+              MyTextView(
+                  "Discount: ${widget.totalDiscount.toStringAsFixed(2)}৳",
+                  16,
+                  FontWeight.bold,
+                  Colors.black,
+                  TextAlign.start),
             Container(
               height: 1,
               color: Colors.grey,
