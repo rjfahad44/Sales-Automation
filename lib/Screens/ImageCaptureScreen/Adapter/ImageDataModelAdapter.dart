@@ -1,6 +1,7 @@
 import 'package:hive/hive.dart';
 
 import '../../../global.dart';
+import '../../ProductListScreen/Model/Product.dart';
 import '../Model/ImageDataModel.dart';
 
 @HiveType(typeId: image_model_type_id)
@@ -15,6 +16,8 @@ class ImageDataModelAdapter extends TypeAdapter<ImageDataModel> {
           imagePath: reader.readString(),
           doctorName: reader.readString(),
           doctorId: reader.readInt(),
+          address: reader.readString(),
+          productList: (reader.readList()).cast<Product>(),
         );
       default:
         throw HiveError("Unknown version: $version for ImageDataModel");
@@ -27,6 +30,8 @@ class ImageDataModelAdapter extends TypeAdapter<ImageDataModel> {
     writer.writeString(obj.imagePath);
     writer.writeString(obj.doctorName);
     writer.writeInt(obj.doctorId);
+    writer.writeString(obj.address);
+    writer.writeList(obj.productList);
   }
 
   @override

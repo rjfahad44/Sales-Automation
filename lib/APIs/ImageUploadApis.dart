@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import '../Screens/ImageCaptureScreen/Model/ImageDataModel.dart';
 import '../Screens/ImageCaptureScreen/Model/ImageUploadResponse.dart';
+import '../Screens/ProductListScreen/Model/Product.dart';
 import '../global.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as p;

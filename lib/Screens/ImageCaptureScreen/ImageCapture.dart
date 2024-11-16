@@ -7,12 +7,14 @@ import '../../APIs/ImageUploadApis.dart';
 import '../../APIs/OrderAPI.dart';
 import '../../Components/Components.dart';
 import '../../Components/ImageUploadResponseCustomDialog.dart';
+import '../../Components/ProductListDialog.dart';
 import '../../Components/TransparentProgressDialog.dart';
 import '../../LocalDB/DatabaseHelper.dart';
 import '../../Models/Doctor.dart';
 import '../../global.dart';
 import 'dart:core';
 
+import '../ProductListScreen/Model/Product.dart';
 import 'Model/ImageDataModel.dart';
 
 class ImageCapture extends StatefulWidget {
@@ -30,11 +32,14 @@ class _ImageCaptureState extends State<ImageCapture> {
   File? _image;
   bool _isImageChoose = false;
   List<Doctor> doctorList = [];
+  List<Product> productList = [];
+  List<Product> selectedProductList = [];
   Doctor? selectedDoctor;
   bool _isLoading = false;
   ImagePicker imagePicker = ImagePicker();
   final imageHiveBox = HiveBoxHelper<ImageDataModel>('image_db');
   final ValueNotifier<bool> enableUploadButtons = ValueNotifier(true);
+
   List<Map<String, dynamic>> prescribedProducts = [
     {'productId': '1', 'productName': 'Product A', 'quantity': 1},
     {'productId': '2', 'productName': 'Product A', 'quantity': 1},
@@ -42,6 +47,7 @@ class _ImageCaptureState extends State<ImageCapture> {
 
   @override
   void initState() {
+    loadProducts();
     api.getDoctorList().then((value) {
       setState(() {
         doctorList = value;
@@ -49,6 +55,45 @@ class _ImageCaptureState extends State<ImageCapture> {
       });
     });
     super.initState();
+  }
+
+  stateReload(){
+    for (var product in productList.where((p) => p.textEditingController.text.isNotEmpty)) {
+      product.textEditingController.clear();
+      product.productQuantity = 0;
+    }
+    selectedProductList = [];
+    _image = null;
+    selectedDoctor = null;
+    _isImageChoose = false;
+    setState(() {});
+  }
+
+  Future<void> loadProducts() async {
+    productList = await api.getProducts();
+    setState(() {
+      if (productList.isNotEmpty && selectedProductList.isNotEmpty) {
+        for (int i=0; i<selectedProductList.length; i++) {
+          try{
+            int pos= productList.indexWhere((item) => item.productId == selectedProductList[i].productId);
+            productList[pos].textEditingController.text = "${selectedProductList[i].productQuantity}";
+          }catch(e){
+            print(e);
+          }
+        }
+        selectedProductList = productList;
+      }
+    });
+  }
+
+  List<Map<String, dynamic>> getProductMapList(){
+    return selectedProductList.map((product) {
+      return {
+        'productId': product.productId,
+        'productName': product.productName,
+        'quantity': product.productQuantity,
+      };
+    }).toList();
   }
 
   _imageFromCamera() async {
@@ -311,7 +356,12 @@ class _ImageCaptureState extends State<ImageCapture> {
                     ),
                   ),
                   onPressed: () {
-
+                    showProductListDialog(context, productList, (finalList) {
+                      setState(() {
+                        selectedProductList = finalList;
+                        print("Selected Product List: $finalList");
+                      });
+                    });
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -324,13 +374,91 @@ class _ImageCaptureState extends State<ImageCapture> {
                         TextAlign.left,
                       ),
                       // Add icon on the right
-                      const Icon(
+                      productList.isNotEmpty ? const Icon(
                         Icons.add,
                         color: Colors.blue,
-                      ),
+                      ) : const CircularProgressIndicator(),
                     ],
                   ),
                 ),
+              ),
+
+              ListView.builder(
+                primary: false,
+                shrinkWrap: true,
+                itemCount: selectedProductList.length,
+                itemBuilder: (context, index) {
+                  var data = selectedProductList[index];
+                  return Card(
+                    color: primaryButtonColor,
+                    surfaceTintColor: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              // Product Name
+                              Text(
+                                data.productName,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 12.0,
+                                ),
+                              ),
+
+                              // Product Price
+                              Text(
+                                "Product Price: ${data.tp.toStringAsFixed(2)}৳",
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 12.0,
+                                ),
+                              ),
+
+                              Text(
+                                "Product Quantity: ${data.productQuantity}",
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 12.0,
+                                ),
+                              ),
+
+                              Text(
+                                "Total Price: ${(data.tp*data.productQuantity).toStringAsFixed(2)}৳",
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 12.0,
+                                ),
+                              ),
+                            ],
+                          ),
+                          IconButton(
+                              onPressed: (){
+                                try {
+                                  final product = productList.firstWhere((item) => item.productId == data.productId);
+                                  product.textEditingController.clear();
+                                  product.productQuantity = 0;
+                                } catch (e) {
+                                  print("Product not found: $e");
+                                }
+                                selectedProductList.remove(data);
+                                setState(() {
+                                });
+                              },
+                              icon: const Icon(Icons.delete, color: Colors.red,)),
+                        ],
+                      ),
+                    ),
+                  );
+                },
               ),
 
               const SizedBox(
@@ -373,17 +501,10 @@ class _ImageCaptureState extends State<ImageCapture> {
                                 _image!,
                                 "",
                                 selectedDoctor?.id ?? 0,
-                                prescribedProducts, (isSuccess, response) {
+                                getProductMapList(), (isSuccess, response) {
                               hideTransparentProgressDialog(context);
                               if (isSuccess) {
-                                setState(() {
-                                  _image = null;
-                                  selectedDoctor = null;
-                                  _isImageChoose = false;
-                                  _isLoading = false;
-                                });
-
-                                showBottomSheetDialog(context, response);
+                                stateReload();
                               } else {
                                 Fluttertoast.showToast(
                                     msg: response.message ?? "Error!!",
@@ -450,13 +571,12 @@ class _ImageCaptureState extends State<ImageCapture> {
                             var data = ImageDataModel(
                                 imagePath: "",
                                 doctorName: selectedDoctor?.doctorName ?? '',
-                                doctorId: selectedDoctor?.id ?? 0);
+                                doctorId: selectedDoctor?.id ?? 0,
+                              address: "",
+                              productList: selectedProductList
+                            );
                             saveImage(data, _image!, (isDataAdd) {
-                              setState(() {
-                                _image = null;
-                                selectedDoctor = null;
-                                _isImageChoose = false;
-                              });
+                              stateReload();
                               Fluttertoast.showToast(
                                   msg: "Save data.",
                                   toastLength: Toast.LENGTH_LONG,

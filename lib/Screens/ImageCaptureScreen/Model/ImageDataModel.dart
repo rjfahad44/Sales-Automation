@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'package:sales_automation/Screens/ProductListScreen/Model/Product.dart';
 
 import '../../../global.dart';
 
@@ -10,11 +11,18 @@ class ImageDataModel {
   String doctorName;
   @HiveField(2)
   int doctorId;
+  @HiveField(3)
+  String address;
+  @HiveField(4)
+  List<Product> productList;
 
-  ImageDataModel(
-      {required this.imagePath,
-      required this.doctorName,
-      required this.doctorId});
+  ImageDataModel({
+    required this.imagePath,
+    required this.doctorName,
+    required this.doctorId,
+    required this.address,
+    required this.productList,
+  });
 
   @override
   String toString() {
@@ -22,6 +30,8 @@ class ImageDataModel {
         'imagePath: $imagePath,'
         'doctorName: $doctorName'
         'doctorId: $doctorId'
+        'address: $address'
+        'productList: $productList'
         ')';
   }
 }
