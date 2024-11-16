@@ -40,7 +40,6 @@ class _ImageCaptureState extends State<ImageCapture> {
     {'productId': '2', 'productName': 'Product A', 'quantity': 1},
   ];
 
-
   @override
   void initState() {
     api.getDoctorList().then((value) {
@@ -124,75 +123,73 @@ class _ImageCaptureState extends State<ImageCapture> {
           child: Column(
             children: [
               // Image capture view
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: 60.0,
-                      height: 60.0,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.all(2.0),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0)),
-                        ),
-                        onPressed: _imageFromCamera,
-                        child: const Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(bottom: 2.0),
-                                child: Icon(
-                                  Icons.camera_alt_outlined,
-                                  size: 24.0,
-                                ),
-                              ),
-                              Text(
-                                "Camera",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              )
-                            ]),
-                      ),
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                SizedBox(
+                  width: 60.0,
+                  height: 60.0,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.all(2.0),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0)),
                     ),
-                    const SizedBox(
-                      width: 35.0,
+                    onPressed: _imageFromCamera,
+                    child: const Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 2.0),
+                            child: Icon(
+                              Icons.camera_alt_outlined,
+                              size: 24.0,
+                            ),
+                          ),
+                          Text(
+                            "Camera",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        ]),
+                  ),
+                ),
+                const SizedBox(
+                  width: 35.0,
+                ),
+                SizedBox(
+                  width: 60.0,
+                  height: 60.0,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.all(2.0),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0)),
                     ),
-                    SizedBox(
-                      width: 60.0,
-                      height: 60.0,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.all(2.0),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0)),
-                        ),
-                        onPressed: _imageFromGallery,
-                        child: const Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(bottom: 2.0),
-                                child: Icon(
-                                  Icons.photo_library_outlined,
-                                  size: 24.0,
-                                ),
-                              ),
-                              Text(
-                                "Gallery",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              )
-                            ]),
-                      ),
-                    ),
-                  ]),
+                    onPressed: _imageFromGallery,
+                    child: const Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 2.0),
+                            child: Icon(
+                              Icons.photo_library_outlined,
+                              size: 24.0,
+                            ),
+                          ),
+                          Text(
+                            "Gallery",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        ]),
+                  ),
+                ),
+              ]),
               const SizedBox(
                 height: 10.0,
               ),
@@ -211,7 +208,9 @@ class _ImageCaptureState extends State<ImageCapture> {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(8.0),
                             child: Image(
-                              image: FileImage(_isImageChoose ? _image ?? File('') : File('')),
+                              image: FileImage(_isImageChoose
+                                  ? _image ?? File('')
+                                  : File('')),
                               fit: BoxFit.cover,
                               width: double.infinity,
                               height: double.infinity,
@@ -250,49 +249,53 @@ class _ImageCaptureState extends State<ImageCapture> {
                   padding: const EdgeInsets.fromLTRB(8, 2, 8, 2),
                   child: _isLoading
                       ? DropdownButton<Doctor>(
-                    hint: MyTextView(
-                      selectedDoctor?.doctorName ?? "Please select doctor",
-                      12,
-                      FontWeight.normal,
-                      Colors.black,
-                      TextAlign.start,
-                    ),
-                    value: selectedDoctor,
-                    isExpanded: true, // Ensures the dropdown takes the full width of its parent
-                    underline: Container(), // Removes the default underline
-                    onChanged: (Doctor? selectedValue) {
-                      if (selectedValue?.doctorName.isEmpty == true) {
-                        selectedValue?.doctorName = "No Name Found! id:${selectedValue.id}";
-                      }
-                      setState(() {
-                        selectedDoctor = selectedValue;
-                      });
-                    },
-                    items: doctorList.map((Doctor item) {
-                      if (item.doctorName.isEmpty) {
-                        item.doctorName = "No Name Found! id:${item.id}";
-                      }
-                      return DropdownMenuItem<Doctor>(
-                        value: item,
-                        child:  MyTextView(
-                          item.doctorName,
-                          12,
-                          FontWeight.bold,
-                          Colors.black,
-                          TextAlign.start,
-                        ),
-                      );
-                    }).toList(),
-                  )
+                          hint: MyTextView(
+                            selectedDoctor?.doctorName ??
+                                "Please select doctor",
+                            12,
+                            FontWeight.normal,
+                            Colors.black,
+                            TextAlign.start,
+                          ),
+                          value: selectedDoctor,
+                          isExpanded: true,
+                          // Ensures the dropdown takes the full width of its parent
+                          underline: Container(),
+                          // Removes the default underline
+                          onChanged: (Doctor? selectedValue) {
+                            if (selectedValue?.doctorName.isEmpty == true) {
+                              selectedValue?.doctorName =
+                                  "No Name Found! id:${selectedValue.id}";
+                            }
+                            setState(() {
+                              selectedDoctor = selectedValue;
+                            });
+                          },
+                          items: doctorList.map((Doctor item) {
+                            if (item.doctorName.isEmpty) {
+                              item.doctorName = "No Name Found! id:${item.id}";
+                            }
+                            return DropdownMenuItem<Doctor>(
+                              value: item,
+                              child: MyTextView(
+                                item.doctorName,
+                                12,
+                                FontWeight.bold,
+                                Colors.black,
+                                TextAlign.start,
+                              ),
+                            );
+                          }).toList(),
+                        )
                       : const Center(
-                    child: SizedBox(
-                      height: 40,
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(vertical: 4.0),
-                        child: CircularProgressIndicator(),
-                      ),
-                    ),
-                  ),
+                          child: SizedBox(
+                            height: 40,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(vertical: 4.0),
+                              child: CircularProgressIndicator(),
+                            ),
+                          ),
+                        ),
                 ),
               ),
               // Add Product view
@@ -304,12 +307,8 @@ class _ImageCaptureState extends State<ImageCapture> {
                     padding: const EdgeInsets.fromLTRB(8, 2, 8, 2),
                     child: Align(
                       alignment: Alignment.centerLeft,
-                      child: MyTextView(
-                          "Add Product",
-                          14,
-                          FontWeight.bold,
-                          Colors.black,
-                          TextAlign.left),
+                      child: MyTextView("Add Product", 14, FontWeight.bold,
+                          Colors.black, TextAlign.left),
                     ),
                   ),
                 ),
@@ -347,7 +346,8 @@ class _ImageCaptureState extends State<ImageCapture> {
                                 textColor: Colors.white,
                                 fontSize: 16.0);
                           } else {
-                            enableUploadButtons.value = !enableUploadButtons.value;
+                            enableUploadButtons.value =
+                                !enableUploadButtons.value;
                             showTransparentProgressDialog(context);
                             await imageUploadApis.sendPrescribedProducts(
                                 _image!,
