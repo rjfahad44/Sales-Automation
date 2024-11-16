@@ -77,32 +77,30 @@ class _OrderCreateScreenState extends State<OrderCreateScreen> {
                           flex: 3,
                           child: Padding(
                             padding: const EdgeInsets.all(4.0),
-                            child: SizedBox(
-                              height: 52.0,
-                              child: ElevatedButton(
-                                onPressed: () => _selectDate(context),
-                                style: ButtonStyle(
-                                    surfaceTintColor: WidgetStateColor.resolveWith(
-                                            (states) => Colors.white),
-                                    shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                                        RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10.0),
-                                        ))),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      deliveryDispDate.split(" ")[0],
-                                      style: const TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.normal,
-                                        fontSize: 12.0,
-                                      ),
-                                      textAlign: TextAlign.start,
-                                    ),
-                                    const Icon(Icons.calendar_month)
-                                  ],
+                            child: ElevatedButton(
+                              onPressed: () => _selectDate(context),
+                              style: ElevatedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                minimumSize: const Size(0, 50),
+                                backgroundColor: Colors.red.shade50,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12.0),
                                 ),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    deliveryDispDate.split(" ")[0],
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: 12.0,
+                                    ),
+                                    textAlign: TextAlign.start,
+                                  ),
+                                  const Icon(Icons.calendar_month)
+                                ],
                               ),
                             ),
                           ),

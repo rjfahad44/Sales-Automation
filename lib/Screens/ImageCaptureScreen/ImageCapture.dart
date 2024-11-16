@@ -299,20 +299,40 @@ class _ImageCaptureState extends State<ImageCapture> {
                 ),
               ),
               // Add Product view
-              Card(
-                surfaceTintColor: Colors.white,
-                child: SizedBox(
-                  height: 50,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(8, 2, 8, 2),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: MyTextView("Add Product", 14, FontWeight.bold,
-                          Colors.black, TextAlign.left),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    minimumSize: const Size(0, 50),
+                    backgroundColor: Colors.red.shade50,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12.0),
                     ),
+                  ),
+                  onPressed: () {
+
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      MyTextView(
+                        "Add Product",
+                        14,
+                        FontWeight.bold,
+                        Colors.black,
+                        TextAlign.left,
+                      ),
+                      // Add icon on the right
+                      const Icon(
+                        Icons.add,
+                        color: Colors.blue,
+                      ),
+                    ],
                   ),
                 ),
               ),
+
               const SizedBox(
                 height: 20.0,
               ),
@@ -323,7 +343,7 @@ class _ImageCaptureState extends State<ImageCapture> {
                   Expanded(
                     flex: 1,
                     child: Padding(
-                      padding: const EdgeInsets.only(bottom: 10.0, right: 5.0),
+                      padding: const EdgeInsets.all(4.0),
                       child: ElevatedButton(
                         style: ButtonStyle(
                             backgroundColor: WidgetStateColor.resolveWith(
@@ -402,7 +422,7 @@ class _ImageCaptureState extends State<ImageCapture> {
                   Expanded(
                     flex: 1,
                     child: Padding(
-                      padding: const EdgeInsets.only(bottom: 10.0, left: 5.0),
+                      padding: const EdgeInsets.all(4.0),
                       child: ElevatedButton(
                         style: ButtonStyle(
                             backgroundColor: WidgetStateColor.resolveWith(
