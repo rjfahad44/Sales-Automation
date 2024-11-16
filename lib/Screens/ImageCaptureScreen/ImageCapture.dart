@@ -505,6 +505,7 @@ class _ImageCaptureState extends State<ImageCapture> {
                               hideTransparentProgressDialog(context);
                               if (isSuccess) {
                                 stateReload();
+                                showBottomSheetDialog(context, response);
                               } else {
                                 Fluttertoast.showToast(
                                     msg: response.message ?? "Error!!",

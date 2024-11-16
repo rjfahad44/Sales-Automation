@@ -66,18 +66,26 @@ class ImageUploadApis {
     imageDataList?.then((value) async {
       int count = 0;
       int pos = 0;
-      for (var p in value) {
-        var bytes = await File(p.imagePath).readAsBytes();
+      for (var i in value) {
+        var bytes = await File(i.imagePath).readAsBytes();
         var base64Image = base64Encode(bytes);
+        var productListMap = i.productList.map((product) {
+          return {
+            'productId': product.productId,
+            'productName': product.productName,
+            'quantity': product.productQuantity,
+          };
+        }).toList();
+
         var data = {
-          'imageName': p.doctorName,
-          'doctorId': 0,
-          'address': "",
+          'imageName': p.basename(i.imagePath),
+          'doctorId': i.doctorId,
+          'address': locationInf.locationName,
           'employeeId': userData.data.employeeId,
           'longitude': locationInf.lat,
           'latitude': locationInf.lon,
           'base64Image': base64Image,
-          // 'prescribedProducts':prescribedProducts,
+          'prescribedProducts': productListMap,
         };
 
         final response = await http.post(
@@ -91,7 +99,7 @@ class ImageUploadApis {
         );
 
         if (response.statusCode == 200) {
-          imageHiveBox.delete(pos);
+          imageHiveBox.deleteItem(i);
           imageDataList = imageHiveBox.getAll();
           callback.call(imageDataList);
           pos--;

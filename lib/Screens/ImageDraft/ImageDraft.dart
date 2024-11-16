@@ -73,36 +73,83 @@ class _ImageArchiveState extends State<ImageDraft> {
                                   return Card(
                                     elevation: 1,
                                     child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Row(
-                                          children: [
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.all(6.0),
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                                child: Image.file(
-                                                  File(data.imagePath),
-                                                  fit: BoxFit.cover,
-                                                  height: 60,
-                                                  width: 60,
+                                        // Row(
+                                        //   children: [
+                                        //     Padding(
+                                        //       padding:
+                                        //           const EdgeInsets.all(6.0),
+                                        //       child: ClipRRect(
+                                        //         borderRadius:
+                                        //             BorderRadius.circular(8),
+                                        //         child: Image.file(
+                                        //           File(data.imagePath),
+                                        //           fit: BoxFit.cover,
+                                        //           height: 60,
+                                        //           width: 60,
+                                        //         ),
+                                        //       ),
+                                        //     ),
+                                        //     Text(
+                                        //       "Dr. Name : ${data.doctorName}",
+                                        //       style: const TextStyle(
+                                        //           color: Colors.black,
+                                        //           fontSize: 12.0,
+                                        //           fontWeight: FontWeight.w500),
+                                        //       maxLines: 1,
+                                        //       overflow: TextOverflow.ellipsis,
+                                        //     ),
+                                        //   ],
+                                        // ),
+
+                                        Padding(
+                                            padding:
+                                            const EdgeInsets.all(6.0),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment.start, mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                ClipRRect(
+                                                  borderRadius:
+                                                  BorderRadius.circular(8),
+                                                  child: Image.file(
+                                                    File(data.imagePath),
+                                                    fit: BoxFit.cover,
+                                                    height: 70,
+                                                    width: 60,
+                                                  ),
                                                 ),
-                                              ),
+
+                                                Text(
+                                                  "Doctor Name: ${data.doctorName.isNotEmpty ? data.doctorName : "Not Found!" }",
+                                                  style: const TextStyle(
+                                                    color: Colors.black,
+                                                    fontWeight: FontWeight.normal,
+                                                    fontSize: 12.0,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  "Total Products: ${data.productList.length}",
+                                                  style: const TextStyle(
+                                                    color: Colors.black,
+                                                    fontWeight: FontWeight.normal,
+                                                    fontSize: 12.0,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  "Total Price: ${data.productList.fold(0.0, (sum, product) => sum + (product.tp * product.productQuantity)).toStringAsFixed(2)}৳",
+                                                  style: const TextStyle(
+                                                    color: Colors.black,
+                                                    fontWeight: FontWeight.normal,
+                                                    fontSize: 12.0,
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                            Text(
-                                              "Dr. Name : ${data.doctorName}",
-                                              style: const TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 12.0,
-                                                  fontWeight: FontWeight.w500),
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          ],
                                         ),
+
                                         Row(
                                           children: [
                                             IconButton(
@@ -111,7 +158,7 @@ class _ImageArchiveState extends State<ImageDraft> {
                                                 color: Colors.red,
                                               ),
                                               onPressed: () {
-                                                imageHiveBox.delete(index);
+                                                imageHiveBox.deleteItem(data);
                                                 setState(() {
                                                   imageDataList =
                                                       imageHiveBox.getAll();
@@ -142,7 +189,7 @@ class _ImageArchiveState extends State<ImageDraft> {
                                                   hideTransparentProgressDialog(
                                                       context);
                                                   if (isSuccess) {
-                                                    imageHiveBox.delete(index);
+                                                    imageHiveBox.deleteItem(data);
                                                     setState(() {
                                                       imageDataList =
                                                           imageHiveBox.getAll();
@@ -155,8 +202,7 @@ class _ImageArchiveState extends State<ImageDraft> {
                                                       });
                                                     });
 
-                                                    showBottomSheetDialog(
-                                                        context, response);
+                                                    showBottomSheetDialog(context, response);
                                                   } else {
                                                     Fluttertoast.showToast(
                                                         msg: response.message ??
@@ -223,7 +269,7 @@ class _ImageArchiveState extends State<ImageDraft> {
                                   if (isSuccess) {
                                     Fluttertoast.showToast(
                                         msg:
-                                            "Successfully Upload All CurrentUserData",
+                                            "Successfully Uploaded",
                                         toastLength: Toast.LENGTH_LONG,
                                         gravity: ToastGravity.BOTTOM,
                                         timeInSecForIosWeb: 1,
