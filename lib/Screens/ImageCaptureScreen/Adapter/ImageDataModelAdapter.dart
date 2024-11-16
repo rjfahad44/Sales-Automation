@@ -14,7 +14,7 @@ class ImageDataModelAdapter extends TypeAdapter<ImageDataModel> {
         return ImageDataModel(
           imagePath: reader.readString(),
           doctorName: reader.readString(),
-          employeeId: reader.readInt(),
+          doctorId: reader.readInt(),
         );
       default:
         throw HiveError("Unknown version: $version for ImageDataModel");
@@ -26,7 +26,7 @@ class ImageDataModelAdapter extends TypeAdapter<ImageDataModel> {
     writer.writeByte(1); // Version number (update if the model changes)
     writer.writeString(obj.imagePath);
     writer.writeString(obj.doctorName);
-    writer.writeInt(obj.employeeId);
+    writer.writeInt(obj.doctorId);
   }
 
   @override

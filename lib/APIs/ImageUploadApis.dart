@@ -4,12 +4,13 @@ import '../Screens/ImageCaptureScreen/Model/ImageDataModel.dart';
 import '../Screens/ImageCaptureScreen/Model/ImageUploadResponse.dart';
 import '../global.dart';
 import 'package:http/http.dart' as http;
+import 'package:path/path.dart' as p;
 
 class ImageUploadApis {
   sendPrescribedProducts(
       File image,
-      String doctorName,
-      int employeeId,
+      String doctorAddress,
+      int doctorId,
       List<Map<String, dynamic>> prescribedProducts,
       Function(bool isSuccess, ImageUploadResponse respons) callback) async {
 
@@ -17,12 +18,12 @@ class ImageUploadApis {
     var base64Image = base64Encode(bytes);
 
     final data = {
-      'imageName': doctorName,
-      'doctorId': 0,
+      'imageName': p.basename(image.path),
+      'doctorId': doctorId,
+      'address': doctorAddress,
       'employeeId': userData.data.employeeId,
       'longitude': locationInf.lat,
       'latitude': locationInf.lon,
-      'address': "",
       'base64Image': base64Image,
       'prescribedProducts':prescribedProducts,
     };
@@ -69,10 +70,10 @@ class ImageUploadApis {
         var data = {
           'imageName': p.doctorName,
           'doctorId': 0,
-          'employeeId': p.employeeId,
+          'address': "",
+          'employeeId': userData.data.employeeId,
           'longitude': locationInf.lat,
           'latitude': locationInf.lon,
-          'address': "",
           'base64Image': base64Image,
           // 'prescribedProducts':prescribedProducts,
         };

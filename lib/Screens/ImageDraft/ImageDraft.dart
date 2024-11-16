@@ -137,7 +137,7 @@ class _ImageArchiveState extends State<ImageDraft> {
                                                       .sendPrescribedProducts(
                                                           File(data.imagePath),
                                                           data.doctorName,
-                                                          data.employeeId,
+                                                          data.doctorId,
                                                           prescribedProducts,
                                                           (isSuccess, response) {
                                                             hideTransparentProgressDialog(context);

@@ -10,12 +10,12 @@ class ImageDataModel{
   @HiveField(1)
   String doctorName;
   @HiveField(2)
-  int employeeId;
+  int doctorId;
 
   ImageDataModel({
     required this.imagePath,
     required this.doctorName,
-    required this.employeeId
+    required this.doctorId
   });
 
   @override
@@ -23,7 +23,7 @@ class ImageDataModel{
     return 'ImageDataModel('
         'imagePath: $imagePath,'
         'doctorName: $doctorName'
-        'employeeId: $employeeId'
+        'doctorId: $doctorId'
         ')';
   }
 }
