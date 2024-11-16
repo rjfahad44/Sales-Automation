@@ -13,7 +13,6 @@ class ImageUploadApis {
       int doctorId,
       List<Map<String, dynamic>> prescribedProducts,
       Function(bool isSuccess, ImageUploadResponse respons) callback) async {
-
     final bytes = await image.readAsBytes();
     var base64Image = base64Encode(bytes);
 
@@ -25,7 +24,7 @@ class ImageUploadApis {
       'longitude': locationInf.lat,
       'latitude': locationInf.lon,
       'base64Image': base64Image,
-      'prescribedProducts':prescribedProducts,
+      'prescribedProducts': prescribedProducts,
     };
 
     final response = await http.post(
@@ -42,15 +41,17 @@ class ImageUploadApis {
     print('Image Upload Request Body : $encodedData');
 
     if (response.statusCode == 200) {
-      var json =  jsonDecode(response.body);
-      ImageUploadResponse res = ImageUploadResponse.fromJson(json as Map<String, dynamic>);
+      var json = jsonDecode(response.body);
+      ImageUploadResponse res =
+          ImageUploadResponse.fromJson(json as Map<String, dynamic>);
       callback.call(true, res);
       print('sent successfully!');
       print('Image Upload Response: ${response.body.toString()}');
     } else {
-      var json =  jsonDecode(response.body);
+      var json = jsonDecode(response.body);
       //print('Error body : $json');
-      ImageUploadResponse res = ImageUploadResponse.fromJson(json as Map<String, dynamic>);
+      ImageUploadResponse res =
+          ImageUploadResponse.fromJson(json as Map<String, dynamic>);
       callback.call(false, res);
       print('Error sending data: ${response.reasonPhrase}');
     }
