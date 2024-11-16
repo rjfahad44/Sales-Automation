@@ -274,7 +274,13 @@ class _ImageCaptureState extends State<ImageCapture> {
                       }
                       return DropdownMenuItem<Doctor>(
                         value: item,
-                        child: Text(item.doctorName),
+                        child:  MyTextView(
+                          item.doctorName,
+                          12,
+                          FontWeight.bold,
+                          Colors.black,
+                          TextAlign.start,
+                        ),
                       );
                     }).toList(),
                   )
@@ -300,7 +306,7 @@ class _ImageCaptureState extends State<ImageCapture> {
                       alignment: Alignment.centerLeft,
                       child: MyTextView(
                           "Add Product",
-                          12,
+                          14,
                           FontWeight.bold,
                           Colors.black,
                           TextAlign.left),
