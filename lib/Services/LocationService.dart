@@ -40,15 +40,6 @@ class LocationService {
     locationInf.lat = position.latitude;
     locationInf.lon = position.longitude;
 
-    Marker marker = Marker(
-      point: LatLng(position.latitude, position.longitude),
-      height: 12,
-      width: 12,
-      child: const ColoredBox(color: Colors.lightBlue),
-    );
-
-    locationInf.marker = marker;
-
     try {
       List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
       if (placemarks != null && placemarks.isNotEmpty) {
