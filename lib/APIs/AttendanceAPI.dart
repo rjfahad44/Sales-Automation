@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:ffi';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
-import 'package:latlong2/latlong.dart';
 import 'package:sales_automation/Models/LocationInfo.dart';
 import '../Models/AttendanceData.dart';
 import '../global.dart';

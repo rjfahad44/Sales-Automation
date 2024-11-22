@@ -8,6 +8,7 @@ import '../../LocalDB/DatabaseHelper.dart';
 import '../../Models/OrderCreate.dart';
 import '../../global.dart';
 import '../Order/OrderCreateScreen.dart';
+import '../Order/OrderHistoryScreen.dart';
 
 class OrderDraftScreen extends StatefulWidget {
   const OrderDraftScreen({super.key});
@@ -314,8 +315,17 @@ class _OrderDraftScreenState extends State<OrderDraftScreen> {
       if (isSuccess) {
         orderSaveHiveBox.deleteItem(data);
         getAllOrders();
-        showBottomSheetDialog(context, response, response.message, totalAmount,
-            totalDiscount, finalAmount, () {});
+        Fluttertoast.showToast(
+            msg: "Order Successfully Submitted.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.orange,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        goToPage(const OrderHistoryScreen(), true, context);
+        // showBottomSheetDialog(context, response, response.message, totalAmount,
+        //     totalDiscount, finalAmount, () {});
       } else {
         Fluttertoast.showToast(
             msg: "Failed",
@@ -336,8 +346,17 @@ class _OrderDraftScreenState extends State<OrderDraftScreen> {
       hideTransparentProgressDialog(context);
       getAllOrders();
       if (isSuccess) {
-        showBottomSheetDialog(context, null, "Orders Successfully Submitted.",
-            totalPrice, totalOrders.toDouble(), totalPrice, () {});
+        // showBottomSheetDialog(context, null, "Orders Successfully Submitted.",
+        //     totalPrice, totalOrders.toDouble(), totalPrice, () {});
+        Fluttertoast.showToast(
+            msg: "Orders Successfully Submitted.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.orange,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        goToPage(const OrderHistoryScreen(), true, context);
       } else {
         Fluttertoast.showToast(
             msg: "Failed",

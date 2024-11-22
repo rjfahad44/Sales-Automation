@@ -91,6 +91,12 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
             goToPage(const HomeScreen(), false, context);
           },
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.filter_alt_outlined),
+            onPressed: () => pickDateRange(context),
+          ),
+        ],
       ),
       body: Column(
         children: [
@@ -102,17 +108,23 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                   child: TextField(
                     controller: searchController,
                     onChanged: _filterData,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'Search...',
-                      prefixIcon: Icon(Icons.search),
-                      border: OutlineInputBorder(),
+                      prefixIcon: const Icon(Icons.search),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        borderSide: const BorderSide(color: Colors.black54),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        borderSide: BorderSide(color: primaryButtonColor, width: 2.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        borderSide: const BorderSide(color:  Colors.black54),
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: () => pickDateRange(context),
-                  child: const Text('Filter by Date'),
                 ),
               ],
             ),
@@ -123,30 +135,30 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
               itemBuilder: (context, index) {
                 final order = filteredData[index];
                 return Card(
+                  color: primaryButtonColor,
                   elevation: 4,
                   margin: const EdgeInsets.all(8.0),
                   child: ExpansionTile(
-                    title: Text(
-                        'Order No: ${order.orderNo} | Chemist: ${order.chemistName}'),
-                    subtitle: Text(
-                      'Total Price: ${order.totalPrice} | Date: ${DateFormat.yMMMd().format(order.orderDate)}',
-                    ),
+                    iconColor: Colors.blue, // Changes the icon color when expanded
+                    collapsedIconColor: Colors.white, // Changes the icon color when collapsed
+                    title: Text('Order No: ${order.orderNo} | Chemist: ${order.chemistName}', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+                    subtitle: Text('Total Price: ${order.totalPrice} | Date: ${DateFormat.yMMMd().format(order.orderDate)}', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
                     children: [
                       SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: DataTable(
                           columns: const [
-                            DataColumn(label: Text('Product')),
-                            DataColumn(label: Text('Quantity')),
-                            DataColumn(label: Text('Price')),
-                            DataColumn(label: Text('Total Price')),
+                            DataColumn(label: Text('Product', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),),
+                            DataColumn(label: Text('Quantity', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),),
+                            DataColumn(label: Text('Price', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),),
+                            DataColumn(label: Text('Total Price', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),),
                           ],
                           rows: (order.orderDetails)
                               .map<DataRow>((detail) => DataRow(cells: [
-                            DataCell(Text(detail.productName)),
-                            DataCell(Text(detail.quantity.toString())),
-                            DataCell(Text(detail.price.toString())),
-                            DataCell(Text(detail.totalPrice.toString())),
+                            DataCell(Text(detail.productName, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.normal),),),
+                            DataCell(Text(detail.quantity.toString(), style: const TextStyle(color: Colors.white, fontWeight: FontWeight.normal),),),
+                            DataCell(Text(detail.price.toString(), style: const TextStyle(color: Colors.white, fontWeight: FontWeight.normal),),),
+                            DataCell(Text(detail.totalPrice.toString(), style: const TextStyle(color: Colors.white, fontWeight: FontWeight.normal),),),
                           ]))
                               .toList(),
                         ),

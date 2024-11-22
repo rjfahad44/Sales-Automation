@@ -6,7 +6,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:sales_automation/APIs/AttendanceAPI.dart';
 import 'package:sales_automation/Models/LocationInfo.dart';
-import 'package:sales_automation/Screens/Attendance/AttendanceListScreen.dart';
+import 'package:sales_automation/Screens/Attendance/AttendanceHistoryScreen.dart';
 import 'package:sales_automation/Services/LocationService.dart';
 import '../../Components/Components.dart';
 import '../../global.dart';
