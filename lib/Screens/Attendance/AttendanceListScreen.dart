@@ -124,15 +124,13 @@ class _AttendanceListScreenState extends State<AttendanceListScreen> {
                   color: primaryButtonColor,
                   margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                   child: ListTile(
-                    title: Text(attendance.name),
+                    title: Text(attendance.name, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                            'Sign-in: ${attendance.signInTime} (${attendance.signInAddress})'),
-                        Text(
-                            'Sign-out: ${attendance.signOutTime} (${attendance.signOutAddress})'),
-                        Text('Date: ${DateFormat('yyyy-MM-dd').format(attendance.date)}'),
+                        Text('Sign-in: ${attendance.signInTime} (${attendance.signInAddress})', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.normal),),
+                        Text('Sign-out: ${attendance.signOutTime} (${attendance.signOutAddress})', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.normal)),
+                        Text('Date: ${DateFormat('yyyy-MM-dd').format(attendance.date)}', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.normal)),
                       ],
                     ),
                     trailing: attendance.status
