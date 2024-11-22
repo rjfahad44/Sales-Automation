@@ -121,6 +121,7 @@ class _AttendanceListScreenState extends State<AttendanceListScreen> {
               itemBuilder: (context, index) {
                 final attendance = filteredList[index];
                 return Card(
+                  color: primaryButtonColor,
                   margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                   child: ListTile(
                     title: Text(attendance.name),
