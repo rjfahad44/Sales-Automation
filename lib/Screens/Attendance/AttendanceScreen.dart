@@ -27,6 +27,14 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   LocationInf currentLocation = LocationInf();
 
   @override
+  void initState() {
+    setState(() {
+      selectedLocation.value = LatLng(locationInf.lat, locationInf.lon);
+    });
+    super.initState();
+  }
+
+  @override
   void dispose() {
     selectedLocation.dispose();
     super.dispose();
@@ -48,8 +56,8 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
             options: MapOptions(
               initialCameraFit: CameraFit.bounds(
                 bounds: LatLngBounds(
-                  const LatLng(23.867633 - 0.002, 90.387223 - 0.002),
-                  const LatLng(23.867633 + 0.002, 90.387223 + 0.002),
+                  LatLng((selectedLocation.value?.latitude ?? 23.7561) - 0.002, (selectedLocation.value?.longitude ?? 90.3872) - 0.002),
+                  LatLng((selectedLocation.value?.latitude ?? 23.7561) + 0.002, (selectedLocation.value?.longitude ?? 90.3872) + 0.002),
                 ),
                 padding: const EdgeInsets.all(8),
               ),

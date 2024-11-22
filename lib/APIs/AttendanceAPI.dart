@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:ffi';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
 import 'package:sales_automation/Models/LocationInfo.dart';
@@ -9,11 +10,12 @@ import 'package:intl/intl.dart';
 
 class AttendanceAPI {
   Future<bool> submitAttendance(LocationInf currentLocation) async {
-    String now = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(DateTime.now());
+    String now =
+        DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(DateTime.now());
     String? deviceId = "";
-    try{
+    try {
       deviceId = await getDeviceId();
-    }catch(e){
+    } catch (e) {
       print('deviceId error: $e');
     }
 
@@ -50,21 +52,12 @@ class AttendanceAPI {
   }
 
   Future<List<AttendanceData>?> getEmployeeAttendance(DateTime? fromDate, DateTime? toDate) async {
-    final String url = '$serverPath/api/Attendances/GetEmployeeWiseAttendanceListByEmployeeId';
-    final String fromDateString = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(fromDate??DateTime.now());
-    final String toDateString = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(toDate??DateTime.now());
-
-    // Query parameters
-    final Map<String, String> queryParams = {
-      'employeeId': "${userData.data.employeeId}",
-      'fromDate': fromDateString,
-      'toDate': toDateString,
-    };
-
-    // Construct full URL with query parameters
-    final Uri uri = Uri.parse(url).replace(queryParameters: queryParams);
+    final String fromDateString = DateFormat("yyyy-MM-dd").format(fromDate ?? DateTime.now());
+    final String toDateString = DateFormat("yyyy-MM-dd").format(toDate ?? DateTime.now());
+    final String url = '$serverPath/api/Attendances/GetEmployeeWiseAttendanceListByEmployeeId?employeeId=${userData.data.employeeId}&fromDate=$fromDateString&toDate=$toDateString';
 
     try {
+      final Uri uri = Uri.parse(url);
       final response = await http.get(
         uri,
         headers: {
@@ -74,19 +67,30 @@ class AttendanceAPI {
       );
 
       if (response.statusCode == 200) {
-        final jsonDecodeData = json.decode(response.body);
-        var data = AttendanceData.fromJson(jsonDecodeData);
-        print('Response Data: $data');
-        return data;
+        final jsonData = jsonDecode(response.body);
+        debugPrint("Attendance History: $jsonData");
+
+        // Ensure data is parsed as a list
+        if (jsonData['data'] is List) {
+          final List<dynamic> jsonList = jsonData['data'];
+
+          // Map to AttendanceData objects
+          final List<AttendanceData> attendanceList = jsonList
+              .map((item) => AttendanceData.fromJson(item as Map<String, dynamic>))
+              .toList();
+
+          return attendanceList;
+        } else {
+          debugPrint("Error: 'data' is not a List. Actual type: ${jsonData['data'].runtimeType}");
+          return null;
+        }
       } else {
-        print('Error: ${response.statusCode} - ${response.reasonPhrase}');
+        debugPrint('Error: ${response.statusCode} - ${response.reasonPhrase}');
         return null;
       }
     } catch (e) {
-      print('Exception: $e');
+      debugPrint("Exception occurred: $e");
       return null;
     }
   }
-
-
 }

@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import '../../APIs/AttendanceAPI.dart';
 import '../../Models/AttendanceData.dart';
 
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
+import '../../global.dart';
 
 class AttendanceListScreen extends StatefulWidget {
   const AttendanceListScreen({super.key});
@@ -27,14 +28,15 @@ class _AttendanceListScreenState extends State<AttendanceListScreen> {
     _fetchAttendanceData();
   }
 
-  Future<void> _fetchAttendanceData() async {
-    final dataList = await api.getEmployeeAttendance(fromDate, toDate);
-    if (dataList != null) {
-      setState(() {
-        attendanceList = dataList;
-        filteredList = attendanceList;
-      });
-    }
+  void _fetchAttendanceData() {
+    api.getEmployeeAttendance(fromDate, toDate).then((dataList){
+      if (dataList != null) {
+        setState(() {
+          attendanceList = dataList;
+          filteredList = attendanceList;
+        });
+      }
+    });
   }
 
   void _filterAttendance(String query) {
@@ -60,7 +62,7 @@ class _AttendanceListScreenState extends State<AttendanceListScreen> {
         fromDate = pickedRange.start;
         toDate = pickedRange.end;
       });
-      await _fetchAttendanceData();
+      _fetchAttendanceData();
     }
   }
 
@@ -68,13 +70,14 @@ class _AttendanceListScreenState extends State<AttendanceListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Attendance List'),
+        title: const Text('Attendance History'),
         actions: [
           IconButton(
             icon: const Icon(Icons.filter_alt_outlined),
             onPressed: _selectDateRange,
           ),
         ],
+        backgroundColor: themeColor,
       ),
       body: attendanceList.isNotEmpty
           ? Column(

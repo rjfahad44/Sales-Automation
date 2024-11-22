@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class AttendanceData {
   final String name;
   final int employeeID;
@@ -29,26 +27,24 @@ class AttendanceData {
     required this.signOutAddress,
   });
 
-  // Factory method to create an instance from a map
-  factory AttendanceData.fromMap(Map<String, dynamic> map) {
+  factory AttendanceData.fromJson(Map<String, dynamic> json) {
     return AttendanceData(
-      name: map['name'] as String,
-      employeeID: map['employeeID'] as int,
-      date: DateTime.parse(map['date'] as String),
-      signInTime: map['signInTime'] as String,
-      signOutTime: map['signOutTime'] as String,
-      status: map['status'] as bool,
-      signInLatitude: (map['signInLatitude'] as num).toDouble(),
-      signInLongitude: (map['signInLongitude'] as num).toDouble(),
-      signOutLatitude: (map['signOutLatitude'] as num).toDouble(),
-      signOutLongitude: (map['signOutLongitude'] as num).toDouble(),
-      signInAddress: map['signInAddress'] as String,
-      signOutAddress: map['signOutAddress'] as String,
+      name: json['name'] ?? '',
+      employeeID: json['employeeID'] ?? 0,
+      date: DateTime.parse(json['date']),
+      signInTime: json['signInTime'] ?? '',
+      signOutTime: json['signOutTime'] ?? '',
+      status: json['status'] ?? false,
+      signInLatitude: (json['signInLatitude'] as num).toDouble(),
+      signInLongitude: (json['signInLongitude'] as num).toDouble(),
+      signOutLatitude: (json['signOutLatitude'] as num).toDouble(),
+      signOutLongitude: (json['signOutLongitude'] as num).toDouble(),
+      signInAddress: json['signInAddress'] ?? '',
+      signOutAddress: json['signOutAddress'] ?? '',
     );
   }
 
-  // Method to convert the instance to a map
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return {
       'name': name,
       'employeeID': employeeID,
@@ -63,16 +59,5 @@ class AttendanceData {
       'signInAddress': signInAddress,
       'signOutAddress': signOutAddress,
     };
-  }
-
-  // Factory method to create a list of EmployeeData from JSON
-  static List<AttendanceData> fromJson(String source) {
-    final data = json.decode(source) as List<dynamic>;
-    return data.map((item) => AttendanceData.fromMap(item as Map<String, dynamic>)).toList();
-  }
-
-  // Method to convert a list of EmployeeData to JSON
-  static String toJson(List<AttendanceData> data) {
-    return json.encode(data.map((item) => item.toMap()).toList());
   }
 }

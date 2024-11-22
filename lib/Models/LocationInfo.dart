@@ -9,8 +9,8 @@ class LocationInf {
   String error;
 
   LocationInf({
-    this.lat = 0.0,
-    this.lon = 0.0,
+    this.lat = 23.7561,
+    this.lon = 90.3872,
     this.locationName = 'Location not found!!',
     this.locationDetails = 'Location details not found!!',
     this.error = 'Location not found!!.',
