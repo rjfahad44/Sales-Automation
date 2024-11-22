@@ -92,15 +92,15 @@ class _AttendanceListScreenState extends State<AttendanceListScreen> {
                 prefixIcon: const Icon(Icons.search),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8.0),
-                  borderSide: BorderSide(color: primaryButtonColor),
+                  borderSide: const BorderSide(color: Colors.black54),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8.0),
-                  borderSide: const BorderSide(color: Colors.black54, width: 2.0),
+                  borderSide: BorderSide(color: primaryButtonColor, width: 2.0),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8.0),
-                  borderSide: BorderSide(color: primaryButtonColor),
+                  borderSide: const BorderSide(color:  Colors.black54),
                 ),
               ),
             ),
