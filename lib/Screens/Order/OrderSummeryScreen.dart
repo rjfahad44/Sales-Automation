@@ -10,6 +10,7 @@ import '../../LocalDB/DatabaseHelper.dart';
 import '../../Models/Cart.dart';
 import '../../Models/OrderCreate.dart';
 import '../../global.dart';
+import 'OrderHistoryScreen.dart';
 
 class OrderSummeryScreen extends StatefulWidget {
   final List<Cart> carts;
@@ -173,10 +174,10 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen> {
     orderAPI.submitOrder(widget.carts, (isSuccess, response) {
       hideTransparentProgressDialog(context);
       if (isSuccess) {
-        showBottomSheetDialog(
-            context, response, response.message, totalAmount, totalDiscount, finalAmount, () {
-          goToPage(const HomeScreen(), false, context);
-        });
+        // showBottomSheetDialog(context, response, response.message, totalAmount, totalDiscount, finalAmount, () {
+        //   goToPage(const HomeScreen(), false, context);
+        // });
+        goToPage(const OrderHistoryScreen(), true, context);
       } else {
         Fluttertoast.showToast(
             msg: "Failed",

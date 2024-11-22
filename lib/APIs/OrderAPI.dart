@@ -6,6 +6,7 @@ import '../Models/Cart.dart';
 import '../Models/ChemistDropdownResponse.dart';
 import '../Models/Item.dart';
 import '../Models/OrderCreate.dart';
+import '../Models/OrderHistoryData.dart';
 import '../Models/OrderResponse.dart';
 import '../Screens/ProductListScreen/Model/Product.dart';
 import '../global.dart';
@@ -287,6 +288,33 @@ class OrderAPI {
 
     // Call the callback after processing all orders
     callBack(isSuccess, totalOrders, totalPrice);
+  }
+
+  Future<List<OrderHistoryData>?> getOrderHistoryData(DateTime? fromDate, DateTime? toDate) async {
+    final String fromDateString = DateFormat("yyyy-MM-dd").format(fromDate ?? DateTime.now());
+    final String toDateString = DateFormat("yyyy-MM-dd").format(toDate ?? DateTime.now());
+    final String url = '$serverPath/api/Order/OrderListByEmployeeId?employeeId=${userData.data.employeeId}&fromDate=$fromDateString&toDate=$toDateString';
+
+    try {
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {
+          'accept': '*/*',
+          'Authorization': 'Bearer ${userData.data.token}',
+        },
+      );
+      if (response.statusCode == 200) {
+        var data = json.decode(response.body);
+        print('Response: ${data}');
+        return (data['data'] as List).map((item) => OrderHistoryData.fromJson(item)).toList();
+      } else {
+        print('Failed to fetch orders. Status code: ${response.statusCode}');
+        return null;
+      }
+    } catch (error) {
+      print('Error occurred: $error');
+      return null;
+    }
   }
 
 }
